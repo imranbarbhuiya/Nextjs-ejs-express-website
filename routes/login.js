@@ -72,6 +72,7 @@ route
       {
         username: req.body.username,
         name: req.body.name,
+        verified: false,
       },
       req.body.password,
       function (err, user) {
@@ -121,9 +122,11 @@ route
       }
     );
     if (!user) {
+      res.locals.message = req.flash("error", "User doesn't exist");
       res.redirect("/login");
     } else {
-      res.send("Check email to proceed");
+      res.locals.message = req.flash("success", "Check email to proceed");
+      res.redirect("/login");
       mail(
         null,
         mailTo,

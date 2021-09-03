@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   googleId: String,
   githubId: String,
   facebookId: String,
-  quote: Array,
+  verified: { type: Boolean, require: true },
   resetPasswordToken: String,
   resetPasswordExpire: String,
 });

@@ -2,25 +2,16 @@
 
 <div class="jumbotron centered">
   <div class="container">
-    <h1 class="display-3">
-      <i class="fas fa-quote-left"></i>Here are all the quotes<i
-        class="fas fa-quote-right"
-      ></i>
-    </h1>
+    <h1 class="display-3">Here's your detail's</h1>
 
-    <ul class="list">
-      <% usersWithQuotes.forEach(function(user){
-      user.quote.forEach(function(quote){ %>
-      <li class="quote-text">"<%= quote %>" - <%= user.name%></li>
-      <% })}) %>
-    </ul>
     <hr />
-    <% if(login){%>
+    <% if(user){%>
+    <ul class="list">
+      <li class="field-text">name: <%= user.name %></li>
+      <li class="field-text">Email: <%= user.username%></li>
+    </ul>
     <a class="btn btn-warning btn-lg me-5" href="/logout" role="button"
       >Log Out</a
-    >
-    <a class="btn btn-success btn-lg ms-5" href="/submit" role="button"
-      >Submit a Quote</a
     >
     <%}else{%>
     <a class="btn btn-warning btn-lg me-5" href="/register" role="button"

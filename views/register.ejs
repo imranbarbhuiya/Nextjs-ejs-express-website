@@ -22,9 +22,15 @@
             </div>
             <button type="submit" class="btn btn-success mt-2">Register</button>
           </form>
-          <% if(Object.keys(message).length !== 0){ %>
-          <div class="alert alert-danger" role="alert"><%=message.error%></div>
-          <% } %>
+          <% if(message.error){ %>
+          <div class="alert alert-danger" role="alert">
+            <%=`${message.error}`.replace(/username/g, 'email');%>
+          </div>
+          <% }else if(message.success){ %>
+          <div class="alert alert-success" role="alert">
+            <%=`${message.error}`.replace(/username/g, 'email');%>
+          </div>
+          <% }%>
         </div>
       </div>
     </div>

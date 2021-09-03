@@ -57,40 +57,11 @@ const loginRoute = require("./routes/login");
 app.use("/", loginRoute);
 app
   .get("/", function (req, res) {
-    User.find({ quote: { $ne: null } }, function (err, users) {
-      if (err) {
-        console.log(err);
-      } else {
-        if (users) {
-          res.render("quotes", {
-            usersWithQuotes: users,
-            login: req.isAuthenticated(),
-          });
-        }
-      }
+    res.render("index", {
+      user: req.user ? req.user : null,
     });
   })
 
-  .get("/submit", ensureLoggedIn("/login"), function (req, res) {
-    res.render("submit");
-  })
-
-  .post("/submit", function (req, res) {
-    const quote = req.body.quote;
-
-    User.findById(req.user.id, function (err, user) {
-      if (err) {
-        console.log(err);
-      } else {
-        if (user) {
-          user.quote.push(quote);
-          user.save(function () {
-            res.redirect("/");
-          });
-        }
-      }
-    });
-  })
   .listen(port, () => {
     console.log(`Server started at port ${port}`);
   });

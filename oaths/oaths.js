@@ -28,6 +28,7 @@ module.exports = (passport) => {
                 googleId: profile.id,
                 name: profile._json.given_name,
                 username: profile._json.email,
+                verified: true,
               });
               user.save(function (err, user) {
                 if (err) {
@@ -79,6 +80,7 @@ module.exports = (passport) => {
                     githubId: profile.id,
                     name: profile.displayName,
                     username: primaryEmail,
+                    verified: true,
                   });
                   user.save(function (err, user) {
                     if (err) {
@@ -122,6 +124,7 @@ module.exports = (passport) => {
                 facebookId: profile.id,
                 name: profile.displayName,
                 username: profile.emails[0].value,
+                verified: true,
               });
               user.save(function (err, user) {
                 if (err) {
