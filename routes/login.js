@@ -112,7 +112,7 @@ route
   })
   .post("/reset", async function (req, res) {
     resetPasswordToken = crypto.randomBytes(20).toString("hex");
-    resetPasswordExpire = Date.now() + 60 * 60 * 1000;
+    resetPasswordExpire = Date.now() + 10 * 60 * 1000;
     const mailTo = req.body.username;
     const user = await User.findOneAndUpdate(
       { username: mailTo },

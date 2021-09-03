@@ -78,12 +78,3 @@
 </div>
 
 <%- include('partials/footer') %>
-
-<script>
-  const form = document.querySelector("form");
-  const pass = document.querySelector(".password");
-  form.addEventListener("submit", (e) => {
-    if (pass.value.length > 5) return;
-    else e.preventDefault();
-  });
-</script>
