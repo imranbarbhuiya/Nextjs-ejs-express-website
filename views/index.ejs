@@ -1,25 +1,25 @@
 <%- include('partials/header') %>
 
-<div class="jumbotron centered">
-  <div class="container">
-    <h1 class="display-3">Here's your detail's</h1>
+  <div class="jumbotron centered">
+    <div class="container">
+      <h1 class="display-3">Here's your detail's</h1>
 
-    <hr />
-    <% if(user){%>
-    <ul class="list">
-      <li class="field-text">name: <%= user.name %></li>
-      <li class="field-text">Email: <%= user.username%></li>
-    </ul>
-    <a class="btn btn-warning btn-lg me-5" href="/logout" role="button"
-      >Log Out</a
-    >
-    <%}else{%>
-    <a class="btn btn-warning btn-lg me-5" href="/register" role="button"
-      >Register</a
-    >
-    <a class="btn btn-success btn-lg ms-5" href="/login" role="button">Login</a>
-    <%}%>
+      <hr />
+      <% if(user){%>
+        <ul class="list">
+          <li class="field-text">name: <%= user.name %>
+          </li>
+          <li class="field-text">Email: <%= user.username%>
+          </li>
+        </ul>
+        <a class="btn btn-warning btn-lg me-5" href="/logout" role="button">Log Out</a>
+        <% if(!user.verified){%>
+          <a class="btn btn-success btn-lg me-5" href="/verify" role="button">verify</a>
+          <%}}else{%>
+            <a class="btn btn-warning btn-lg me-5" href="/register" role="button">Register</a>
+            <a class="btn btn-success btn-lg ms-5" href="/login" role="button">Login</a>
+            <%}%>
+    </div>
   </div>
-</div>
 
-<%- include('partials/footer') %>
+  <%- include('partials/footer') %>
