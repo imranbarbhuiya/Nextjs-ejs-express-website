@@ -163,7 +163,8 @@ img {
   color: var(--first-color-light);
 }
 
-.login__forgot {
+.login__forgot,
+.flash_message {
   display: block;
   width: max-content;
   margin-left: auto;
@@ -172,11 +173,22 @@ img {
   font-weight: 600;
   color: var(--first-color-light);
 }
+.flash_message {
+  position: relative;
+  width: 100%;
+  margin-top: 1rem;
+}
+.flash_message.success {
+  color: #00ff00;
+}
+.flash_message.error {
+  color: #ff0000;
+}
 
 .login__button {
   display: block;
   padding: 1.05rem;
-  margin: 2rem 0;
+  margin: 1.5rem 0;
   width: 100%;
   background-color: var(--first-color);
   color: #fff;

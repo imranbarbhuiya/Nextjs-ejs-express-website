@@ -42,7 +42,10 @@
               <input name="password" type="password" placeholder="Password" class="login__input" required />
             </div>
 
-            <a href="#" class="login__forgot">Forgot password?</a>
+            <a href="/reset" class="login__forgot">Forgot password?</a>
+            <span href="#" class="flash_message <%=message.error?" error":"success" %>">
+              <%=message.error||message.success%>
+            </span>
             <input type="submit" class="login__button" value="Sign In" required>
 
             <div>
@@ -98,6 +101,9 @@
               <input name="cPassword" type="password" placeholder="Confirm Password"
                 class="login__input ConfirmPassword" required />
             </div>
+            <span href="#" class="flash_message <%=message.error?" error":"success" %>">
+              <%=message.error||message.success%>
+            </span>
             <input type="submit" class="login__button" value="Sign Up">
 
             <div>
@@ -130,10 +136,6 @@
           </form>
 
         </div>
-
-        <span>
-          <%=message.success + message.error%>
-        </span>
 
       </div>
 
