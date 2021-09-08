@@ -53,7 +53,7 @@ route
   )
   .get("/login", function (req, res) {
     res.locals.message = req.flash();
-    res.render("login");
+    res.render("login", { login: "", register: "none" });
   })
   .post(
     "/login",
@@ -65,7 +65,7 @@ route
   )
   .get("/register", function (req, res) {
     res.locals.message = req.flash();
-    res.render("register");
+    res.render("login", { login: "none", register: "" });
   })
   .post("/register", function (req, res) {
     User.register(

@@ -1,80 +1,161 @@
-<%- include('partials/header') %>
+<a%- include('partials/header') %>
+  <!-- ==== import font ==== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  </link>
 
-<div class="container mt-5">
-  <h1>Login</h1>
+  <!-- ===== CSS ===== -->
+  <link rel="stylesheet" href="assets/css/styles.css" />
 
-  <div class="row">
-    <div class="col-sm-8">
-      <div class="card">
-        <div class="card-body">
-          <!-- Makes POST request to /login route -->
-          <form action="/login" method="POST">
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" class="form-control" name="username" />
+  <title>Codversity-Login</title>
+  </head>
+
+  <body>
+
+    <div id="particles-js"></div>
+
+    <div class="login">
+
+      <div class="login__content">
+        <div class="box">
+        </div>
+
+        <div class="login__img">
+        </div>
+        <div class="login__forms">
+          <form action="/login" method="POST" class="login__register <%=login%>" id="login-in">
+            <h1 class="login__title">Sign In</h1>
+
+            <div class="login__box">
+              <i class="fa fa-user login__icon"></i>
+              <input name="username" type="text" placeholder="Email" class="login__input" required />
             </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input
-                type="password"
-                class="form-control password"
-                name="password"
-              />
+
+            <div class="login__box">
+              <i class="fa fa-lock login__icon"></i>
+              <input name="password" type="password" placeholder="Password" class="login__input" required />
             </div>
-            <button type="submit" class="btn btn-success mt-2">Login</button>
+
+            <a href="#" class="login__forgot">Forgot password?</a>
+
+            <input type="submit" class="login__button" value="Sign In" required>
+
+            <div>
+              <span class="login__account">Don't have an Account ?</span>
+              <span class="login__signin" id="sign-up">Sign Up</span>
+            </div>
+            <div class="wrapper">
+              <div class="icon google">
+                <span><a href="/auth/google" class="fab fa-google"></a></span>
+              </div>
+              <div class="icon instagram">
+                <span><a href="/auth/fa-facebook" class="fab fa-facebook"></a></span>
+              </div>
+              <div class="icon github">
+                <span><a href="/auth/github" class="fab fa-github"></a></span>
+              </div>
+            </div>
           </form>
-          <% if(message.error){ %>
-          <div class="alert alert-danger" role="alert">
-            <%=`${message.error}`.replace(/username/g, 'email');%>
-          </div>
-          <% }else if(message.success){ %>
-          <div class="alert alert-success" role="alert">
-            <%=`${message.success}`.replace(/username/g, 'email');%>
-          </div>
-          <% }%>
+
+          <form action="/register" method="POST" class="login__create <%=register%>" id="login-up">
+            <h1 class="login__title">Create Account</h1>
+
+            <div class="login__box">
+              <i class="fa fa-user login__icon"></i>
+              <input name="name" type="text" placeholder="Username" class="login__input" required />
+            </div>
+
+            <div class="login__box">
+              <i class="fa fa-at login__icon"></i>
+              <input name="username" type="email" placeholder="Email" class="login__input" required />
+            </div>
+
+            <div class="login__box">
+              <i class="fa fa-lock login__icon"></i>
+              <input name="password" type="password" placeholder="Password" class="login__input password" required />
+              <div class="helper-wrapper">
+                <div class="helper-text"><span class="length">☑ Between 6-50 characters </span><span class="lowercase">☑
+                    Lowercase letter</span><span class="uppercase">☑ Uppercase letter</span><span class="number">☑ A
+                    number</span><span class="special">☑ A special character</span></div>
+              </div>
+            </div>
+
+            <div class="login__box">
+              <i class="fa fa-lock login__icon"></i>
+              <input name="cPassword" type="password" placeholder="Confirm Password"
+                class="login__input ConfirmPassword" required />
+
+            </div>
+
+            <input type="submit" class="login__button" value="Sign Up">
+
+            <div>
+              <span class="login__account">Already have an Account ?</span>
+              <span class="login__signup" id="sign-in">Sign In</span>
+            </div>
+
+            <div class="wrapper">
+              <div class="icon google">
+                <span><a href="/auth/google" class="fab fa-google"></a></span>
+              </div>
+              <div class="icon instagram">
+                <span><a href="/auth/fa-facebook" class="fab fa-facebook"></a></span>
+              </div>
+              <div class="icon github">
+                <span><a href="/auth/github" class="fab fa-github"></a></span>
+              </div>
+            </div>
+          </form>
+          <span>
+            <%=message.success + message.error%>
+          </span>
         </div>
       </div>
     </div>
 
-    <div class="col-sm-4">
-      <div class="card">
-        <div class="card-body">
-          <a
-            class="btn btn-block btn-social btn-google"
-            href="/auth/google"
-            role="button"
-          >
-            <i class="fab fa-google"></i>
-            Sign In with Google
-          </a>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-body">
-          <a
-            class="btn btn-block btn-social btn-github"
-            href="/auth/github"
-            role="button"
-          >
-            <i class="fab fa-github"></i>
-            Sign In with Github
-          </a>
-        </div>
-        <div class="card">
-          <div class="card-body">
-            <a
-              class="btn btn-block btn-social btn-facebook"
-              href="/auth/facebook"
-              role="button"
-            >
-              <i class="fab fa-facebook"></i>
-              Sign In with Facebook
-            </a>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
-</div>
 
-<%- include('partials/footer') %>
+
+    <footer class="footer-distributed">
+      <div class="footer-right">
+
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+        <a href="#"><i class="fab fa-github"></i></a>
+
+      </div>
+
+      <div class="footer-left">
+
+        <p class="footer-links">
+          <a class="link-1" href="#">Home</a>
+
+          <a href="#">Blog</a>
+
+          <a href="#">Pricing</a>
+
+          <a href="#">About</a>
+
+          <a href="#">Faq</a>
+
+          <a href="#">Contact</a>
+        </p>
+
+        <p>Codversity &copy; 2021</p>
+      </div>
+
+    </footer>
+
+
+
+    <!--===== MAIN JS =====-->
+    <script src="assets/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+    <script src="assets/js/particles.js"></script>
+    <script src="assets/js/script.js"></script>
+
+    <%- include('partials/footer') %>
