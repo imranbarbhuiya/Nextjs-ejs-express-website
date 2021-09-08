@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
-const { ensureLoggedIn } = require("connect-ensure-login");
 const flash = require("connect-flash");
 
 const User = require("./model/userSchema");
