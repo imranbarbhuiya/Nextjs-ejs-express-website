@@ -52,7 +52,7 @@ passport.deserializeUser(function (id, done) {
     done(err, user);
   });
 });
-require("./oaths/oaths")(passport);
+require("./auth/auth")(passport);
 const loginRoute = require("./routes/login");
 app.use("/", loginRoute);
 app

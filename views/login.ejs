@@ -1,4 +1,5 @@
 <i%- include('partials/header') %>
+
   <!-- ==== import font ==== -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -7,8 +8,7 @@
   </link>
 
   <!-- ===== CSS ===== -->
-  <link rel="stylesheet" href="assets/css/styles.css" />
-
+  <link rel="stylesheet" href="assets/css/login.css" />
   <title>Codversity-Login</title>
   </head>
 
@@ -19,13 +19,17 @@
     <div class="login">
 
       <div class="login__content">
+
         <div class="box">
         </div>
 
         <div class="login__img">
         </div>
+
         <div class="login__forms">
+
           <form action="/login" method="POST" class="login__register <%=login%>" id="login-in">
+
             <h1 class="login__title">Sign In</h1>
 
             <div class="login__box">
@@ -39,31 +43,33 @@
             </div>
 
             <a href="#" class="login__forgot">Forgot password?</a>
-
             <input type="submit" class="login__button" value="Sign In" required>
 
             <div>
               <span class="login__account">Don't have an Account ?</span>
               <span class="login__signin" id="sign-up">Sign Up</span>
             </div>
+
             <div class="wrapper">
-              <div class="icon google"><a href="/auth/google">
+              <a href="/auth/google">
+                <div class="icon google">
                   <span><i class="fab fa-google"></i></span>
-                </a>
-              </div>
-              <div class="icon facebook">
-                <a href="/auth/fa-facebook">
+                </div>
+              </a>
+              <a href="/auth/fa-facebook">
+                <div class="icon facebook">
                   <span><i class="fab fa-facebook-f"></i></span>
-                </a>
-              </div>
-              <div class="icon github"><a href="/auth/github">
+                </div>
+              </a><a href="/auth/github">
+                <div class="icon github">
                   <span><i class="fab fa-github"></i></span>
-                </a>
-              </div>
+                </div>
+              </a>
             </div>
           </form>
 
           <form action="/register" method="POST" class="login__create <%=register%>" id="login-up">
+
             <h1 class="login__title">Create Account</h1>
 
             <div class="login__box">
@@ -79,20 +85,19 @@
             <div class="login__box">
               <i class="fa fa-lock login__icon"></i>
               <input name="password" type="password" placeholder="Password" class="login__input password" required />
+
               <div class="helper-wrapper">
                 <div class="helper-text"><span class="length">☑ Between 6-50 characters </span><span class="lowercase">☑
                     Lowercase letter</span><span class="uppercase">☑ Uppercase letter</span><span class="number">☑ A
                     number</span><span class="special">☑ A special character</span></div>
               </div>
-            </div>
 
+            </div>
             <div class="login__box">
               <i class="fa fa-lock login__icon"></i>
               <input name="cPassword" type="password" placeholder="Confirm Password"
                 class="login__input ConfirmPassword" required />
-
             </div>
-
             <input type="submit" class="login__button" value="Sign Up">
 
             <div>
@@ -101,69 +106,57 @@
             </div>
 
             <div class="wrapper">
-              <div class="icon google"><a href="/auth/google">
+
+              <a href="/auth/google">
+                <div class="icon google">
                   <span><i class="fab fa-google"></i></span>
-                </a>
-              </div>
-              <div class="icon facebook">
-                <a href="/auth/fa-facebook">
+                </div>
+              </a>
+
+              <a href="/auth/fa-facebook">
+                <div class="icon facebook">
                   <span><i class="fab fa-facebook-f"></i></span>
-                </a>
-              </div>
-              <div class="icon github"><a href="/auth/github">
+                </div>
+              </a>
+
+              <a href="/auth/github">
+                <div class="icon github">
                   <span><i class="fab fa-github"></i></span>
-                </a>
-              </div>
+                </div>
+              </a>
+
             </div>
+
           </form>
-          <span>
-            <%=message.success + message.error%>
-          </span>
+
         </div>
+
+        <span>
+          <%=message.success + message.error%>
+        </span>
+
       </div>
-    </div>
 
     </div>
-
 
     <footer class="footer-distributed">
-      <div class="footer-right">
-
-        <a href="#"><i class="fab fa-facebook"></i></a>
+      <div class="footer-right"> <a href="#"><i class="fab fa-facebook"></i></a>
         <a href="#"><i class="fab fa-twitter"></i></a>
         <a href="#"><i class="fab fa-linkedin"></i></a>
         <a href="#"><i class="fab fa-github"></i></a>
-
       </div>
-
       <div class="footer-left">
-
         <p class="footer-links">
-          <a class="link-1" href="#">Home</a>
-
-          <a href="#">Blog</a>
-
-          <a href="#">Pricing</a>
-
-          <a href="#">About</a>
-
-          <a href="#">Faq</a>
-
-          <a href="#">Contact</a>
+          <a class="link-1" href="#">Home</a> <a href="#">Blog</a> <a href="#">Pricing</a> <a href="#">About</a> <a
+            href="#">Faq</a> <a href="#">Contact</a>
         </p>
-
         <p>Codversity &copy; 2021</p>
       </div>
-
     </footer>
-
-
 
     <!--===== MAIN JS =====-->
     <script src="assets/js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-
     <script src="assets/js/particles.js"></script>
     <script src="assets/js/script.js"></script>
-
     <%- include('partials/footer') %>
