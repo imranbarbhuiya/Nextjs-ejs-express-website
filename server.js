@@ -2,7 +2,7 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const session = require("cookie-session");
+const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const flash = require("connect-flash");
@@ -19,13 +19,14 @@ app
       extended: true,
     })
   )
+  .set("trust proxy", 1)
   .use(cookieParser())
   .use(
     session({
       secret: "my secret code #4451122@%",
       resave: false,
       saveUninitialized: false,
-      cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
+      cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, secure: true },
     })
   )
   .use(flash())
