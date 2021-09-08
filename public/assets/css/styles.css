@@ -321,7 +321,7 @@ img {
   pointer-events: none;
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
-.wrapper .icon span a {
+.wrapper .icon a {
   text-decoration: none;
   color: inherit;
 }
@@ -360,13 +360,6 @@ img {
 .wrapper .google:hover .tooltip,
 .wrapper .google:hover .tooltip::before {
   background-color: #468bf5;
-  color: #ffffff;
-}
-
-.wrapper .instagram:hover,
-.wrapper .instagram:hover .tooltip,
-.wrapper .instagram:hover .tooltip::before {
-  background-color: #e1306c;
   color: #ffffff;
 }
 
