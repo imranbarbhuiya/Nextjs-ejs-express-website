@@ -39,7 +39,7 @@ mongoose.connect(process.env.MONGODB_SRV, {
   useUnifiedTopology: true,
 });
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT;
 
 passport.use(User.createStrategy());
 
