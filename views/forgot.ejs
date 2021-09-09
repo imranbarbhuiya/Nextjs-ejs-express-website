@@ -8,7 +8,7 @@
   </link>
 
   <!-- ===== CSS ===== -->
-  <link rel="stylesheet" href="assets/css/login.css" />
+  <link rel="stylesheet" href="/assets/css/login.css" />
   <title>Codversity-Login</title>
   </head>
 
@@ -21,38 +21,40 @@
       <form method="POST" class=" forgot" id="login-up">
 
         <h1 class="login__title">Forgot Password</h1>
-
-        <div class="login__box">
-          <i class="fa fa-at login__icon"></i>
-          <input name="username" type="email" placeholder="Email" class="login__input" required />
-        </div>
-
-        <div class="login__box">
-          <i class="fa fa-lock login__icon"></i>
-          <input name="password" type="password" placeholder="Password" class="login__input password" required />
-
-          <div class="helper-wrapper">
-            <div class="helper-text"><span class="length">☑ Between 6-50 characters </span><span class="lowercase">☑
-                Lowercase letter</span><span class="uppercase">☑ Uppercase letter</span><span class="number">☑ A
-                number</span><span class="special">☑ A special character</span></div>
+        <%if(!password){%>
+          <div class="login__box">
+            <i class="fa fa-at login__icon"></i>
+            <input name="username" type="email" placeholder="Email" class="login__input" required
+              <%=password?"disabled":null%> />
           </div>
+          <%}else{%>
+            <div class=" login__box">
+              <i class="fa fa-lock login__icon"></i>
+              <input name="password" type="password" placeholder="Password" class="login__input password" required />
 
-        </div>
-        <div class="login__box">
-          <i class="fa fa-lock login__icon"></i>
-          <input name="cPassword" type="password" placeholder="Confirm Password" class="login__input ConfirmPassword"
-            required />
-        </div>
-        <span href="#" class="flash_message error">
-          Error message
-        </span>
-        <input type="submit" class="login__button" value="Reset">
+              <div class="helper-wrapper">
+                <div class="helper-text"><span class="length">☑ Between 6-50 characters </span><span class="lowercase">☑
+                    Lowercase letter</span><span class="uppercase">☑ Uppercase letter</span><span class="number">☑ A
+                    number</span><span class="special">☑ A special character</span></div>
+              </div>
+
+            </div>
+            <div class="login__box">
+              <i class="fa fa-lock login__icon"></i>
+              <input name="cPassword" type="password" placeholder="Confirm Password"
+                class="login__input ConfirmPassword" required />
+            </div>
+            <%}%>
+              <span class="flash_message <%=message.error?" error":"success" %>">
+                <%=message.error||message.success%>
+              </span>
+              <input type="submit" class="login__button" value="Reset">
 
       </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script src="assets/js/particles.js"></script>
-    <script src="assets/js/script.js"></script>
+    <script src="/assets/js/particles.js"></script>
+    <script src="/assets/js/script.js"></script>
 
     <%- include('partials/footer') %>

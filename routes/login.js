@@ -108,7 +108,8 @@ route
     );
   })
   .get("/reset", ensureLoggedOut(), function (req, res) {
-    res.render("forgot");
+    res.locals.message = req.flash();
+    res.render("forgot", { password: false });
   })
   .post("/reset", async function (req, res) {
     resetPasswordToken = crypto.randomBytes(20).toString("hex");
@@ -123,10 +124,10 @@ route
     );
     if (!user) {
       res.locals.message = req.flash("error", "User doesn't exist");
-      res.redirect("/login");
+      res.redirect("/reset");
     } else {
       res.locals.message = req.flash("success", "Check email to proceed");
-      res.redirect("/login");
+      res.redirect("/reset");
       mail(
         mailTo,
         "Reset Password",
@@ -139,7 +140,8 @@ route
     }
   })
   .get("/reset/:token", ensureLoggedOut("/"), function (req, res) {
-    res.render("reset");
+    res.locals.message = req.flash();
+    res.render("forgot", { password: true });
   })
   .post("/reset/:token", function (req, res) {
     User.findOne(

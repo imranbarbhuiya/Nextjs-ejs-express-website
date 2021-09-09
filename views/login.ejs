@@ -43,7 +43,7 @@
             </div>
 
             <a href="/reset" class="login__forgot">Forgot password?</a>
-            <span href="#" class="flash_message <%=message.error?" error":"success" %>">
+            <span class="flash_message <%=message.error?" error":"success" %>">
               <%=message.error||message.success%>
             </span>
             <input type="submit" class="login__button" value="Sign In" required>
@@ -101,7 +101,7 @@
               <input name="cPassword" type="password" placeholder="Confirm Password"
                 class="login__input ConfirmPassword" required />
             </div>
-            <span href="#" class="flash_message <%=message.error?" error":"success" %>">
+            <span class="flash_message <%=message.error?" error":"success" %>">
               <%=message.error||message.success%>
             </span>
             <input type="submit" class="login__button" value="Sign Up">

@@ -252,6 +252,27 @@ img {
     justify-self: center;
   }
 }
+.forgot-box {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  pointer-events: none;
+}
+.forgot {
+  bottom: 1rem;
+  width: 350px;
+  background-color: var(--first-color-lighten);
+  padding: 2rem 1rem;
+  border-radius: 1rem;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(35, 0, 77, 0.2);
+  animation-duration: 0.4s;
+  animation-name: animate-login;
+  pointer-events: all;
+}
 
 @media screen and (min-width: 1024px) {
   .login {
@@ -288,7 +309,6 @@ img {
   .login__create {
     left: -11rem;
   }
-
   .login__register {
     bottom: -2rem;
   }
