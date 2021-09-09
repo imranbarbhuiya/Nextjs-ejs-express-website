@@ -45,7 +45,7 @@
                 class="login__input ConfirmPassword" required />
             </div>
             <%}%>
-              <span class="flash_message <%=message.error?" error":"success" %>">
+              <span class="flash_message <%=message.error?" error":"success" %>" id="flash">
                 <%=message.error||message.success%>
               </span>
               <input type="submit" class="login__button" value="Reset">
@@ -53,8 +53,22 @@
       </form>
     </div>
 
+    <footer class="footer-distributed">
+      <div class="footer-right"> <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+        <a href="#"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-left">
+        <p class="footer-links">
+          <a class="link-1" href="#">Home</a> <a href="#">Blog</a> <a href="#">Pricing</a> <a href="#">About</a> <a
+            href="#">Faq</a> <a href="#">Contact</a>
+        </p>
+        <p>Codversity &copy; 2021</p>
+      </div>
+    </footer>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="/assets/js/particles.js"></script>
-    <script src="/assets/js/script.js"></script>
+    <script src="/assets/js/validation.js"></script>
 
     <%- include('partials/footer') %>

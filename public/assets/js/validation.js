@@ -14,6 +14,7 @@ for (var i = 0; i < helpTxt.length; i++) {
 var password = document.querySelector(".password");
 var cPassword = document.querySelector(".ConfirmPassword");
 var form = document.getElementById("login-up");
+var flash = document.getElementById("flash");
 
 var helperText = {
   charLength: document.querySelector(".helper-text .length"),
@@ -127,10 +128,18 @@ form.addEventListener("submit", (e) => {
       pattern.lowercase() &&
       pattern.uppercase() &&
       pattern.number() &&
-      pattern.special() &&
-      password.value == cPassword.value
+      pattern.special()
     )
   ) {
-    e.preventDefault();
+    errorAdd(e, "Password is too weak");
+  } else if (password.value != cPassword.value) {
+    errorAdd(e, "Password and confirm password should match");
   }
 });
+
+function errorAdd(e, message) {
+  e.preventDefault();
+  flash.classList.remove("success");
+  flash.classList.add("error");
+  flash.innerText = message || "error";
+}
