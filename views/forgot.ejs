@@ -1,24 +1,58 @@
-<%- include('partials/header') %> <%- include('partials/header') %>
+<%- include('partials/header') %>
 
-<div class="container mt-5">
-  <h1>Login</h1>
+  <!-- ==== import font ==== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  </link>
 
-  <div class="row">
-    <div class="col-sm-8">
-      <div class="card">
-        <div class="card-body">
-          <!-- Makes POST request to /login route -->
-          <form action="/reset" method="POST">
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" class="form-control" name="username" />
-            </div>
-            <button type="submit" class="btn btn-success mt-2">Reset</button>
-          </form>
+  <!-- ===== CSS ===== -->
+  <link rel="stylesheet" href="assets/css/login.css" />
+  <title>Codversity-Login</title>
+  </head>
+
+  <body>
+
+    <div id="particles-js"></div>
+
+    <div class="forgot-box">
+
+      <form method="POST" class=" forgot" id="login-up">
+
+        <h1 class="login__title">Forgot Password</h1>
+
+        <div class="login__box">
+          <i class="fa fa-at login__icon"></i>
+          <input name="username" type="email" placeholder="Email" class="login__input" required />
         </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<%- include('partials/footer') %>
+        <div class="login__box">
+          <i class="fa fa-lock login__icon"></i>
+          <input name="password" type="password" placeholder="Password" class="login__input password" required />
+
+          <div class="helper-wrapper">
+            <div class="helper-text"><span class="length">☑ Between 6-50 characters </span><span class="lowercase">☑
+                Lowercase letter</span><span class="uppercase">☑ Uppercase letter</span><span class="number">☑ A
+                number</span><span class="special">☑ A special character</span></div>
+          </div>
+
+        </div>
+        <div class="login__box">
+          <i class="fa fa-lock login__icon"></i>
+          <input name="cPassword" type="password" placeholder="Confirm Password" class="login__input ConfirmPassword"
+            required />
+        </div>
+        <span href="#" class="flash_message error">
+          Error message
+        </span>
+        <input type="submit" class="login__button" value="Reset">
+
+      </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="assets/js/particles.js"></script>
+    <script src="assets/js/script.js"></script>
+
+    <%- include('partials/footer') %>
