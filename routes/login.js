@@ -24,7 +24,10 @@ route
       failureFlash: true,
     })
   )
-  .get("/auth/github", passport.authenticate("github", { scope: ["user"] }))
+  .get(
+    "/auth/github",
+    passport.authenticate("github", { scope: ["read:user", "user:email"] })
+  )
   .get(
     "/auth/github/login",
     passport.authenticate("github", {

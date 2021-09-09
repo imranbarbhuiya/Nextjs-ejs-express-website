@@ -449,33 +449,38 @@ img {
 }
 
 .helper-wrapper {
+  pointer-events: none;
   position: relative;
 }
 .helper-wrapper .helper-text {
+  text-align: left;
   position: absolute;
   border-radius: 10px;
   box-shadow: 0 8px 20px rgba(35, 0, 77, 1);
   animation-duration: 0.4s;
   animation-name: animate-login;
-  font: Open-sans;
   top: -80px;
   right: -400px;
   font-size: 12px;
-  line-height: 22px;
+  line-height: 30px;
   list-style: none;
-  padding: 5px;
+  padding: 20px;
   background: white;
   box-shadow: 0 8px 20px rgba(35, 0, 77, 0.2);
   animation-duration: 0.4s;
   animation-name: animate-login;
   z-index: 1049;
   color: red;
+  display: none;
 }
 .helper-wrapper .helper-text span {
   display: block;
 }
 .helper-wrapper .helper-text span.valid {
   color: green;
+}
+.helper-wrapper .helper-text span i {
+  margin-right: 5px;
 }
 form.valid input {
   border: none;
