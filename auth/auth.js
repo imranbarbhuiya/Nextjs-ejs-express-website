@@ -78,7 +78,7 @@ module.exports = (passport) => {
                 } else {
                   user = new User({
                     githubId: profile.id,
-                    name: profile.displayName,
+                    name: profile.displayName || profile.displayName,
                     username: primaryEmail,
                     verified: true,
                   });
