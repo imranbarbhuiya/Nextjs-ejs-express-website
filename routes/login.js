@@ -107,7 +107,7 @@ route
       }
     );
   })
-  .get("/reset", function (req, res) {
+  .get("/reset", ensureLoggedOut(), function (req, res) {
     res.render("forgot");
   })
   .post("/reset", async function (req, res) {
@@ -128,11 +128,13 @@ route
       res.locals.message = req.flash("success", "Check email to proceed");
       res.redirect("/login");
       mail(
-        null,
         mailTo,
         "Reset Password",
         `<p>Reset Password</p><a href="http://localhost:8080/reset/${resetPasswordToken}">Click here</a>`
-      );
+      ).catch((error) => {
+        req.flash("error", "auth fail");
+        console.log(error);
+      });
     }
   })
   .get("/reset/:token", ensureLoggedOut("/"), function (req, res) {
