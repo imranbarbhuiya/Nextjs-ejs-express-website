@@ -130,7 +130,8 @@ route
       mail(
         mailTo,
         "Reset Password",
-        `<p>Reset Password</p><a href="http://localhost:8080/reset/${resetPasswordToken}">Click here</a>`
+        `<p>Reset Password</p>
+        <a href="https://${req.headers.host}/reset/${resetPasswordToken}">Click here</a>`
       ).catch((error) => {
         req.flash("error", "auth fail");
         console.log(error);
