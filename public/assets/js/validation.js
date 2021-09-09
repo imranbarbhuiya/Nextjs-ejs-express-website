@@ -1,10 +1,12 @@
 function patternTest(pattern, response) {
+  let box = response.querySelector(".fas");
   if (pattern) {
-    var box = response.querySelector(".fas");
     box.classList.remove("fa-times");
     box.classList.add("fa-check");
     response.classList.add("valid");
   } else {
+    box.classList.add("fa-times");
+    box.classList.remove("fa-check");
     response.classList.remove("valid");
   }
 }
