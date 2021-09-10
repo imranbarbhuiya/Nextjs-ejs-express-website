@@ -7,15 +7,16 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
+  "author": "imran",
+  "license": "ISC",
   "engines": {
     "node": "16.9.0"
   },
-  "author": "imran",
-  "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
     "connect-ensure-login": "^0.1.1",
     "connect-flash": "^0.1.1",
+    "connect-mongo": "^4.5.0",
     "cookie-parser": "^1.4.5",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",

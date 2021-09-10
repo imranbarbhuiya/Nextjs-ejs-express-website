@@ -4,6 +4,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const flash = require("connect-flash");
 
@@ -23,9 +24,10 @@ app
   .use(cookieParser())
   .use(
     session({
-      secret: "my secret code #4451122@%",
+      secret: process.env.SECRET,
       resave: false,
       saveUninitialized: false,
+      store: MongoStore.create({ mongoUrl: process.env.MONGODB_SRV }),
       cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
     })
   )
