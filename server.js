@@ -1,4 +1,6 @@
 //jshint esversion:6
+// requiring dependencies
+
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
@@ -8,9 +10,12 @@ const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const flash = require("connect-flash");
 
+// local modules
 const User = require("./model/userSchema");
 
 const app = express();
+
+// express setup
 
 app
   .use(express.static("public"))
@@ -36,12 +41,16 @@ app
   .use(passport.initialize())
   .use(passport.session());
 
+// mongodb connect with mongoose
+
 mongoose.connect(process.env.MONGODB_SRV, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
 const port = process.env.PORT;
+
+// passport setup
 
 passport.use(User.createStrategy());
 
@@ -54,15 +63,22 @@ passport.deserializeUser(function (id, done) {
     done(err, user);
   });
 });
+
+// splitted routes
+
 require("./auth/auth")(passport);
 const loginRoute = require("./routes/login");
 app.use("/", loginRoute);
+
+// will be removed in future
 app
   .get("/", function (req, res) {
     res.render("index", {
       user: req.user ? req.user : null,
     });
   })
+
+  // listening to port
 
   .listen(port, () => {
     console.log(`Server started at port ${port}`);

@@ -1,12 +1,17 @@
+// requiring dependencies
 const { ensureLoggedIn, ensureLoggedOut } = require("connect-ensure-login");
 const express = require("express");
 const passport = require("passport");
 const crypto = require("crypto");
 
+// requiring local modules
 const User = require("../model/userSchema");
 const mail = require("../module/mail");
 
 const route = express.Router();
+
+// auth setup
+// google
 
 route
   .get(
@@ -24,6 +29,8 @@ route
       failureFlash: true,
     })
   )
+  // github
+
   .get(
     "/auth/github",
     passport.authenticate("github", { scope: ["read:user", "user:email"] })
@@ -39,6 +46,8 @@ route
       res.redirect("/");
     }
   )
+  // facebook
+
   .get(
     "/auth/facebook",
     passport.authenticate("facebook", { scope: ["public_profile", "email"] })
@@ -54,6 +63,8 @@ route
       res.redirect("/");
     }
   )
+  // local login system
+
   .get("/login", function (req, res) {
     res.locals.message = req.flash();
     res.render("login", { login: "", register: "none" });
@@ -66,6 +77,8 @@ route
       failureFlash: true,
     })
   )
+  // local register system
+
   .get("/register", function (req, res) {
     res.locals.message = req.flash();
     res.render("login", { login: "none", register: "" });
@@ -90,6 +103,8 @@ route
       }
     );
   })
+  // change password system
+
   .get("/change", ensureLoggedIn("/login"), function (req, res) {
     res.render("change");
   })
@@ -110,6 +125,8 @@ route
       }
     );
   })
+  // forgot password system
+
   .get("/reset", ensureLoggedOut(), function (req, res) {
     res.locals.message = req.flash();
     res.render("forgot", { password: false });
@@ -172,6 +189,8 @@ route
       }
     );
   })
+  // logout
+
   .get("/logout", function (req, res) {
     req.logout();
     res.redirect("/");
