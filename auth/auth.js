@@ -19,7 +19,7 @@ export default (passport) => {
       function (accessToken, refreshToken, profile, cb) {
         User.findOne(
           {
-            username: profile._json.email,
+            email: profile._json.email,
           },
           function (err, user) {
             if (err) {
@@ -30,8 +30,8 @@ export default (passport) => {
             } else {
               user = new User({
                 googleId: profile.id,
-                name: profile._json.given_name,
-                username: profile._json.email,
+                username: profile._json.given_name,
+                email: profile._json.email,
                 verified: true,
               });
               user.save(function (err, user) {
@@ -71,7 +71,7 @@ export default (passport) => {
             }
             User.findOne(
               {
-                username: primaryEmail,
+                email: primaryEmail,
               },
               function (err, user) {
                 if (err) {
@@ -82,8 +82,8 @@ export default (passport) => {
                 } else {
                   user = new User({
                     githubId: profile.id,
-                    name: profile.displayName || profile.displayName,
-                    username: primaryEmail,
+                    userusername: profile.displayName || profile.displayName,
+                    email: primaryEmail,
                     verified: true,
                   });
                   user.save(function (err, user) {
@@ -115,7 +115,7 @@ export default (passport) => {
         }
         User.findOne(
           {
-            username: profile.emails[0].value,
+            email: profile.emails[0].value,
           },
           function (err, user) {
             if (err) {
@@ -126,8 +126,8 @@ export default (passport) => {
             } else {
               user = new User({
                 facebookId: profile.id,
-                name: profile.displayName,
-                username: profile.emails[0].value,
+                username: profile.displayName,
+                email: profile.emails[0].value,
                 verified: true,
               });
               user.save(function (err, user) {

@@ -85,8 +85,8 @@ route
   .post("/register", function (req, res) {
     User.register(
       {
+        email: req.body.email,
         username: req.body.username,
-        name: req.body.name,
         verified: false,
       },
       req.body.password,
@@ -108,21 +108,18 @@ route
     res.render("change");
   })
   .post("change", function (req, res) {
-    User.findOne(
-      { username: req.user.username },
-      function (err, sanitizedUser) {
-        if (sanitizedUser) {
-          sanitizedUser.changePassword(
-            req.body.oldPassword,
-            req.body.newPassword,
-            function () {
-              sanitizedUser.save();
-            }
-          );
-          res.redirect("/");
-        }
+    User.findOne({ email: req.user.username }, function (err, sanitizedUser) {
+      if (sanitizedUser) {
+        sanitizedUser.changePassword(
+          req.body.oldPassword,
+          req.body.newPassword,
+          function () {
+            sanitizedUser.save();
+          }
+        );
+        res.redirect("/");
       }
-    );
+    });
   })
 
   // forgot password system
@@ -133,9 +130,9 @@ route
   .post("/reset", async function (req, res) {
     resetPasswordToken = randomBytes(20).toString("hex");
     resetPasswordExpire = Date.now() + 10 * 60 * 1000;
-    const mailTo = req.body.username;
+    const mailTo = req.body.email;
     const user = await User.findOneAndUpdate(
-      { username: mailTo },
+      { email: mailTo },
       {
         resetPasswordToken: resetPasswordToken,
         resetPasswordExpire: resetPasswordExpire,

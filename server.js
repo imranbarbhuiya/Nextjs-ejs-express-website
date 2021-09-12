@@ -79,7 +79,36 @@ app.get("/", function (req, res) {
     user: req.user ? req.user : null,
   });
 });
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  const err = new Error("Not Found");
+  err.status = 404;
+  next(err);
+});
 
+// error handlers
+
+// development error handler
+// will print stacktrace
+if (app.get("env") === "development") {
+  app.use(function (err, req, res, next) {
+    res.status(err.status || 500);
+    res.render("error", {
+      message: err.message,
+      error: err,
+    });
+  });
+}
+
+// production error handler
+// no stacktrace leaked to user
+app.use(function (err, req, res, next) {
+  res.status(err.status || 500);
+  res.render("error", {
+    message: err.message,
+    error: {},
+  });
+});
 // listening to port
 const port = process.env.PORT;
 app.listen(port, () => {
