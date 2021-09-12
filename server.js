@@ -42,7 +42,6 @@ app
 
 // mongodb connect with mongoose
 
-mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_SRV, (err) => {
   if (err) console.log(err);
   else console.log("Connected to the database successfully.");
