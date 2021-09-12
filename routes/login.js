@@ -2,6 +2,7 @@
 import { ensureLoggedIn, ensureLoggedOut } from "connect-ensure-login";
 import { randomBytes } from "crypto";
 import { Router } from "express";
+import { body, validationResult } from "express-validator";
 import passport from "passport";
 // requiring local modules
 import User from "../model/userModel.js";
@@ -82,26 +83,42 @@ route
     res.locals.message = req.flash();
     res.render("login", { login: "none", register: "" });
   })
-  .post("/register", function (req, res) {
-    User.register(
-      {
-        email: req.body.email,
-        username: req.body.username,
-        verified: false,
-      },
-      req.body.password,
-      function (err, user) {
-        if (err) {
-          req.flash("error", err.message);
-          res.redirect("/register");
-        } else {
-          passport.authenticate("local")(req, res, function () {
-            res.redirect(req.session.returnTo || "/");
-          });
-        }
+  .post(
+    "/register",
+    body("username")
+      .trim()
+      .isLength({ min: 1 })
+      .withMessage("Name empty.")
+      .isAlpha()
+      .withMessage("Name must be alphabet letters."),
+    body("email").isEmail(),
+    function (req, res) {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        console.log(errors.array().errors);
+        req.flash("error", errors.array().errors);
+        return res.redirect("/register");
       }
-    );
-  })
+      User.register(
+        {
+          email: req.body.email,
+          username: req.body.username,
+          verified: false,
+        },
+        req.body.password,
+        function (err, user) {
+          if (err) {
+            req.flash("error", err.message);
+            res.redirect("/register");
+          } else {
+            passport.authenticate("local")(req, res, function () {
+              res.redirect(req.session.returnTo || "/");
+            });
+          }
+        }
+      );
+    }
+  )
 
   // change password system
   .get("/change", ensureLoggedIn("/login"), function (req, res) {
