@@ -21,7 +21,7 @@ userSchema.plugin(passportLocalMongoose, {
   maxAttempts: 100,
   errorMessages: {
     NoSaltValueStoredError:
-      "Your account was used to created with social auth. Try signing in with social auth.",
+      "Your account was created with social auth. Try signing in with social auth.",
     IncorrectPasswordError: "Incorrect password entered",
     IncorrectUsernameError: "User with the given email id doesn't exist",
     MissingUsernameError: "No email id provided",
