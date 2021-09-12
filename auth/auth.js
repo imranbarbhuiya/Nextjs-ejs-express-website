@@ -1,14 +1,14 @@
 // requiring dependencies
 
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const GitHubStrategy = require("passport-github2").Strategy;
-const FacebookStrategy = require("passport-facebook").Strategy;
-const User = require("../model/userModel");
-const axios = require("axios").default;
+import axios from "axios";
+import { Strategy as FacebookStrategy } from "passport-facebook";
+import { Strategy as GitHubStrategy } from "passport-github2";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import User from "../model/userModel.js";
 
 // auth setup
 
-module.exports = (passport) => {
+export default (passport) => {
   passport.use(
     new GoogleStrategy(
       {

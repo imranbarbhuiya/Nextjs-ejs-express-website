@@ -1,7 +1,7 @@
-const nodemailer = require("nodemailer");
+import { createTransport } from "nodemailer";
 
 async function mail(mailTo, subject, html, text) {
-  let transporter = nodemailer.createTransport({
+  let transporter = createTransport({
     service: "gmail",
     auth: {
       user: process.env.EMAIL,
@@ -19,4 +19,4 @@ async function mail(mailTo, subject, html, text) {
 
   console.log("Message sent: %s", info.messageId);
 }
-module.exports = mail;
+export default mail;

@@ -1,11 +1,9 @@
-const { ensureLoggedIn } = require("connect-ensure-login");
-const express = require("express");
-const natural = require("natural");
+import { ensureLoggedIn } from "connect-ensure-login";
+import { Router } from "express";
+import { metaphone } from "metaphone";
+import Course from "../model/courseModel.js";
 
-const Course = require("../model/courseModel");
-
-const route = express.Router();
-const metaphone = natural.Metaphone;
+const route = Router();
 
 route
   .get("/", function (req, res) {
@@ -24,7 +22,7 @@ route
     const course = new Course({
       author: author,
       title: title,
-      keywords: metaphone.process(title),
+      keywords: metaphone(title),
     });
     course.save(function (err) {
       if (err) console.log(err);
@@ -36,7 +34,7 @@ route
   .get("/search", function (req, res) {
     if (!req.query.search) res.redirect("/");
     try {
-      Course.fuzzySearch(metaphone.process(req.query.search), (err, data) => {
+      Course.fuzzySearch(metaphone(req.query.search), (err, data) => {
         if (err) {
           console.log(err);
         } else {
@@ -48,4 +46,4 @@ route
     }
   });
 
-module.exports = route;
+export default route;

@@ -1,7 +1,8 @@
-const mongoose = require("mongoose");
-const mongoose_fuzzy_searching = require("mongoose-fuzzy-searching");
+import mongoose from "mongoose";
+import mongoose_fuzzy_searching from "mongoose-fuzzy-searching";
+const { model, Schema } = mongoose;
 
-const courseSchema = new mongoose.Schema({
+const courseSchema = new Schema({
   title: { type: String, required: true },
   author: { type: String, required: true },
   thumbnail: { type: String },
@@ -15,4 +16,4 @@ const courseSchema = new mongoose.Schema({
 
 courseSchema.plugin(mongoose_fuzzy_searching, { fields: ["keywords"] });
 
-module.exports = mongoose.model("Course", courseSchema);
+export default model("Course", courseSchema);

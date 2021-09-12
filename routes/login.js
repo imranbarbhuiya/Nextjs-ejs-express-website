@@ -1,14 +1,13 @@
 // requiring dependencies
-const { ensureLoggedIn, ensureLoggedOut } = require("connect-ensure-login");
-const express = require("express");
-const passport = require("passport");
-const crypto = require("crypto");
-
+import { ensureLoggedIn, ensureLoggedOut } from "connect-ensure-login";
+import { randomBytes } from "crypto";
+import { Router } from "express";
+import passport from "passport";
 // requiring local modules
-const User = require("../model/userModel");
-const mail = require("../module/mail");
+import User from "../model/userModel.js";
+import mail from "../module/mail.js";
 
-const route = express.Router();
+const route = Router();
 
 // auth setup
 // google
@@ -132,7 +131,7 @@ route
     res.render("forgot", { password: false });
   })
   .post("/reset", async function (req, res) {
-    resetPasswordToken = crypto.randomBytes(20).toString("hex");
+    resetPasswordToken = randomBytes(20).toString("hex");
     resetPasswordExpire = Date.now() + 10 * 60 * 1000;
     const mailTo = req.body.username;
     const user = await User.findOneAndUpdate(
@@ -196,4 +195,4 @@ route
     res.redirect("/");
   });
 
-module.exports = route;
+export default route;

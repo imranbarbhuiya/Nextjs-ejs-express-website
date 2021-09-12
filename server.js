@@ -1,16 +1,23 @@
 // requiring dependencies
 
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const session = require("express-session");
-const cookieParser = require("cookie-parser");
-const MongoStore = require("connect-mongo");
-const passport = require("passport");
-const flash = require("connect-flash");
-
+import flash from "connect-flash";
+import connect_mongo from "connect-mongo";
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
+import express from "express";
+import session from "express-session";
+import mongoose from "mongoose";
+import passport from "passport";
+// splitted routes
+// splitted routes
+import auth from "./auth/auth.js";
 // local modules
-const User = require("./model/userModel");
+import userModel from "./model/userModel.js";
+import courseRoute from "./routes/course.js";
+import loginRoute from "./routes/login.js";
+dotenv.config();
+const { create } = connect_mongo;
+const { connect } = mongoose;
 
 const app = express();
 
@@ -31,7 +38,7 @@ app
       secret: process.env.SECRET,
       resave: false,
       saveUninitialized: false,
-      store: MongoStore.create({ mongoUrl: process.env.MONGODB_SRV }),
+      store: create({ mongoUrl: process.env.MONGODB_SRV }),
       cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
     })
   )
@@ -42,7 +49,7 @@ app
 
 // mongodb connect with mongoose
 
-mongoose.connect(process.env.MONGODB_SRV, (err) => {
+connect(process.env.MONGODB_SRV, (err) => {
   if (err) console.log(err);
   else console.log("Connected to the database successfully.");
 });
@@ -51,25 +58,21 @@ const port = process.env.PORT;
 
 // passport setup
 
-passport.use(User.createStrategy());
+passport.use(userModel.createStrategy());
 
 passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
 
 passport.deserializeUser(function (id, done) {
-  User.findById(id, function (err, user) {
+  userModel.findById(id, function (err, user) {
     done(err, user);
   });
 });
 
-// splitted routes
-
-require("./auth/auth")(passport);
-const loginRoute = require("./routes/login");
+auth(passport);
 app.use("/", loginRoute);
 
-const courseRoute = require("./routes/course");
 app.use("/course", courseRoute);
 
 // will be removed in future
