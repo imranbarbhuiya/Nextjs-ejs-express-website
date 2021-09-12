@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
   githubId: String,
   facebookId: String,
   verified: { type: Boolean, require: true },
+  designation: { type: String },
   resetPasswordToken: { type: String, expires: 1000 },
   resetPasswordExpire: { type: String, expires: 1000 },
 });

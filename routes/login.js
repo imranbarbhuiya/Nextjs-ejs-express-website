@@ -5,7 +5,7 @@ const passport = require("passport");
 const crypto = require("crypto");
 
 // requiring local modules
-const User = require("../model/userSchema");
+const User = require("../model/userModel");
 const mail = require("../module/mail");
 
 const route = express.Router();

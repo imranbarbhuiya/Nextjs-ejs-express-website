@@ -1,4 +1,3 @@
-//jshint esversion:6
 // requiring dependencies
 
 require("dotenv").config();
@@ -11,7 +10,7 @@ const passport = require("passport");
 const flash = require("connect-flash");
 
 // local modules
-const User = require("./model/userSchema");
+const User = require("./model/userModel");
 
 const app = express();
 
@@ -43,9 +42,10 @@ app
 
 // mongodb connect with mongoose
 
-mongoose.connect(process.env.MONGODB_SRV, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.MONGODB_SRV, (err) => {
+  if (err) console.log(err);
+  else console.log("Connected to the database successfully.");
 });
 
 const port = process.env.PORT;
@@ -69,6 +69,9 @@ passport.deserializeUser(function (id, done) {
 require("./auth/auth")(passport);
 const loginRoute = require("./routes/login");
 app.use("/", loginRoute);
+
+const courseRoute = require("./routes/course");
+app.use("/course", courseRoute);
 
 // will be removed in future
 app

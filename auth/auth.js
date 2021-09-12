@@ -3,7 +3,7 @@
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const GitHubStrategy = require("passport-github2").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
-const User = require("../model/userSchema");
+const User = require("../model/userModel");
 const axios = require("axios").default;
 
 // auth setup
