@@ -1,13 +1,12 @@
 // requiring dependencies
-
 import axios from "axios";
 import { Strategy as FacebookStrategy } from "passport-facebook";
 import { Strategy as GitHubStrategy } from "passport-github2";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+// connecting to user model
 import User from "../model/userModel.js";
 
 // auth setup
-
 export default (passport) => {
   passport.use(
     new GoogleStrategy(

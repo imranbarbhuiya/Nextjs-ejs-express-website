@@ -1,5 +1,4 @@
 // requiring dependencies
-
 import flash from "connect-flash";
 import connect_mongo from "connect-mongo";
 import cookieParser from "cookie-parser";
@@ -8,33 +7,36 @@ import express from "express";
 import session from "express-session";
 import mongoose from "mongoose";
 import passport from "passport";
-// splitted routes
-// splitted routes
 import auth from "./auth/auth.js";
 // local modules
 import userModel from "./model/userModel.js";
 import courseRoute from "./routes/course.js";
 import loginRoute from "./routes/login.js";
+// object destruction
 dotenv.config();
 const { create } = connect_mongo;
 const { connect } = mongoose;
-
+// initiate app
 const app = express();
 
-// express setup
-
 app
+  // set static files
   .use(express.static("public"))
+  // set view engine
   .set("view engine", "ejs")
+  // fetch data from request
   .use(
     express.urlencoded({
-      extended: true,
+      extended: false,
     })
   )
   .set("trust proxy", 1)
+  // set cookie parser
   .use(cookieParser())
+  // set express season
   .use(
     session({
+      name: "codversity_session_id",
       secret: process.env.SECRET,
       resave: false,
       saveUninitialized: false,
@@ -42,22 +44,19 @@ app
       cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
     })
   )
+  // set flash
   .use(flash())
-
+  // init passport
   .use(passport.initialize())
   .use(passport.session());
 
 // mongodb connect with mongoose
-
 connect(process.env.MONGODB_SRV, (err) => {
   if (err) console.log(err);
   else console.log("Connected to the database successfully.");
 });
 
-const port = process.env.PORT;
-
 // passport setup
-
 passport.use(userModel.createStrategy());
 
 passport.serializeUser(function (user, done) {
@@ -70,21 +69,19 @@ passport.deserializeUser(function (id, done) {
   });
 });
 
+// calling auth function
 auth(passport);
-app.use("/", loginRoute);
-
-app.use("/course", courseRoute);
+app.use("/", loginRoute).use("/course", courseRoute);
 
 // will be removed in future
-app
-  .get("/", function (req, res) {
-    res.render("index", {
-      user: req.user ? req.user : null,
-    });
-  })
-
-  // listening to port
-
-  .listen(port, () => {
-    console.log(`Server started at port ${port}`);
+app.get("/", function (req, res) {
+  res.render("index", {
+    user: req.user ? req.user : null,
   });
+});
+
+// listening to port
+const port = process.env.PORT;
+app.listen(port, () => {
+  console.log(`Server started at port ${port}`);
+});

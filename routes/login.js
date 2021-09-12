@@ -7,11 +7,11 @@ import passport from "passport";
 import User from "../model/userModel.js";
 import mail from "../module/mail.js";
 
+// init router
 const route = Router();
 
 // auth setup
 // google
-
 route
   .get(
     "/auth/google",
@@ -28,8 +28,8 @@ route
       failureFlash: true,
     })
   )
-  // github
 
+  // github
   .get(
     "/auth/github",
     passport.authenticate("github", { scope: ["read:user", "user:email"] })
@@ -45,8 +45,8 @@ route
       res.redirect("/");
     }
   )
-  // facebook
 
+  // facebook
   .get(
     "/auth/facebook",
     passport.authenticate("facebook", { scope: ["public_profile", "email"] })
@@ -62,8 +62,8 @@ route
       res.redirect("/");
     }
   )
-  // local login system
 
+  // local login system
   .get("/login", function (req, res) {
     res.locals.message = req.flash();
     res.render("login", { login: "", register: "none" });
@@ -76,8 +76,8 @@ route
       failureFlash: true,
     })
   )
-  // local register system
 
+  // local register system
   .get("/register", function (req, res) {
     res.locals.message = req.flash();
     res.render("login", { login: "none", register: "" });
@@ -102,8 +102,8 @@ route
       }
     );
   })
-  // change password system
 
+  // change password system
   .get("/change", ensureLoggedIn("/login"), function (req, res) {
     res.render("change");
   })
@@ -124,8 +124,8 @@ route
       }
     );
   })
-  // forgot password system
 
+  // forgot password system
   .get("/reset", ensureLoggedOut(), function (req, res) {
     res.locals.message = req.flash();
     res.render("forgot", { password: false });
@@ -188,8 +188,8 @@ route
       }
     );
   })
-  // logout
 
+  // logout
   .get("/logout", function (req, res) {
     req.logout();
     res.redirect("/");
