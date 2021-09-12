@@ -10,10 +10,17 @@
 
 <body>
     <form action="" method="post">
-        <input type="text" name="author" id="">
-        <input type="text" name="title" id="">
+        <input type="text" name="author" id="" placeholder="author">
+        <input type="text" name="title" id="" placeholder="title">
         <input type="submit" name="" id="">
     </form>
+    <form action="/course/search" method="GET">
+        <input type="search" name="search" id="" placeholder="search">
+        <input type="submit" id="">
+    </form>
+    <%if(done){%>
+        <h1> Submitted</h1>
+        <% }%>
 </body>
 
 </html>

@@ -12,10 +12,11 @@ route
     res.sendStatus(500);
   })
   .get("/create", ensureLoggedIn("/login"), function (req, res) {
-    if (req.user.designation == "instructor") res.render("courseAdd");
-    else {
-      res.sendStatus(400);
-    }
+    // if (req.user.designation == "instructor")
+    res.render("courseAdd", { done: false });
+    // else {
+    //   res.sendStatus(400);
+    // }
   })
   .post("/create", function (req, res) {
     // res.sendStatus(500);
@@ -26,8 +27,10 @@ route
       keywords: metaphone.process(title),
     });
     course.save(function (err) {
-      res.sendStatus(200);
       if (err) console.log(err);
+      else {
+        res.render("courseAdd", { done: true });
+      }
     });
   })
   .get("/search", function (req, res) {
