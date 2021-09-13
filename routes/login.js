@@ -139,8 +139,8 @@ route
     res.render("forgot", { password: false });
   })
   .post("/reset", async function (req, res) {
-    resetPasswordToken = randomBytes(20).toString("hex");
-    resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+    let resetPasswordToken = randomBytes(20).toString("hex");
+    let resetPasswordExpire = Date.now() + 10 * 60 * 1000;
     const mailTo = req.body.email;
     const user = await User.findOneAndUpdate(
       { email: mailTo },
