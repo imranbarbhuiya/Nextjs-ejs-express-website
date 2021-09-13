@@ -1,13 +1,35 @@
-import mongoose from "mongoose";
+import dotenv from "dotenv";
 import passport from "passport";
-import { RateLimiterMongo } from "rate-limiter-flexible";
+import { RateLimiterRedis } from "rate-limiter-flexible";
+import redis from "redis";
+dotenv.config();
 
 const maxWrongAttemptsByIPperDay = 100;
 const maxConsecutiveFailsByEmailAndIP = 10;
 
 // the rate limiter instance counts and limits the number of failed logins by key
-const limiterSlowBruteByIP = new RateLimiterMongo({
-  storeClient: mongoose.connection,
+// const limiterSlowBruteByIP = new RateLimiterMongo({
+const redisClient = redis.createClient({
+  host: process.env.REDIS_HOSTNAME,
+  port: process.env.REDIS_PORT,
+  password: process.env.REDIS_PASSWORD,
+
+  // if no connection, an error will be emitted
+  // enable_offline_queue: false,
+});
+// if no connection, an error will be emitted
+// handle connection errors
+redisClient
+  .on("connect", function () {
+    console.log("Connected with redis db!");
+  })
+  .on("error", (err) => {
+    console.log(err);
+    // this error is handled by an error handling function that will be explained later in this tutorial
+    return new Error();
+  });
+const limiterSlowBruteByIP = new RateLimiterRedis({
+  storeClient: redisClient,
   keyPrefix: "codversity_login_fail_ip_per_day",
   // maximum number of failed logins allowed. 1 fail = 1 point
   // each failed login consumes a point
@@ -18,8 +40,8 @@ const limiterSlowBruteByIP = new RateLimiterMongo({
   blockDuration: 60 * 60 * 3, // Block for 1 day, if 100 wrong attempts per day
 });
 
-const limiterConsecutiveFailsByEmailAndIP = new RateLimiterMongo({
-  storeClient: mongoose.connection,
+const limiterConsecutiveFailsByEmailAndIP = new RateLimiterRedis({
+  storeClient: redisClient,
   keyPrefix: "codversity_login_fail_consecutive_email_and_ip",
   points: maxConsecutiveFailsByEmailAndIP,
   duration: 60 * 60 * 24 * 14, // Store number for 14 days since first fail
@@ -58,9 +80,13 @@ export async function loginRouteRateLimit(req, res, next) {
     if (retrySecs > 0) {
       // sets the response’s HTTP header field
       res.set("Retry-After", String(retrySecs));
+      let remainingTime =
+        retrySecs > 60
+          ? `${(retrySecs / 60).toFixed(2)} minute`
+          : `${retrySecs} seconds`;
       req.flash(
         "error",
-        `Too many login attempts. Retry after ${retrySecs} seconds`
+        `Too many login attempts. Retry after ${remainingTime}`
       );
       return res.status(429).redirect("/login");
     }
