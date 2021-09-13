@@ -17,8 +17,8 @@ const userSchema = new Schema({
 
 userSchema.plugin(passportLocalMongoose, {
   usernameField: "email",
-  limitAttempts: true,
-  maxAttempts: 100,
+  // limitAttempts: true,
+  // maxAttempts: 100,
   errorMessages: {
     NoSaltValueStoredError:
       "Your account was created with social auth. Try signing in with social auth.",

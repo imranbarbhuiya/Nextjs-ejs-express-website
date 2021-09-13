@@ -118,9 +118,13 @@ export async function loginRouteRateLimit(req, res, next) {
           const timeOut =
             String(Math.round(rlRejected.msBeforeNext / 1000)) || 1;
           res.set("Retry-After", timeOut);
+          let remainingTime =
+            timeOut > 60
+              ? `${(timeOut / 60).toFixed(2)} minute`
+              : `${timeOut} seconds`;
           req.flash(
             "error",
-            `Too many login attempts. Retry after ${timeOut} seconds`
+            `Too many login attempts. Retry after ${remainingTime} seconds`
           );
           res.status(429).redirect("/login");
         }

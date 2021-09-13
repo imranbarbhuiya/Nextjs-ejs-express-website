@@ -75,7 +75,6 @@ app.use("/", loginRoute).use("/course", courseRoute);
 
 // will be removed in future
 app.get("/", function (req, res) {
-  console.log(req.ip);
   res.render("index", {
     user: req.user ? req.user : null,
   });
