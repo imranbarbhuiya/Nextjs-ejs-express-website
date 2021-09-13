@@ -21,7 +21,7 @@ const redisClient = redis.createClient({
 // handle connection errors
 redisClient
   .on("connect", function () {
-    console.log("Connected with redis db!");
+    console.log("Connected to the Redis database successfully.");
   })
   .on("error", (err) => {
     console.log(err);
@@ -141,7 +141,9 @@ export async function loginRouteRateLimit(req, res, next) {
         if (err) {
           return next(err);
         }
-        return res.redirect(req.session.returnTo || "/");
+        res.redirect(req.session.returnTo || "/");
+        delete req.session.returnTo;
+        return;
       });
     }
   })(req, res, next);

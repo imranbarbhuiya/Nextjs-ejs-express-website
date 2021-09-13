@@ -107,6 +107,7 @@ route
           } else {
             passport.authenticate("local")(req, res, function () {
               res.redirect(req.session.returnTo || "/");
+              delete req.session.returnTo;
             });
           }
         }
@@ -199,8 +200,9 @@ route
 
   // logout
   .get("/logout", function (req, res) {
-    req.logout();
-    res.redirect("/");
+    req.session.destroy(function (err) {
+      res.redirect("/");
+    });
   });
 
 export default route;

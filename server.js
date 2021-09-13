@@ -53,7 +53,7 @@ app
 // mongodb connect with mongoose
 connect(process.env.MONGODB_SRV, (err) => {
   if (err) console.log(err);
-  else console.log("Connected to the database successfully.");
+  else console.log("Connected to the MongoDB database successfully.");
 });
 
 // passport setup
