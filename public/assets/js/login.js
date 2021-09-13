@@ -23,6 +23,3 @@ signIn.addEventListener("click", () => {
   loginIn.classList.toggle("block");
   loginUp.classList.toggle("none");
 });
-
-const inputs = document.querySelectorAll("input");
-inputs.forEach((input) => input.focus({ preventScroll: true }));
