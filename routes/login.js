@@ -4,6 +4,7 @@ import { randomBytes } from "crypto";
 import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import passport from "passport";
+import { loginRouteRateLimit } from "../controller/rate-limit-controller.js";
 // requiring local modules
 import User from "../model/userModel.js";
 import mail from "../module/mail.js";
@@ -69,14 +70,7 @@ route
     res.locals.message = req.flash();
     res.render("login", { login: "", register: "none" });
   })
-  .post(
-    "/login",
-    passport.authenticate("local", {
-      successReturnToOrRedirect: "/",
-      failureRedirect: "/login",
-      failureFlash: true,
-    })
-  )
+  .post("/login", loginRouteRateLimit)
 
   // local register system
   .get("/register", function (req, res) {
