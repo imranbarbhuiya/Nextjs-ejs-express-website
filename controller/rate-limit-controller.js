@@ -102,7 +102,6 @@ export async function loginRouteRateLimit(req, res, next) {
     }
     // If passport authentication successful
     if (user) {
-      console.log("successful login");
       if (resEmailAndIP !== null && resEmailAndIP.consumedPoints > 0) {
         // Reset limiter based on IP + email on successful authorization
         await limiterConsecutiveFailsByEmailAndIP.delete(emailIPkey);
