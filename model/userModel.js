@@ -17,8 +17,9 @@ const userSchema = new Schema({
 
 userSchema.plugin(passportLocalMongoose, {
   usernameField: "email",
-  // limitAttempts: true,
-  // maxAttempts: 100,
+  limitAttempts: true,
+  maxAttempts: 100,
+  maxInterval: 500,
   errorMessages: {
     NoSaltValueStoredError:
       "Your account was created with social auth. Try signing in with social auth.",
@@ -28,6 +29,7 @@ userSchema.plugin(passportLocalMongoose, {
     UserExistsError: "User with the given email id already exist",
     TooManyAttemptsError:
       "Account locked permanently due to too many failed login attempts. Please reset password to unlock.",
+    AttemptTooSoonError: "You're trying too fast please wait and try again.",
   },
 });
 const User = new model("User", userSchema);

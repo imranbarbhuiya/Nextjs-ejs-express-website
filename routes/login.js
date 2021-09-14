@@ -63,34 +63,57 @@ route
     function (req, res) {
       res.redirect("/");
     }
-  )
+  );
 
-  // local login system
+// local login system
+route
   .get("/login", function (req, res) {
     res.locals.message = req.flash();
-    res.render("login", { login: "", register: "none" });
+    res.render("login", {
+      login: "",
+      register: "none",
+    });
   })
   .post("/login", loginRouteRateLimit)
 
   // local register system
   .get("/register", function (req, res) {
     res.locals.message = req.flash();
-    res.render("login", { login: "none", register: "" });
+    res.render("login", {
+      login: "none",
+      register: "",
+    });
   })
   .post(
     "/register",
     body("username")
       .trim()
       .isLength({ min: 1 })
-      .withMessage("Name empty.")
+      .withMessage("Please provide your username!")
       .isAlpha()
       .withMessage("Name must be alphabet letters."),
-    body("email").isEmail(),
+    body("email").isEmail().withMessage("Email is invalid"),
+    body("password")
+      .isLength({ min: 8, max: 50 })
+      .withMessage("Password length should be 8-50 character long.")
+      .matches(/^(?=.*[a-z]).+$/)
+      .withMessage("Password should contain lowercase letter.")
+      .matches(/^(?=.*[A-Z]).+$/)
+      .withMessage("Password should contain Uppercase letter.")
+      .matches(/^(?=.*?[#?!@$%^&*-])/)
+      .withMessage("Password should contain Special character.")
+      .matches(/^(?=.*?[0-9])/)
+      .withMessage("Password should contain Number."),
+    body("cPassword").custom(async (confirmPassword, { req }) => {
+      const password = req.body.password;
+      if (password !== confirmPassword) {
+        throw new Error("Passwords and confirm password must be same");
+      }
+    }),
     function (req, res) {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        console.log(errors.array().errors);
-        req.flash("error", errors.array().errors);
+        req.flash("error", errors.array()[0].msg);
         return res.redirect("/register");
       }
       User.register(

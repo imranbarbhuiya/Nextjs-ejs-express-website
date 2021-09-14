@@ -51,32 +51,34 @@
           </div>
 
           <a href="/reset" class="login__forgot">Forgot password?</a>
-          <span class="flash_message <%=message.error?" error":"success" %>">
-            <%=message.error||message.success%>
-          </span>
-          <input type="submit" class="login__button" value="Sign In" required>
+          <%if(register){%>
+            <span class="flash_message <%=message.error?" error":"success" %>" id="flash">
+              <%=message.error||message.success%>
+            </span>
+            <%}%>
+              <input type="submit" class="login__button" value="Sign In" required>
 
-          <div>
-            <span class="login__account">Don't have an Account ?</span>
-            <span class="login__signin" id="sign-up">Sign Up</span>
-          </div>
+              <div>
+                <span class="login__account">Don't have an Account ?</span>
+                <span class="login__signin" id="sign-up">Sign Up</span>
+              </div>
 
-          <div class="wrapper">
-            <a href="/auth/google">
-              <div class="icon google">
-                <span><i class="fab fa-google"></i></span>
+              <div class="wrapper">
+                <a href="/auth/google">
+                  <div class="icon google">
+                    <span><i class="fab fa-google"></i></span>
+                  </div>
+                </a>
+                <a href="/auth/facebook">
+                  <div class="icon facebook">
+                    <span><i class="fab fa-facebook-f"></i></span>
+                  </div>
+                </a><a href="/auth/github">
+                  <div class="icon github">
+                    <span><i class="fab fa-github"></i></span>
+                  </div>
+                </a>
               </div>
-            </a>
-            <a href="/auth/facebook">
-              <div class="icon facebook">
-                <span><i class="fab fa-facebook-f"></i></span>
-              </div>
-            </a><a href="/auth/github">
-              <div class="icon github">
-                <span><i class="fab fa-github"></i></span>
-              </div>
-            </a>
-          </div>
         </form>
 
         <form action="/register" method="POST" class="login__create <%=register%>" id="login-up">
@@ -88,7 +90,7 @@
             <input name="username" type="text" placeholder="Username" class="login__input" required />
           </div>
 
-          <div class="login__box">
+          <div class=" login__box">
             <i class="fa fa-at login__icon"></i>
             <input name="email" type="email" placeholder="Email" class="login__input" required />
           </div>
@@ -98,7 +100,7 @@
             <input name="password" type="password" placeholder="Password" class="login__input password" required />
 
             <div class="helper-wrapper">
-              <div class="helper-text"><span class="length"><i class="fas fa-times"></i> Between 6-50 characters
+              <div class="helper-text"><span class="length"><i class="fas fa-times"></i> Between 8-50 characters
                 </span><span class="lowercase"><i class="fas fa-times"></i>
                   Lowercase letter</span><span class="uppercase"><i class="fas fa-times"></i> Uppercase
                   letter</span><span class="number"><i class="fas fa-times"></i> A
@@ -111,37 +113,39 @@
             <input name="cPassword" type="password" placeholder="Confirm Password" class="login__input ConfirmPassword"
               required />
           </div>
-          <span class="flash_message <%=message.error?" error":"success" %>" id="flash">
-            <%=message.error||message.success%>
-          </span>
-          <input type="submit" class="login__button" value="Sign Up">
+          <%if(login){%>
+            <span class="flash_message <%=message.error?" error":"success" %>" id="flash">
+              <%=message.error||message.success%>
+            </span>
+            <%}%>
+              <input type="submit" class="login__button" value="Sign Up">
 
-          <div>
-            <span class="login__account">Already have an Account ?</span>
-            <span class="login__signup" id="sign-in">Sign In</span>
-          </div>
-
-          <div class="wrapper">
-
-            <a href="/auth/google">
-              <div class="icon google">
-                <span><i class="fab fa-google"></i></span>
+              <div>
+                <span class="login__account">Already have an Account ?</span>
+                <span class="login__signup" id="sign-in">Sign In</span>
               </div>
-            </a>
 
-            <a href="/auth/facebook">
-              <div class="icon facebook">
-                <span><i class="fab fa-facebook-f"></i></span>
+              <div class="wrapper">
+
+                <a href="/auth/google">
+                  <div class="icon google">
+                    <span><i class="fab fa-google"></i></span>
+                  </div>
+                </a>
+
+                <a href="/auth/facebook">
+                  <div class="icon facebook">
+                    <span><i class="fab fa-facebook-f"></i></span>
+                  </div>
+                </a>
+
+                <a href="/auth/github">
+                  <div class="icon github">
+                    <span><i class="fab fa-github"></i></span>
+                  </div>
+                </a>
+
               </div>
-            </a>
-
-            <a href="/auth/github">
-              <div class="icon github">
-                <span><i class="fab fa-github"></i></span>
-              </div>
-            </a>
-
-          </div>
 
         </form>
 

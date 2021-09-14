@@ -37,7 +37,7 @@ const limiterSlowBruteByIP = new RateLimiterRedis({
   // delete key after 24 hours
   duration: 60 * 60 * 24,
   // number of seconds to block route if consumed points > points
-  blockDuration: 60 * 60 * 3, // Block for 1 day, if 100 wrong attempts per day
+  blockDuration: 60 * 60 * 24, // Block for 1 day, if 100 wrong attempts per day
 });
 
 const limiterConsecutiveFailsByEmailAndIP = new RateLimiterRedis({

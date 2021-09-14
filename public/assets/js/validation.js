@@ -31,7 +31,7 @@ var helperText = {
 
 var pattern = {
   charLength: function () {
-    if (password.value.length >= 6 && password.value.length < 50) {
+    if (password.value.length >= 8 && password.value.length < 50) {
       return true;
     }
   },
