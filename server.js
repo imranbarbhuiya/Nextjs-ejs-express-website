@@ -5,10 +5,11 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import express from "express";
 import session from "express-session";
+import helmet from "helmet";
 import mongoose from "mongoose";
 import passport from "passport";
-import auth from "./auth/auth.js";
 // local modules
+import auth from "./auth/auth.js";
 import userModel from "./model/userModel.js";
 import courseRoute from "./routes/course.js";
 import loginRoute from "./routes/login.js";
@@ -48,7 +49,8 @@ app
   .use(flash())
   // init passport
   .use(passport.initialize())
-  .use(passport.session());
+  .use(passport.session())
+  .use(helmet());
 
 // mongodb connect with mongoose
 connect(process.env.MONGODB_SRV, (err) => {
