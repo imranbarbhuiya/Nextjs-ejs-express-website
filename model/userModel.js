@@ -13,6 +13,8 @@ const userSchema = new Schema({
   designation: { type: String },
   resetPasswordToken: { type: String, expires: 1000 },
   resetPasswordExpire: { type: String, expires: 1000 },
+  verificationToken: { type: String },
+  verificationTokenExpire: { type: String },
 });
 
 userSchema.plugin(passportLocalMongoose, {

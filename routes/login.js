@@ -129,7 +129,8 @@ route
             res.redirect("/register");
           } else {
             passport.authenticate("local")(req, res, function () {
-              res.redirect(req.session.returnTo || "/");
+              // res.redirect(req.session.returnTo || "/");
+              res.redirect("/verify");
               delete req.session.returnTo;
             });
           }
@@ -157,6 +158,77 @@ route
     });
   })
 
+  // verification system
+  .get("/verify", ensureLoggedIn("/login"), function (req, res) {
+    if (req.user.verified) return res.redirect("/");
+    res.locals.message = req.flash();
+    res.render("verify", { email: req.user.email });
+  })
+  .post("/verify", ensureLoggedIn("/login"), async (req, res) => {
+    let verificationToken = randomBytes(20).toString("hex");
+    let verificationTokenExpire = Date.now() + 24 * 60 * 60 * 1000;
+    const mailTo = req.user.email;
+    const user = await User.findOneAndUpdate(
+      { email: mailTo },
+      {
+        verificationToken: verificationToken,
+        verificationTokenExpire: verificationTokenExpire,
+      }
+    );
+    res.locals.message = req.flash("success", "Check email to proceed");
+    res.redirect("/");
+    mail(
+      mailTo,
+      "Verify account",
+      `<p>Verify account</p>
+        <a href="https://${req.headers.host}/reset/${verificationToken}">Click here</a>`
+    ).catch((error) => {
+      req.flash("error", "auth fail");
+      console.log(error);
+    });
+  })
+  .get("/verify/:token", function (re, res) {
+    if (!req.user.email) return res.redirect("/login");
+    {
+      User.findOne(
+        { verificationToken: req.params.token },
+        function (err, sanitizedUser) {
+          if (sanitizedUser) {
+            const now = Date.now();
+            if (sanitizedUser.verificationTokenExpire - now > 0) {
+              User.findOneAndUpdate(
+                { email: req.user.email, verificationToken: req.params.token },
+                { verified: true },
+                function (err, user) {
+                  if (err) {
+                    req.flash("error", "An error occurred");
+                    res.redirect("/login");
+                  } else if (!user) {
+                    req.flash("error", "unauthorized");
+                    res.redirect("/login");
+                  } else {
+                    req.flash("success", "verified");
+                    res.redirect(req.session.returnTo || "/");
+                  }
+                }
+              );
+            }
+            User.updateOne(
+              { email: req.user.email, verificationToken: req.params.token },
+              { $unset: { verificationTokenExpire: 1, verificationToken: 1 } },
+              function (err, user) {
+                if (err) console.log(err);
+              }
+            );
+            req.flash("success", "Verification successful");
+          } else {
+            req.flash("error", "Invalid token");
+          }
+          res.redirect("/login");
+        }
+      );
+    }
+  })
   // forgot password system
   .get("/reset", ensureLoggedOut(), function (req, res) {
     res.locals.message = req.flash();

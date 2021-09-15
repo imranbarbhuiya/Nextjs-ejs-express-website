@@ -141,7 +141,9 @@ export async function loginRouteRateLimit(req, res, next) {
         if (err) {
           return next(err);
         }
-        res.redirect(req.session.returnTo || "/");
+        user.verified
+          ? res.redirect(req.session.returnTo || "/")
+          : res.redirect("/verify");
         delete req.session.returnTo;
         return;
       });
