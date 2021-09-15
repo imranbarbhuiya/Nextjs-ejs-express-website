@@ -176,22 +176,22 @@ route
       }
     );
     res.locals.message = req.flash("success", "Check email to proceed");
-    res.redirect("/");
+    res.redirect("/verify");
     mail(
       mailTo,
       "Verify account",
       `<p>Verify account</p>
-        <a href="https://${req.headers.host}/reset/${verificationToken}">Click here</a>`
+        <a href="https://${req.headers.host}/verify/${req.user.id}/${verificationToken}">Click here</a>`
     ).catch((error) => {
       req.flash("error", "auth fail");
       console.log(error);
     });
   })
-  .get("/verify/:token", function (re, res) {
+  .get("/verify/:id/:token", function (req, res) {
     if (!req.user.email) return res.redirect("/login");
     {
       User.findOne(
-        { verificationToken: req.params.token },
+        { id: req.params.id, verificationToken: req.params.token },
         function (err, sanitizedUser) {
           if (sanitizedUser) {
             const now = Date.now();
@@ -207,7 +207,7 @@ route
                     req.flash("error", "unauthorized");
                     res.redirect("/login");
                   } else {
-                    req.flash("success", "verified");
+                    req.flash("success", "Verification successful");
                     res.redirect(req.session.returnTo || "/");
                   }
                 }
@@ -220,15 +220,15 @@ route
                 if (err) console.log(err);
               }
             );
-            req.flash("success", "Verification successful");
           } else {
             req.flash("error", "Invalid token");
+            res.redirect("/login");
           }
-          res.redirect("/login");
         }
       );
     }
   })
+
   // forgot password system
   .get("/reset", ensureLoggedOut(), function (req, res) {
     res.locals.message = req.flash();
@@ -255,20 +255,20 @@ route
         mailTo,
         "Reset Password",
         `<p>Reset Password</p>
-        <a href="https://${req.headers.host}/reset/${resetPasswordToken}">Click here</a>`
+        <a href="https://${req.headers.host}/reset/${user.id}/${resetPasswordToken}">Click here</a>`
       ).catch((error) => {
         req.flash("error", "auth fail");
         console.log(error);
       });
     }
   })
-  .get("/reset/:token", ensureLoggedOut("/"), function (req, res) {
+  .get("/reset/:id/:token", ensureLoggedOut("/"), function (req, res) {
     res.locals.message = req.flash();
     res.render("forgot", { password: true });
   })
-  .post("/reset/:token", function (req, res) {
+  .post("/reset/:id/:token", function (req, res) {
     User.findOne(
-      { resetPasswordToken: req.params.token },
+      { id: req.params.id, resetPasswordToken: req.params.token },
       function (err, sanitizedUser) {
         if (sanitizedUser) {
           const now = Date.now();

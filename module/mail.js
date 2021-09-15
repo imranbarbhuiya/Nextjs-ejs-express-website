@@ -16,7 +16,5 @@ async function mail(mailTo, subject, html, text) {
     text: text,
     html: html,
   });
-
-  console.log("Message sent: %s", info.messageId);
 }
 export default mail;
