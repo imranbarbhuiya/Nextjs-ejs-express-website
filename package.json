@@ -9,9 +9,6 @@
   },
   "author": "imran",
   "license": "ISC",
-  "engines": {
-    "node": "12.18.1"
-  },
   "type": "module",
   "dependencies": {
     "axios": "^0.21.4",
