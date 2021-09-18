@@ -10,7 +10,7 @@
   "author": "imran",
   "license": "ISC",
   "engines": {
-    "node": "16.8.0"
+    "node": "12.18.1"
   },
   "type": "module",
   "dependencies": {

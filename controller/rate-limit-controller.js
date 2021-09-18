@@ -14,18 +14,17 @@ const redisClient = redis.createClient({
   port: process.env.REDIS_PORT,
   password: process.env.REDIS_PASSWORD,
 
-  // if no connection, an error will be emitted
   // enable_offline_queue: false,
 });
-// if no connection, an error will be emitted
-// handle connection errors
+
 redisClient
   .on("connect", function () {
     console.log("Connected to the Redis database successfully.");
   })
+
+  // handle connection errors
   .on("error", (err) => {
     console.log(err);
-    // this error is handled by an error handling function that will be explained later in this tutorial
     return new Error();
   });
 const limiterSlowBruteByIP = new RateLimiterRedis({
