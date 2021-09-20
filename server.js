@@ -11,7 +11,9 @@ import passport from "passport";
 // local modules
 import auth from "./auth/auth.js";
 import userModel from "./model/userModel.js";
+import articleRoute from "./routes/article.js";
 import courseRoute from "./routes/course.js";
+import indexRoute from "./routes/index.js";
 import loginRoute from "./routes/login.js";
 // object destruction
 dotenv.config();
@@ -74,14 +76,12 @@ passport.deserializeUser(function (id, done) {
 
 // calling auth function
 auth(passport);
-app.use("/", loginRoute).use("/course", courseRoute);
+app
+  .use("/", indexRoute)
+  .use("/", loginRoute)
+  .use("/course", courseRoute)
+  .use("/article", articleRoute);
 
-// will be removed in future
-app.get("/", function (req, res) {
-  res.render("index", {
-    user: req.user ? req.user : null,
-  });
-});
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   const err = new Error("Not Found");
