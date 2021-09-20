@@ -12,8 +12,11 @@ const courseSchema = new Schema({
   reviews: { type: Array },
   price: { type: Number },
   keywords: { type: String },
+  verified: { type: Boolean, required: true, default: false },
 });
 
-courseSchema.plugin(mongoose_fuzzy_searching, { fields: ["keywords"] });
+courseSchema.plugin(mongoose_fuzzy_searching, {
+  fields: ["keywords"],
+});
 
 export default model("Course", courseSchema);

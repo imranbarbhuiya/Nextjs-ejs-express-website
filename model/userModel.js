@@ -3,14 +3,14 @@ import passportLocalMongoose from "passport-local-mongoose";
 const { model, Schema } = mongoose;
 
 const userSchema = new Schema({
-  email: { type: String, require: true, unique: true },
+  email: { type: String, required: true, unique: true },
   username: { type: String, required: true },
   password: String,
   googleId: String,
   githubId: String,
   facebookId: String,
-  verified: { type: Boolean, require: true },
-  designation: { type: String },
+  verified: { type: Boolean, required: true, default: false },
+  role: { type: String, required: true, default: "student" },
   resetPasswordToken: { type: String, expires: 1000 },
   resetPasswordExpire: { type: String, expires: 1000 },
   verificationToken: { type: String },

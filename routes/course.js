@@ -1,6 +1,7 @@
 import { ensureLoggedIn } from "connect-ensure-login";
 import { Router } from "express";
 import { metaphone } from "metaphone";
+import { isAdmin } from "../controller/roles.js";
 import Course from "../model/courseModel.js";
 
 const route = Router();
@@ -9,12 +10,8 @@ route
   .get("/", function (req, res) {
     res.sendStatus(500);
   })
-  .get("/create", ensureLoggedIn("/login"), function (req, res) {
-    // if (req.user.designation == "instructor")
-    res.render("courseAdd", { done: false });
-    // else {
-    //   res.sendStatus(400);
-    // }
+  .get("/create", ensureLoggedIn("/login"), isAdmin, function (req, res) {
+    res.render("course/courseAdd", { done: false });
   })
   .post("/create", function (req, res) {
     // res.sendStatus(500);
@@ -27,7 +24,7 @@ route
     course.save(function (err) {
       if (err) console.log(err);
       else {
-        res.render("courseAdd", { done: true });
+        res.render("course/courseAdd", { done: true });
       }
     });
   })

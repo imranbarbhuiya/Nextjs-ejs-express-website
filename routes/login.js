@@ -69,7 +69,7 @@ route
 route
   .get("/login", function (req, res) {
     res.locals.message = req.flash();
-    res.render("login", {
+    res.render("login/login", {
       login: "",
       register: "none",
     });
@@ -79,7 +79,7 @@ route
   // local register system
   .get("/register", function (req, res) {
     res.locals.message = req.flash();
-    res.render("login", {
+    res.render("login/login", {
       login: "none",
       register: "",
     });
@@ -141,7 +141,7 @@ route
 
   // change password system
   .get("/change", ensureLoggedIn("/login"), function (req, res) {
-    res.render("change");
+    res.render("login/change");
   })
   .post("change", function (req, res) {
     User.findOne({ email: req.user.username }, function (err, sanitizedUser) {
@@ -162,7 +162,7 @@ route
   .get("/verify", ensureLoggedIn("/login"), function (req, res) {
     if (req.user.verified) return res.redirect("/");
     res.locals.message = req.flash();
-    res.render("verify", { email: req.user.email });
+    res.render("login/verify", { email: req.user.email });
   })
   .post("/verify", ensureLoggedIn("/login"), async (req, res) => {
     let verificationToken = randomBytes(20).toString("hex");
@@ -232,7 +232,7 @@ route
   // forgot password system
   .get("/reset", ensureLoggedOut(), function (req, res) {
     res.locals.message = req.flash();
-    res.render("forgot", { password: false });
+    res.render("login/forgot", { password: false });
   })
   .post("/reset", async function (req, res) {
     let resetPasswordToken = randomBytes(20).toString("hex");
@@ -264,7 +264,7 @@ route
   })
   .get("/reset/:id/:token", ensureLoggedOut("/"), function (req, res) {
     res.locals.message = req.flash();
-    res.render("forgot", { password: true });
+    res.render("login/forgot", { password: true });
   })
   .post("/reset/:id/:token", function (req, res) {
     User.findOne(
