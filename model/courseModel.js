@@ -5,6 +5,7 @@ const { model, Schema } = mongoose;
 const courseSchema = new Schema({
   title: { type: String, required: true },
   author: { type: String, required: true },
+  authorId: { type: String, required: true },
   thumbnail: { type: String },
   description: { type: String },
   videos: { type: Array },

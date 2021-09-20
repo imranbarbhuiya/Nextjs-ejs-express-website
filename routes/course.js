@@ -1,7 +1,7 @@
 import { ensureLoggedIn } from "connect-ensure-login";
 import { Router } from "express";
 import { metaphone } from "metaphone";
-import { isAdmin } from "../controller/roles.js";
+// import { isAdmin } from "../controller/roles.js";
 import Course from "../model/courseModel.js";
 
 const route = Router();
@@ -10,16 +10,16 @@ route
   .get("/", function (req, res) {
     res.sendStatus(500);
   })
-  .get("/create", ensureLoggedIn("/login"), isAdmin, function (req, res) {
+  .get("/create", ensureLoggedIn("/login"), function (req, res) {
     res.render("course/courseAdd", { done: false });
   })
   .post("/create", function (req, res) {
-    // res.sendStatus(500);
     let { title, author, thumbnail, description, price } = req.body;
     const course = new Course({
       author: author,
+      authorId: req.user.id,
       title: title,
-      keywords: metaphone(title),
+      keywords: metaphone(`${title}by ${author}`),
     });
     course.save(function (err) {
       if (err) console.log(err);
@@ -35,7 +35,8 @@ route
         if (err) {
           console.log(err);
         } else {
-          res.send(data);
+          let verifiedData = data.filter((data) => data.verified);
+          res.send(verifiedData);
         }
       });
     } catch (error) {
