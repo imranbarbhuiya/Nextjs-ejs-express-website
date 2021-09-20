@@ -33,12 +33,18 @@ route
     try {
       Course.fuzzySearch(
         metaphone(req.query.search) + req.query.search,
+        {
+          verified: true,
+          sort: {
+            price: "descending",
+          },
+          limit: 1,
+        },
         (err, data) => {
           if (err) {
             console.log(err);
           } else {
-            let verifiedData = data.filter((data) => data.verified);
-            res.send(verifiedData);
+            res.send(data);
           }
         }
       );

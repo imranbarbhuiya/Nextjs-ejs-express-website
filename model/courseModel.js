@@ -11,7 +11,7 @@ const courseSchema = new Schema({
   videos: { type: Array },
   comments: { type: Array },
   reviews: { type: Array },
-  price: { type: Number },
+  price: { type: Number, required: true, default: 399 },
   keywords: { type: String },
   verified: { type: Boolean, required: true, default: false },
 });
