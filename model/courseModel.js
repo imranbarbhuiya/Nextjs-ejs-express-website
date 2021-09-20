@@ -17,7 +17,7 @@ const courseSchema = new Schema({
 });
 
 courseSchema.plugin(mongoose_fuzzy_searching, {
-  fields: ["keywords"],
+  fields: ["keywords", "author", "description", "title"],
 });
 
 export default model("Course", courseSchema);

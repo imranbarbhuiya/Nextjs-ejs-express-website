@@ -31,14 +31,17 @@ route
   .get("/search", function (req, res) {
     if (!req.query.search) res.redirect("/");
     try {
-      Course.fuzzySearch(metaphone(req.query.search), (err, data) => {
-        if (err) {
-          console.log(err);
-        } else {
-          let verifiedData = data.filter((data) => data.verified);
-          res.send(verifiedData);
+      Course.fuzzySearch(
+        metaphone(req.query.search) + req.query.search,
+        (err, data) => {
+          if (err) {
+            console.log(err);
+          } else {
+            let verifiedData = data.filter((data) => data.verified);
+            res.send(verifiedData);
+          }
         }
-      });
+      );
     } catch (error) {
       console.log(error);
     }
