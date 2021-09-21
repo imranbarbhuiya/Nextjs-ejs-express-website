@@ -13,7 +13,7 @@ route
   .get("/create", ensureLoggedIn("/login"), function (req, res) {
     res.render("course/courseAdd", { done: false });
   })
-  .post("/create", function (req, res) {
+  .post("/create", ensureLoggedIn("/login"), function (req, res) {
     let { title, author, thumbnail, description, price } = req.body;
     const course = new Course({
       author: author,
