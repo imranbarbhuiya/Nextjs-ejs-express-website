@@ -51,35 +51,35 @@ route
     } catch (error) {
       console.log(error);
     }
-  })
-  .get("/search/auto", function (req, res) {
-    var regex = new RegExp(req.query["term"], "i");
-    var query = User.find({ author: regex }, { author: 1 })
-      .sort({ price: -1 })
-      .limit(20);
-
-    // Execute query in a callback and return users list
-    query.exec(function (err, users) {
-      if (!err) {
-        // Method to construct the json result set
-        var result = buildResultSet(users);
-        res.send(
-          result,
-          {
-            "Content-Type": "application/json",
-          },
-          200
-        );
-      } else {
-        res.send(
-          JSON.stringify(err),
-          {
-            "Content-Type": "application/json",
-          },
-          404
-        );
-      }
-    });
   });
+// .get("/search/auto", function (req, res) {
+//   var regex = new RegExp(req.query["term"], "i");
+//   var query = User.find({ author: regex }, { author: 1 })
+//     .sort({ price: -1 })
+//     .limit(20);
+
+//   // Execute query in a callback and return users list
+//   query.exec(function (err, users) {
+//     if (!err) {
+//       // Method to construct the json result set
+//       var result = buildResultSet(users);
+//       res.send(
+//         result,
+//         {
+//           "Content-Type": "application/json",
+//         },
+//         200
+//       );
+//     } else {
+//       res.send(
+//         JSON.stringify(err),
+//         {
+//           "Content-Type": "application/json",
+//         },
+//         404
+//       );
+//     }
+//   });
+// });
 
 export default route;
