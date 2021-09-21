@@ -52,7 +52,15 @@ app
   // init passport
   .use(passport.initialize())
   .use(passport.session())
-  .use(helmet());
+  // .use(helmet());
+  .use(
+    helmet.contentSecurityPolicy({
+      useDefaults: true,
+      directives: {
+        scriptSrc: ["'self'", "https://cdn.jsdelivr.net"],
+      },
+    })
+  );
 
 // mongodb connect with mongoose
 connect(process.env.MONGODB_SRV, (err) => {
