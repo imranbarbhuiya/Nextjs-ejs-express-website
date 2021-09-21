@@ -10,7 +10,7 @@ $(function () {
           response(
             $.map(data, function (el) {
               return {
-                label: el.fullname,
+                label: el.fullName,
                 value: el._id,
               };
             })
