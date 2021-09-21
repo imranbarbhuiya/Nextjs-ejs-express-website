@@ -52,7 +52,6 @@ app
   // init passport
   .use(passport.initialize())
   .use(passport.session())
-  // .use(helmet());
   .use(
     helmet.contentSecurityPolicy({
       useDefaults: true,
