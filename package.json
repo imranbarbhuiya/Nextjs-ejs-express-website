@@ -1,7 +1,6 @@
 {
-  "name": "test",
+  "name": "codversity",
   "version": "1.0.0",
-  "description": "",
   "main": "server.js",
   "scripts": {
     "test": "snyk test",
@@ -38,5 +37,14 @@
   },
   "devDependencies": {
     "snyk": "^1.709.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imranbarbhuiya/Codversity.git"
+  },
+  "bugs": {
+    "url": "https://github.com/imranbarbhuiya/Codversity/issues"
+  },
+  "homepage": "https://github.com/imranbarbhuiya/Codversity#readme",
+  "description": ""
 }
