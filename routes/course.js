@@ -28,26 +28,17 @@ route
       }
     });
   })
-  .get("/search", function (req, res) {
+  .get("/search", async function (req, res) {
     if (!req.query.search) res.redirect("/");
     try {
-      Course.fuzzySearch(
+      const data = await Course.fuzzySearch(
         metaphone(req.query.search) + req.query.search,
         {
           verified: true,
-          sort: {
-            price: "descending",
-          },
-          limit: 1,
-        },
-        (err, data) => {
-          if (err) {
-            console.log(err);
-          } else {
-            res.send(data);
-          }
         }
-      );
+      ).sort("price");
+      // .exec();
+      res.send(data);
     } catch (error) {
       console.log(error);
     }

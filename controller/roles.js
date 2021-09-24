@@ -1,4 +1,4 @@
-export async function isAdmin(req, res, next) {
+async function isAdmin(req, res, next) {
   if (req.user.role == "admin") {
     next();
   } else {
@@ -6,7 +6,7 @@ export async function isAdmin(req, res, next) {
   }
 }
 
-export async function canAddCourse(req, res, next) {
+async function canAddCourse(req, res, next) {
   if (req.user.role == "instructor" || req.user.role == "admin") {
     next();
   } else {
@@ -14,7 +14,7 @@ export async function canAddCourse(req, res, next) {
   }
 }
 
-export async function canEditCourse(req, res, next) {
+async function canEditCourse(req, res, next) {
   if (
     req.user.role == "admin" ||
     (req.user.role == "instructor" && req.course.userId == req.user.id)
@@ -25,7 +25,7 @@ export async function canEditCourse(req, res, next) {
   }
 }
 
-export async function canEditArticle(req, res, next) {
+async function canEditArticle(req, res, next) {
   if (
     req.user.role == "admin" ||
     (req.user.role == "instructor" && req.article.userId == req.user.id)
@@ -35,3 +35,5 @@ export async function canEditArticle(req, res, next) {
     res.sendStatus(400);
   }
 }
+
+export { isAdmin, canAddCourse, canEditCourse, canEditArticle };

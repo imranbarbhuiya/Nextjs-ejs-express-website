@@ -14,7 +14,7 @@ const redisClient = redis.createClient({
   port: process.env.REDIS_PORT,
   password: process.env.REDIS_PASSWORD,
 
-  // enable_offline_queue: false,
+  enable_offline_queue: false,
 });
 
 redisClient
