@@ -226,6 +226,7 @@ route
     res.render("login/forgot", { password: false });
   })
   .post("/reset", async function (req, res) {
+    let resetPasswordToken = randomBytes(20).toString("hex");
     const mailTo = req.body.email;
     const user = await User.findOneAndUpdate(
       { email: mailTo },
@@ -237,7 +238,6 @@ route
       res.locals.message = req.flash("error", "User doesn't exist");
       res.redirect("/reset");
     } else {
-      let resetPasswordToken = randomBytes(20).toString("hex");
       const encoded = jwt.sign(
         {
           id: user.id,
