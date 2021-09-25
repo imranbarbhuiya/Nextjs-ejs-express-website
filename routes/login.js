@@ -167,13 +167,19 @@ route
   })
   .post("/verify", ensureLoggedIn("/login"), async (req, res) => {
     let verificationToken = randomBytes(20).toString("hex");
-    let verificationTokenExpire = Date.now() + 24 * 60 * 60 * 1000;
+    const encoded = jwt.sign(
+      {
+        id: req.user.id,
+        token: verificationToken,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
     const mailTo = req.user.email;
-    const user = await User.findOneAndUpdate(
+    await User.findOneAndUpdate(
       { email: mailTo },
       {
         verificationToken: verificationToken,
-        verificationTokenExpire: verificationTokenExpire,
       }
     );
     res.locals.message = req.flash("success", "Check email to proceed");
@@ -182,51 +188,35 @@ route
       mailTo,
       "Verify account",
       `<p>Verify account</p>
-        <a href="https://${req.headers.host}/verify/${req.user.id}/${verificationToken}">Click here</a>`
+        <a href="${req.protocol}://${req.headers.host}/verify/${encoded}">Click here</a>`
     ).catch((error) => {
       req.flash("error", "auth fail");
       console.log(error);
     });
   })
-  .get("/verify/:id/:token", function (req, res) {
-    if (!req.user.email) return res.redirect("/login");
-    {
-      User.findOne(
-        { id: req.params.id, verificationToken: req.params.token },
-        function (err, sanitizedUser) {
-          if (sanitizedUser) {
-            const now = Date.now();
-            if (sanitizedUser.verificationTokenExpire - now > 0) {
-              User.findOneAndUpdate(
-                { email: req.user.email, verificationToken: req.params.token },
-                { verified: true },
-                function (err, user) {
-                  if (err) {
-                    req.flash("error", "An error occurred");
-                    res.redirect("/login");
-                  } else if (!user) {
-                    req.flash("error", "unauthorized");
-                    res.redirect("/login");
-                  } else {
-                    req.flash("success", "Verification successful");
-                    res.redirect(req.session.returnTo || "/");
-                  }
-                }
-              );
-            }
-            User.updateOne(
-              { email: req.user.email, verificationToken: req.params.token },
-              { $unset: { verificationTokenExpire: 1, verificationToken: 1 } },
-              function (err, user) {
-                if (err) console.log(err);
-              }
-            );
-          } else {
+  .get("/verify/:token", ensureLoggedIn("/login"), function (req, res) {
+    try {
+      let decode = jwt.decode(req.params.token, process.env.JWT_SECRET);
+      User.findOneAndUpdate(
+        { email: req.user.email, verificationToken: decode.token },
+        { verified: true, $unset: { verificationToken: 1 } },
+        function (err, user) {
+          if (err) {
+            console.log(err);
+            req.flash("error", "An error occurred");
+            res.redirect("/verify");
+          } else if (!user) {
             req.flash("error", "Invalid token");
             res.redirect("/login");
+          } else {
+            req.flash("success", "Verification successful");
+            res.redirect(req.session.returnTo || "/");
           }
         }
       );
+    } catch (err) {
+      req.flash("error", "token expired");
+      res.redirect("/verify");
     }
   })
 
@@ -236,14 +226,6 @@ route
     res.render("login/forgot", { password: false });
   })
   .post("/reset", async function (req, res) {
-    let resetPasswordToken = randomBytes(20).toString("hex");
-    const encoded = jwt.sign(
-      {
-        token: resetPasswordToken,
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
     const mailTo = req.body.email;
     const user = await User.findOneAndUpdate(
       { email: mailTo },
@@ -255,20 +237,29 @@ route
       res.locals.message = req.flash("error", "User doesn't exist");
       res.redirect("/reset");
     } else {
+      let resetPasswordToken = randomBytes(20).toString("hex");
+      const encoded = jwt.sign(
+        {
+          id: user.id,
+          token: resetPasswordToken,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
       res.locals.message = req.flash("success", "Check email to proceed");
       res.redirect("/reset");
       mail(
         mailTo,
         "Reset Password",
         `<p>Reset Password</p>
-        <a href="${req.protocol}://${req.headers.host}/reset/${user.id}/${encoded}">Click here</a>`
+        <a href="${req.protocol}://${req.headers.host}/reset/${encoded}">Click here</a>`
       ).catch((error) => {
         req.flash("error", "auth fail");
         console.log(error);
       });
     }
   })
-  .get("/reset/:id/:token", ensureLoggedOut("/"), function (req, res) {
+  .get("/reset/:token", ensureLoggedOut("/"), function (req, res) {
     jwt.verify(req.params.token, process.env.JWT_SECRET, (err, token) => {
       if (err) {
         req.flash("error", "token expired");
@@ -279,38 +270,66 @@ route
       }
     });
   })
-  .post("/reset/:id/:token", function (req, res) {
-    try {
-      let decode = jwt.verify(req.params.token, process.env.JWT_SECRET);
-      User.findOne(
-        { id: req.params.id, resetPasswordToken: decode.token },
-        function (err, sanitizedUser) {
-          if (sanitizedUser) {
-            const now = Date.now();
-            sanitizedUser.setPassword(req.body.password, function () {
-              sanitizedUser.save();
-            });
-            User.updateOne(
-              { resetPasswordToken: decode.token },
-              { $unset: { resetPasswordToken: 1 } },
-              function (err, user) {
-                if (err) req.flash("error", err.message);
-              }
-            );
-            req.flash("success", "Password reset successful");
-          } else {
-            req.flash("error", "Invalid token");
+  .post(
+    "/reset/:token",
+    body("password")
+      .isLength({ min: 8, max: 50 })
+      .withMessage("Password length should be 8-50 character long.")
+      .matches(/^(?=.*[a-z]).+$/)
+      .withMessage("Password should contain lowercase letter.")
+      .matches(/^(?=.*[A-Z]).+$/)
+      .withMessage("Password should contain Uppercase letter.")
+      .matches(/^(?=.*?[#?!@$%^&*-])/)
+      .withMessage("Password should contain Special character.")
+      .matches(/^(?=.*?[0-9])/)
+      .withMessage("Password should contain Number."),
+    body("cPassword").custom(async (confirmPassword, { req }) => {
+      const password = req.body.password;
+      if (password !== confirmPassword) {
+        throw new Error("Passwords and confirm password must be same");
+      }
+    }),
+    function (req, res) {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        req.flash("error", errors.array()[0].msg);
+        return res.redirect("/register");
+      }
+      try {
+        let decode = jwt.verify(req.params.token, process.env.JWT_SECRET);
+        User.findOne(
+          { id: decode.id, resetPasswordToken: decode.token },
+          function (err, sanitizedUser) {
+            if (err) {
+              console.log(err);
+              req.flash("error", "an error occurred please try again");
+              res.redirect("/reset");
+            } else if (sanitizedUser) {
+              sanitizedUser.setPassword(req.body.password, function () {
+                sanitizedUser.save();
+              });
+              User.updateOne(
+                { resetPasswordToken: decode.token },
+                { $unset: { resetPasswordToken: 1 } },
+                function (err, user) {
+                  if (err) req.flash("error", err.message);
+                }
+              );
+              req.flash("success", "Password reset successful");
+            } else {
+              req.flash("error", "Invalid token");
+            }
+            res.redirect("/login");
           }
-          res.redirect("/login");
-        }
-      );
-    } catch (error) {
-      if (error.message == "jwt expired") {
-        req.flash("error", "Token expired");
-      } else req.flash("error", "Invalid token");
-      res.redirect("/verify");
+        );
+      } catch (error) {
+        if (error.message == "jwt expired") {
+          req.flash("error", "Token expired");
+        } else req.flash("error", "Invalid token");
+        res.redirect("/verify");
+      }
     }
-  })
+  )
 
   // logout
   .get("/logout", function (req, res) {

@@ -11,9 +11,8 @@ const userSchema = new Schema({
   facebookId: String,
   verified: { type: Boolean, required: true, default: false },
   role: { type: String, required: true, default: "student" },
-  resetPasswordToken: { type: String, expires: 1000 },
+  resetPasswordToken: { type: String },
   verificationToken: { type: String },
-  verificationTokenExpire: { type: String },
 });
 
 userSchema.plugin(passportLocalMongoose, {
