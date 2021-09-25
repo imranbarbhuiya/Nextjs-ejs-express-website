@@ -9,12 +9,16 @@ async function mail(mailTo, subject, html, text) {
     },
   });
 
-  let info = await transporter.sendMail({
-    from: '"Codversity" <reset@codversity.com>',
-    to: mailTo,
-    subject: subject,
-    text: text,
-    html: html,
-  });
+  await transporter
+    .sendMail({
+      from: '"Codversity" <reset@codversity.com>',
+      to: mailTo,
+      subject: subject,
+      text: text,
+      html: html,
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 export default mail;

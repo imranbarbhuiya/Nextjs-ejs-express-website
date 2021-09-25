@@ -3,9 +3,10 @@ import { ensureLoggedIn, ensureLoggedOut } from "connect-ensure-login";
 import { randomBytes } from "crypto";
 import { Router } from "express";
 import { body, validationResult } from "express-validator";
+import jwt from "jsonwebtoken";
 import passport from "passport";
-import { loginRouteRateLimit } from "../controller/rate-limit-controller.js";
 // requiring local modules
+import { loginRouteRateLimit } from "../controller/rate-limit-controller.js";
 import User from "../model/userModel.js";
 import mail from "../module/mail.js";
 
@@ -236,13 +237,18 @@ route
   })
   .post("/reset", async function (req, res) {
     let resetPasswordToken = randomBytes(20).toString("hex");
-    let resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+    const encoded = jwt.sign(
+      {
+        token: resetPasswordToken,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
     const mailTo = req.body.email;
     const user = await User.findOneAndUpdate(
       { email: mailTo },
       {
         resetPasswordToken: resetPasswordToken,
-        resetPasswordExpire: resetPasswordExpire,
       }
     );
     if (!user) {
@@ -255,7 +261,7 @@ route
         mailTo,
         "Reset Password",
         `<p>Reset Password</p>
-        <a href="https://${req.headers.host}/reset/${user.id}/${resetPasswordToken}">Click here</a>`
+        <a href="${req.protocol}://${req.headers.host}/reset/${user.id}/${encoded}">Click here</a>`
       ).catch((error) => {
         req.flash("error", "auth fail");
         console.log(error);
@@ -263,34 +269,47 @@ route
     }
   })
   .get("/reset/:id/:token", ensureLoggedOut("/"), function (req, res) {
-    res.locals.message = req.flash();
-    res.render("login/forgot", { password: true });
+    jwt.verify(req.params.token, process.env.JWT_SECRET, (err, token) => {
+      if (err) {
+        req.flash("error", "token expired");
+        res.redirect("/login");
+      } else {
+        res.locals.message = req.flash();
+        res.render("login/forgot", { password: true });
+      }
+    });
   })
   .post("/reset/:id/:token", function (req, res) {
-    User.findOne(
-      { id: req.params.id, resetPasswordToken: req.params.token },
-      function (err, sanitizedUser) {
-        if (sanitizedUser) {
-          const now = Date.now();
-          if (sanitizedUser.resetPasswordExpire - now > 0) {
+    try {
+      let decode = jwt.verify(req.params.token, process.env.JWT_SECRET);
+      User.findOne(
+        { id: req.params.id, resetPasswordToken: decode.token },
+        function (err, sanitizedUser) {
+          if (sanitizedUser) {
+            const now = Date.now();
             sanitizedUser.setPassword(req.body.password, function () {
               sanitizedUser.save();
             });
+            User.updateOne(
+              { resetPasswordToken: decode.token },
+              { $unset: { resetPasswordToken: 1 } },
+              function (err, user) {
+                if (err) req.flash("error", err.message);
+              }
+            );
+            req.flash("success", "Password reset successful");
+          } else {
+            req.flash("error", "Invalid token");
           }
-          User.updateOne(
-            { resetPasswordToken: req.params.token },
-            { $unset: { resetPasswordExpire: 1, resetPasswordToken: 1 } },
-            function (err, user) {
-              if (err) console.log(err);
-            }
-          );
-          req.flash("success", "Password reset successful");
-        } else {
-          req.flash("error", "Invalid token");
+          res.redirect("/login");
         }
-        res.redirect("/login");
-      }
-    );
+      );
+    } catch (error) {
+      if (error.message == "jwt expired") {
+        req.flash("error", "Token expired");
+      } else req.flash("error", "Invalid token");
+      res.redirect("/verify");
+    }
   })
 
   // logout

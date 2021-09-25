@@ -12,7 +12,6 @@ const userSchema = new Schema({
   verified: { type: Boolean, required: true, default: false },
   role: { type: String, required: true, default: "student" },
   resetPasswordToken: { type: String, expires: 1000 },
-  resetPasswordExpire: { type: String, expires: 1000 },
   verificationToken: { type: String },
   verificationTokenExpire: { type: String },
 });
