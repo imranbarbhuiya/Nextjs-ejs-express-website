@@ -116,7 +116,7 @@ route
           email: req.body.email,
           username: req.body.username,
           verified: false,
-          referredBy: req.referredBy,
+          referredBy: req.session.referred,
         },
         req.body.password,
         function (err, user) {
@@ -125,9 +125,8 @@ route
             res.redirect("/register");
           } else {
             passport.authenticate("local")(req, res, function () {
-              // res.redirect(req.session.returnTo || "/");
+              delete req.session.referred;
               res.redirect("/verify");
-              delete req.session.returnTo;
             });
           }
         }

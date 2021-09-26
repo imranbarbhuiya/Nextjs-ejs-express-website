@@ -4,7 +4,8 @@
   "main": "server.js",
   "scripts": {
     "test": "snyk test",
-    "start": "node ./server.js"
+    "start": "node ./server.js",
+    "dev": "nodemon"
   },
   "author": "imran",
   "license": "ISC",
@@ -28,7 +29,6 @@
     "mongoose": "^6.0.5",
     "mongoose-fuzzy-searching": "^2.0.2",
     "nodemailer": "^6.6.3",
-    "nodemon": "^2.0.13",
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
     "passport-github2": "^0.1.12",
@@ -38,6 +38,7 @@
     "redis": "^3.1.2"
   },
   "devDependencies": {
+    "nodemon": "^2.0.13",
     "snyk": "^1.709.0"
   },
   "repository": {
