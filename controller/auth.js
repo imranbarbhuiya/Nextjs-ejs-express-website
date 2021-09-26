@@ -16,19 +16,19 @@ export default (passport) => {
         callbackURL: `/auth/google/login`,
         userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
       },
-      function (accessToken, refreshToken, profile, cb) {
+      function (accessToken, refreshToken, profile, next) {
         User.findOne(
           {
             email: profile.emails[0].value,
           },
           function (err, user) {
             if (err) {
-              return cb(err);
+              return next(err);
             }
             if (user) {
-              if (user.authId == profile.id) return cb(err, user);
+              if (user.authId == profile.id) return next(err, user);
               else
-                return cb(null, false, {
+                return next(null, false, {
                   message: `You'd authenticated with ${
                     user.authProvider || "password"
                   }`,
@@ -44,9 +44,9 @@ export default (passport) => {
               user.save(function (err, user) {
                 if (err) {
                   console.log(err);
-                  return cb(err);
+                  return next(err);
                 }
-                return cb(err, user);
+                return next(err, user);
               });
             }
           }
@@ -61,7 +61,7 @@ export default (passport) => {
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
         callbackURL: "/auth/github/login",
       },
-      async function (accessToken, refreshToken, profile, done) {
+      async function (accessToken, refreshToken, profile, next) {
         let primaryEmail;
         await axios
           .get(`https://api.github.com/user/emails`, {
@@ -74,7 +74,7 @@ export default (passport) => {
             primaryEmail = data.data.filter((email) => email.primary == true)[0]
               .email;
             if (!primaryEmail) {
-              return cb(null, false, {
+              return next(null, false, {
                 message: `${profile.provider} isn't providing any email address try different method`,
               });
             }
@@ -84,12 +84,12 @@ export default (passport) => {
               },
               function (err, user) {
                 if (err) {
-                  return done(err);
+                  return next(err);
                 }
                 if (user) {
-                  if (user.authId == profile.id) return done(err, user);
+                  if (user.authId == profile.id) return next(err, user);
                   else
-                    return cb(null, false, {
+                    return next(null, false, {
                       message: `You'd authenticated with${
                         user.authProvider || "password"
                       }`,
@@ -105,9 +105,9 @@ export default (passport) => {
                   user.save(function (err, user) {
                     if (err) {
                       console.log(err);
-                      return done(err);
+                      return next(err);
                     }
-                    return done(err, user);
+                    return next(err, user);
                   });
                 }
               }
@@ -125,9 +125,9 @@ export default (passport) => {
         enableProof: true,
         profileFields: ["id", "emails", "displayName"],
       },
-      function (accessToken, refreshToken, profile, cb) {
+      function (accessToken, refreshToken, profile, next) {
         if (!profile.emails[0].value) {
-          return cb(null, false, {
+          return next(null, false, {
             message: `${profile.provider} isn't providing any email address try different method`,
           });
         }
@@ -137,12 +137,12 @@ export default (passport) => {
           },
           function (err, user) {
             if (err) {
-              return cb(err);
+              return next(err);
             }
             if (user) {
-              if (user.authId == profile.id) return cb(err, user);
+              if (user.authId == profile.id) return next(err, user);
               else
-                return cb(null, false, {
+                return next(null, false, {
                   message: `You'd authenticated with ${
                     user.authProvider || "password"
                   }`,
@@ -158,9 +158,9 @@ export default (passport) => {
               user.save(function (err, user) {
                 if (err) {
                   console.log(err);
-                  return cb(err);
+                  return next(err);
                 }
-                return cb(err, user);
+                return next(err, user);
               });
             }
           }
