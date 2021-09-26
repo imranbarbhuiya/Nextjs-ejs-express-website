@@ -9,7 +9,7 @@ import helmet from "helmet";
 import mongoose from "mongoose";
 import passport from "passport";
 // local modules
-import auth from "./auth/auth.js";
+import auth from "./controller/auth.js";
 import userModel from "./model/userModel.js";
 import articleRoute from "./routes/article.js";
 import courseRoute from "./routes/course.js";

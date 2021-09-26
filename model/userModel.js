@@ -6,11 +6,22 @@ const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   username: { type: String, required: true },
   password: String,
-  googleId: String,
-  githubId: String,
-  facebookId: String,
+  authId: String,
+  authProvider: String,
   verified: { type: Boolean, required: true, default: false },
   role: { type: String, required: true, default: "student" },
+  referralCode: {
+    type: String,
+    default: function () {
+      let hash = 0;
+      for (let i = 0; i < this.email.length; i++) {
+        hash = this.email.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      let res = (hash & 0x00ffffff).toString(16).toUpperCase();
+      return "00000".substring(0, 6 - res.length) + res;
+    },
+  },
+  referredBy: { type: String, default: null },
   resetPasswordToken: { type: String },
   verificationToken: { type: String },
 });

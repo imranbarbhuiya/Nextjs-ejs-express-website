@@ -43,10 +43,7 @@ route
       successReturnToOrRedirect: "/",
       failureRedirect: "/login",
       failureFlash: true,
-    }),
-    function (req, res) {
-      res.redirect("/");
-    }
+    })
   )
 
   // facebook
@@ -60,10 +57,7 @@ route
       successReturnToOrRedirect: "/",
       failureRedirect: "/login",
       failureFlash: true,
-    }),
-    function (req, res) {
-      res.redirect("/");
-    }
+    })
   );
 
 // local login system
@@ -122,6 +116,7 @@ route
           email: req.body.email,
           username: req.body.username,
           verified: false,
+          referredBy: req.referredBy,
         },
         req.body.password,
         function (err, user) {

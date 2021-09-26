@@ -19,19 +19,26 @@ export default (passport) => {
       function (accessToken, refreshToken, profile, cb) {
         User.findOne(
           {
-            email: profile._json.email,
+            email: profile.emails[0].value,
           },
           function (err, user) {
             if (err) {
               return cb(err);
             }
             if (user) {
-              return cb(err, user);
+              if (user.authId == profile.id) return cb(err, user);
+              else
+                return cb(null, false, {
+                  message: `You'd authenticated with ${
+                    user.authProvider || "password"
+                  }`,
+                });
             } else {
               user = new User({
-                googleId: profile.id,
-                username: profile._json.given_name,
-                email: profile._json.email,
+                authProvider: profile.provider,
+                authId: profile.id,
+                username: profile.displayName,
+                email: profile.emails[0].value,
                 verified: true,
               });
               user.save(function (err, user) {
@@ -67,7 +74,9 @@ export default (passport) => {
             primaryEmail = data.data.filter((email) => email.primary == true)[0]
               .email;
             if (!primaryEmail) {
-              return done();
+              return cb(null, false, {
+                message: `${profile.provider} isn't providing any email address try different method`,
+              });
             }
             User.findOne(
               {
@@ -78,11 +87,18 @@ export default (passport) => {
                   return done(err);
                 }
                 if (user) {
-                  return done(err, user);
+                  if (user.authId == profile.id) return done(err, user);
+                  else
+                    return cb(null, false, {
+                      message: `You'd authenticated with${
+                        user.authProvider || "password"
+                      }`,
+                    });
                 } else {
                   user = new User({
-                    githubId: profile.id,
-                    userusername: profile.displayName || profile.displayName,
+                    authProvider: profile.provider,
+                    authId: profile.id,
+                    username: profile.username || profile.displayName,
                     email: primaryEmail,
                     verified: true,
                   });
@@ -111,7 +127,9 @@ export default (passport) => {
       },
       function (accessToken, refreshToken, profile, cb) {
         if (!profile.emails[0].value) {
-          return cb();
+          return cb(null, false, {
+            message: `${profile.provider} isn't providing any email address try different method`,
+          });
         }
         User.findOne(
           {
@@ -122,10 +140,17 @@ export default (passport) => {
               return cb(err);
             }
             if (user) {
-              return cb(err, user);
+              if (user.authId == profile.id) return cb(err, user);
+              else
+                return cb(null, false, {
+                  message: `You'd authenticated with ${
+                    user.authProvider || "password"
+                  }`,
+                });
             } else {
               user = new User({
-                facebookId: profile.id,
+                authProvider: profile.provider,
+                authId: profile.id,
                 username: profile.displayName,
                 email: profile.emails[0].value,
                 verified: true,
