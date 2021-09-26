@@ -8,26 +8,30 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
         integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
 
-    <title>Articles</title>
+    <title>Blogs</title>
 </head>
 
 <body>
     <div class="container">
-        <h1 class="mb-4">Articles</h1>
-        <a href="article/new" class="btn btn-success">New Articles</a>
+        <h1 class="mb-4">Blogs</h1>
+        <a href="blog/new" class="btn btn-success">New Blog</a>
 
-        <% articles.forEach((article)=>{%>
+        <% blogs.forEach((blog)=>{%>
             <div class="card mt-4">
                 <div class="card-body">
                     <h4 class="card-title">
-                        <%= article.title %>
+                        <%= blog.title %>
                     </h4>
                     <div class="card-subtitle text-muted mb-2">
-                        <%=article.createdAt.toLocaleDateString()%>
+                        <%=blog.createdAt.toLocaleDateString()%>
                     </div>
                     <div class="card-text mb-2">
-                        <%=article.description%>
+                        <%=blog.description%>
                     </div>
+                    <a href="/blog/<%=blog.slug%>" class="btn btn-primary">Read more</a>
+                    <form action="/blog/<%=blog.id%>?_method=DELETE" method="POST" class="d-inline">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
                 </div>
             </div>
             <% }) %>

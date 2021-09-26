@@ -6,12 +6,13 @@ import dotenv from "dotenv";
 import express from "express";
 import session from "express-session";
 import helmet from "helmet";
+import methodOverride from "method-override";
 import mongoose from "mongoose";
 import passport from "passport";
 // local modules
 import auth from "./controller/auth.js";
 import userModel from "./model/userModel.js";
-import articleRoute from "./routes/article.js";
+import blogRoute from "./routes/blog.js";
 import courseRoute from "./routes/course.js";
 import indexRoute from "./routes/index.js";
 import loginRoute from "./routes/login.js";
@@ -59,7 +60,8 @@ app
         scriptSrc: ["'self'", "https://cdn.jsdelivr.net"],
       },
     })
-  );
+  )
+  .use(methodOverride("_method"));
 
 // mongodb connect with mongoose
 connect(process.env.MONGODB_SRV, (err) => {
@@ -87,7 +89,7 @@ app
   .use("/", indexRoute)
   .use("/", loginRoute)
   .use("/course", courseRoute)
-  .use("/article", articleRoute);
+  .use("/blog", blogRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -102,10 +104,10 @@ app.use(function (req, res, next) {
 // will print stacktrace
 if (app.get("env") === "development") {
   app.use(function (err, req, res, next) {
+    console.log(err);
     res.status(err.status || 500);
     res.render("error", {
       message: err.message,
-      error: err,
     });
   });
 }
@@ -116,7 +118,6 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error", {
     message: err.message,
-    error: {},
   });
 });
 // listening to port

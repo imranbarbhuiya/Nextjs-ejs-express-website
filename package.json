@@ -16,6 +16,7 @@
     "connect-flash": "^0.1.1",
     "connect-mongo": "^4.5.0",
     "cookie-parser": "^1.4.5",
+    "dompurify": "^2.3.3",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
@@ -23,9 +24,12 @@
     "express-session": "^1.17.2",
     "express-validator": "^6.12.1",
     "helmet": "^4.6.0",
+    "jsdom": "^17.0.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
+    "marked": "^3.0.4",
     "metaphone": "^2.0.0",
+    "method-override": "^3.0.0",
     "mongoose": "^6.0.5",
     "mongoose-fuzzy-searching": "^2.0.2",
     "nodemailer": "^6.6.3",
@@ -35,7 +39,8 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-local-mongoose": "^6.1.0",
     "rate-limiter-flexible": "^2.2.4",
-    "redis": "^3.1.2"
+    "redis": "^3.1.2",
+    "slugify": "^1.6.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.13",
