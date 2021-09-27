@@ -10,7 +10,7 @@ async function verify(req, res) {
       token: verificationToken,
     },
     process.env.JWT_SECRET,
-    { expiresIn: "1h" }
+    { expiresIn: "24h" }
   );
   const mailTo = req.user.email;
   await User.findOneAndUpdate(
@@ -19,18 +19,20 @@ async function verify(req, res) {
       verificationToken: verificationToken,
     }
   );
-  //   res.locals.message = req.flash("success", "Check email to proceed");
-  console.log("email send");
-  res.redirect("/");
+  const returnTo = req.session.returnTo;
+  delete req.session.returnTo;
   mail(
     mailTo,
     "Verify account",
     `<p>Verify account</p>
         <a href="${req.protocol}://${req.headers.host}/verify/${encoded}">Click here</a>`
-  ).catch((error) => {
-    req.flash("error", "auth fail");
-    console.log(error);
-  });
+  )
+    .then(req.flash("success", "Check email to proceed"))
+    .catch((error) => {
+      req.flash("error", "mail send fail please check your email again");
+      console.log(error);
+    });
+  res.redirect(returnTo || "/");
 }
 
 export { verify };

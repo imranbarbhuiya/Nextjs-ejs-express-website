@@ -140,8 +140,9 @@ export async function loginRouteRateLimit(req, res, next) {
         if (err) {
           return next(err);
         }
-        user.verified ? res.redirect(req.session.returnTo || "/") : next();
+        const returnTo = req.session.returnTo;
         delete req.session.returnTo;
+        user.verified ? res.redirect(returnTo || "/") : next();
         return;
       });
     }
