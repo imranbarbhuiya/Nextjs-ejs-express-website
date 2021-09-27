@@ -31,6 +31,7 @@
                         <%=blog.description%>
                     </div>
                     <a href="/blog/<%=blog.slug%>" class="btn btn-primary">Read more</a>
+                    <a href="/blog/preview/<%=blog.id%>" class="btn btn-primary">Preview more</a>
                     <a class="btn btn-primary" href="/blog/edit/<%=blog.id%>">Edit</a>
                     <form action="/blog/<%=blog.id%>?_method=DELETE" method="POST" class="d-inline">
                         <button class="btn btn-danger" type="submit">Delete</button>
