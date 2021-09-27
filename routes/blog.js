@@ -24,6 +24,7 @@ route
   )
   .get(
     "/preview/:id",
+    ensureLoggedIn("login"),
     async (req, res, next) => {
       try {
         let blog = await blogModel.findById(req.params.id);
