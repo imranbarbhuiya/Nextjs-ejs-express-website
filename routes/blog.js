@@ -9,7 +9,7 @@ const route = new Router();
 
 route
   .get("/", view("all"))
-  .get("/my", ensureLoggedIn("/login"), view("my"))
+  .get("/myblogs", ensureLoggedIn("/login"), view("myblogs"))
   .get("/unverified", isAdmin, view("unverified"))
   .get("/new", ensureLoggedIn("/login"), function (req, res) {
     res.render("blog/new", { blog: new blogModel() });

@@ -19,7 +19,8 @@ function saveBlogAndRedirect(path) {
 function view(path) {
   return async (req, res, next) => {
     let blogs;
-    if (path == "my") blogs = await blogModel.find({ author: req.user.id });
+    if (path == "myblogs")
+      blogs = await blogModel.find({ author: req.user.id });
     else if (path == "all") blogs = await blogModel.find({ verified: true });
     else if (path == "unverified")
       blogs = await blogModel.find({ verified: false });
