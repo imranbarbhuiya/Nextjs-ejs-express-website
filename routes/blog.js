@@ -10,7 +10,7 @@ const route = new Router();
 route
   .get("/", view("all"))
   .get("/myblogs", ensureLoggedIn("/login"), view("myblogs"))
-  .get("/unverified", isAdmin, view("unverified"))
+  .get("/unverified", ensureLoggedIn("/login"), isAdmin, view("unverified"))
   .get("/new", ensureLoggedIn("/login"), function (req, res) {
     if (!req.user.verified) {
       req.flash("error", "you must verify before writing blogs");
@@ -73,13 +73,14 @@ route
   )
   .put(
     "/:id",
+    ensureLoggedIn("/login"),
     async function (req, res, next) {
       req.blog = await blogModel.findById(req.params.id);
       next();
     },
     saveBlogAndRedirect("edit")
   )
-  .get("/verify/:id", isAdmin, async (req, res) => {
+  .get("/verify/:id", ensureLoggedIn("/login"), isAdmin, async (req, res) => {
     let blog = await blogModel.findById(req.params.id);
     blog.verified = true;
     blog.save();
