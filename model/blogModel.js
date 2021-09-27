@@ -7,6 +7,10 @@ import slugify from "slugify";
 const dompurify = createDomPurify(new JSDOM().window);
 
 const blogSchema = new mongoose.Schema({
+  author: {
+    type: String,
+    required: true,
+  },
   title: {
     type: String,
     required: true,
@@ -29,13 +33,19 @@ const blogSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  verified: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
 });
 blogSchema.pre("validate", function (next) {
   if (this.title) {
     this.slug = slugify(this.title, { lower: true, strict: true });
   }
   if (this.markdown) {
-    this.sanitizedHtml = dompurify.sanitize(marked(this.markdown));
+    this.sanitizedHtml =
+      dompurify.sanitize(marked(this.markdown)) || "no text provided";
   }
   next();
 });
