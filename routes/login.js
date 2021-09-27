@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import passport from "passport";
 // requiring local modules
 import { loginRouteRateLimit } from "../controller/rate-limit-controller.js";
+import { verify } from "../controller/verify.js";
 import User from "../model/userModel.js";
 import mail from "../module/mail.js";
 
@@ -69,7 +70,7 @@ route
       register: "none",
     });
   })
-  .post("/login", loginRouteRateLimit)
+  .post("/login", loginRouteRateLimit, verify)
 
   // local register system
   .get("/register", function (req, res) {
@@ -105,7 +106,7 @@ route
         throw new Error("Passwords and confirm password must be same");
       }
     }),
-    function (req, res) {
+    function (req, res, next) {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         req.flash("error", errors.array()[0].msg);
@@ -126,19 +127,20 @@ route
           } else {
             passport.authenticate("local")(req, res, function () {
               delete req.session.referred;
-              res.redirect("/verify");
+              next();
             });
           }
         }
       );
-    }
+    },
+    verify
   )
 
   // change password system
   .get("/change", ensureLoggedIn("/login"), function (req, res) {
     res.render("login/change");
   })
-  .post("change", function (req, res) {
+  .post("/change", function (req, res) {
     User.findOne({ email: req.user.username }, function (err, sanitizedUser) {
       if (sanitizedUser) {
         sanitizedUser.changePassword(
@@ -154,40 +156,7 @@ route
   })
 
   // verification system
-  .get("/verify", ensureLoggedIn("/login"), function (req, res) {
-    if (req.user.verified) return res.redirect("/");
-    res.locals.message = req.flash();
-    res.render("login/verify", { email: req.user.email });
-  })
-  .post("/verify", ensureLoggedIn("/login"), async (req, res) => {
-    let verificationToken = randomBytes(20).toString("hex");
-    const encoded = jwt.sign(
-      {
-        id: req.user.id,
-        token: verificationToken,
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
-    const mailTo = req.user.email;
-    await User.findOneAndUpdate(
-      { email: mailTo },
-      {
-        verificationToken: verificationToken,
-      }
-    );
-    res.locals.message = req.flash("success", "Check email to proceed");
-    res.redirect("/verify");
-    mail(
-      mailTo,
-      "Verify account",
-      `<p>Verify account</p>
-        <a href="${req.protocol}://${req.headers.host}/verify/${encoded}">Click here</a>`
-    ).catch((error) => {
-      req.flash("error", "auth fail");
-      console.log(error);
-    });
-  })
+  .get("/verify", ensureLoggedIn("/login"), verify)
   .get("/verify/:token", ensureLoggedIn("/login"), function (req, res) {
     try {
       let decode = jwt.decode(req.params.token, process.env.JWT_SECRET);

@@ -90,7 +90,7 @@ export default (passport) => {
                   if (user.authId == profile.id) return next(err, user);
                   else
                     return next(null, false, {
-                      message: `You'd authenticated with${
+                      message: `You'd authenticated with ${
                         user.authProvider || "password"
                       }`,
                     });
