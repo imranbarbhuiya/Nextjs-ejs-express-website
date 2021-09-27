@@ -14,9 +14,10 @@
 <body>
     <div class="container">
         <h1 class="mb-4">Blogs</h1>
-        <a href="/blog/new" class="btn btn-success me-2">New Blog</a>
+        <a href="/blog/new" class="btn btn-outline-success me-2">New Blog</a>
         <a href="/blog/myblogs" class="btn btn-success me-2">My Blog</a>
-        <a href="/blog/unverified" class="btn btn-warning">Unverified Blogs</a>
+        <a href="/blog/unverified" class="btn btn-warning me-2">Unverified Blogs</a>
+        <a class="btn btn-primary" href="/">Home</a>
 
         <% blogs.forEach((blog)=>{%>
             <div class="card mt-4">
@@ -37,6 +38,12 @@
                         <button class="btn btn-danger" type="submit">Delete</button>
                     </form>
                 </div>
+                <p class="text-danger">
+                    <%=message.error%>
+                </p>
+                <p class="text-success">
+                    <%=message.success%>
+                </p>
             </div>
             <% }) %>
     </div>

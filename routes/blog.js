@@ -12,6 +12,10 @@ route
   .get("/myblogs", ensureLoggedIn("/login"), view("myblogs"))
   .get("/unverified", isAdmin, view("unverified"))
   .get("/new", ensureLoggedIn("/login"), function (req, res) {
+    if (!req.user.verified) {
+      req.flash("error", "you must verify before writing blogs");
+      res.redirect("/blog");
+    }
     res.render("blog/new", { blog: new blogModel() });
   })
   .post(

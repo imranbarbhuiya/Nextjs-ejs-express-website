@@ -24,7 +24,11 @@ function view(path) {
     else if (path == "all") blogs = await blogModel.find({ verified: true });
     else if (path == "unverified")
       blogs = await blogModel.find({ verified: false });
-    else return req.sendStatus(404);
+    else {
+      req.flash("error", "unauthorized");
+      return req.redirect("/blog");
+    }
+    res.locals.message = req.flash();
     res.render("blog/index", { blogs: blogs });
   };
 }
