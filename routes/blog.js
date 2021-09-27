@@ -51,7 +51,7 @@ route
     if (blog) res.render("blog/view", { blog: blog });
     else res.sendStatus(404);
   })
-  .delete("/:id", isAdmin, async function (req, res) {
+  .delete("/:id", ensureLoggedIn("/login"), isAdmin, async function (req, res) {
     try {
       await blogModel.findByIdAndDelete(req.params.id);
     } catch (err) {}
