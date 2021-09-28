@@ -5,9 +5,10 @@ import { Strategy as GitHubStrategy } from "passport-github2";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 // connecting to user model
 import User from "../model/userModel.js";
-
-// auth setup
-export default (passport) => {
+/**
+ * setup the google facebook and github strategy
+ */
+const passportSocialAuth = (passport) => {
   passport.use(
     new GoogleStrategy(
       {
@@ -43,7 +44,6 @@ export default (passport) => {
               });
               user.save(function (err, user) {
                 if (err) {
-                  console.log(err);
                   return next(err);
                 }
                 return next(err, user);
@@ -68,7 +68,7 @@ export default (passport) => {
             headers: { authorization: `token ${accessToken}` },
           })
           .catch((err) => {
-            console.log(err);
+            return next(err);
           })
           .then((data) => {
             primaryEmail = data.data.filter((email) => email.primary == true)[0]
@@ -104,7 +104,6 @@ export default (passport) => {
                   });
                   user.save(function (err, user) {
                     if (err) {
-                      console.log(err);
                       return next(err);
                     }
                     return next(err, user);
@@ -157,7 +156,6 @@ export default (passport) => {
               });
               user.save(function (err, user) {
                 if (err) {
-                  console.log(err);
                   return next(err);
                 }
                 return next(err, user);
@@ -169,3 +167,5 @@ export default (passport) => {
     )
   );
 };
+
+export default passportSocialAuth;

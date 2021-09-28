@@ -13,8 +13,10 @@ import mail from "../module/mail.js";
 
 // init router
 const route = Router();
+/**
+ * Authenticate user with google, github and facebook
+ */
 
-// auth setup
 // google
 route
   .get(
@@ -60,8 +62,17 @@ route
       failureFlash: true,
     })
   );
-
-// local login system
+/**
+ * Local passport authenticate
+ * uses passport-local-mongoose
+ * for rate limiter rate-limiter-flexible is used
+ * register
+ * login
+ * verify
+ * change password
+ * reset password
+ * logout
+ */
 route
   .get("/login", function (req, res) {
     res.locals.message = req.flash();

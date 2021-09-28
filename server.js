@@ -10,7 +10,7 @@ import methodOverride from "method-override";
 import mongoose from "mongoose";
 import passport from "passport";
 // local modules
-import auth from "./controller/auth.js";
+import passportSocialAuth from "./controller/auth.js";
 import userModel from "./model/userModel.js";
 import blogRoute from "./routes/blog.js";
 import courseRoute from "./routes/course.js";
@@ -83,8 +83,8 @@ passport.deserializeUser(function (id, done) {
   });
 });
 
-// calling auth function
-auth(passport);
+// calling passport social auth function
+passportSocialAuth(passport);
 app
   .use("/", indexRoute)
   .use("/", loginRoute)
