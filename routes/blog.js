@@ -2,16 +2,19 @@ import { ensureLoggedIn } from "connect-ensure-login";
 import { Router } from "express";
 // model
 import { saveBlogAndRedirect, view } from "../controller/blog.js";
-import { isAdmin, isBlogOwner } from "../controller/roles.js";
+import { isAdmin, isAdminOrBlogOwner } from "../controller/roles.js";
 import blogModel from "../model/blogModel.js";
 
 const route = new Router();
-
+route.use(
+  /^\/.*(myblogs|unverified|new|preview|verify|edit).*/i,
+  ensureLoggedIn("/login")
+);
 route
   .get("/", view("all"))
-  .get("/myblogs", ensureLoggedIn("/login"), view("myblogs"))
-  .get("/unverified", ensureLoggedIn("/login"), isAdmin, view("unverified"))
-  .get("/new", ensureLoggedIn("/login"), function (req, res) {
+  .get("/myblogs", view("myblogs"))
+  .get("/unverified", isAdmin, view("unverified"))
+  .get("/new", function (req, res) {
     if (!req.user.verified) {
       req.flash("error", "you must verify before writing blogs");
       return res.redirect("/blog");
@@ -41,7 +44,7 @@ route
         console.log(err);
       }
     },
-    isBlogOwner("view")
+    isAdminOrBlogOwner("view")
   )
   .get("/:slug", async (req, res) => {
     let blog = await blogModel.findOne({
@@ -51,7 +54,7 @@ route
     if (blog) res.render("blog/view", { blog: blog });
     else res.sendStatus(404);
   })
-  .delete("/:id", ensureLoggedIn("/login"), isAdmin, async function (req, res) {
+  .delete("/:id", isAdmin, async function (req, res) {
     try {
       await blogModel.findByIdAndDelete(req.params.id);
     } catch (err) {}
@@ -69,7 +72,7 @@ route
         res.sendStatus(404);
       }
     },
-    isBlogOwner("edit")
+    isAdminOrBlogOwner("edit")
   )
   .put(
     "/:id",
@@ -80,7 +83,7 @@ route
     },
     saveBlogAndRedirect("edit")
   )
-  .get("/verify/:id", ensureLoggedIn("/login"), isAdmin, async (req, res) => {
+  .get("/verify/:id", isAdmin, async (req, res) => {
     let blog = await blogModel.findById(req.params.id);
     blog.verified = true;
     blog.save();
