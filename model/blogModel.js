@@ -1,8 +1,8 @@
 import createDomPurify from "dompurify";
 import { JSDOM } from "jsdom";
-import _ from "lodash";
 import marked from "marked";
 import mongoose from "mongoose";
+import slugify from "slugify";
 
 const dompurify = createDomPurify(new JSDOM().window);
 
@@ -41,11 +41,13 @@ const blogSchema = new mongoose.Schema({
 });
 blogSchema.pre("validate", function (next) {
   if (this.title) {
-    this.slug = _.kebabCase(this.title);
+    this.slug = slugify(this.title, { lower: true, strict: true });
   }
   if (this.markdown) {
     this.sanitizedHtml =
-      dompurify.sanitize(marked(this.markdown)) || "no text provided";
+      dompurify.sanitize(marked(this.markdown), {
+        USE_PROFILES: { html: true },
+      }) || "no text provided";
   }
   next();
 });
