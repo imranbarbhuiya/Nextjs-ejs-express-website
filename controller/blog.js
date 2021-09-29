@@ -51,7 +51,7 @@ function view(path) {
           .sort({ createdAt: -1 });
       }
     } else if (path == "unverified")
-      blogs = await blogModel.find({ verified: false });
+      blogs = await blogModel.find({ verified: false }).sort({ createdAt: -1 });
     else {
       req.flash("error", "unauthorized");
       return req.redirect("/blog");
