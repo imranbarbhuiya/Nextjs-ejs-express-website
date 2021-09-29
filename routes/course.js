@@ -15,11 +15,14 @@ route
   })
   .post("/create", ensureLoggedIn("/login"), function (req, res) {
     let { title, author, thumbnail, description, price } = req.body;
+    let keyword = "";
+    title.split(/ +/).forEach((key) => (keyword += `${metaphone(key)} `));
+    keyword += `b ${metaphone(author)}`;
     const course = new Course({
       author: author,
       authorId: req.user.id,
       title: title,
-      keywords: metaphone(`${title}by ${author}`),
+      keywords: keyword,
     });
     course.save(function (err) {
       if (err) console.log(err);
@@ -29,15 +32,15 @@ route
     });
   })
   .get("/search", async function (req, res) {
-    if (!req.query.search) res.redirect("/");
+    let searchQuery = req.query.search;
+    if (!searchQuery) res.redirect("/");
+    let keyword = "";
+    searchQuery.split(/ +/).forEach((key) => (keyword += `${metaphone(key)} `));
+    console.log(keyword);
     try {
-      const data = await Course.fuzzySearch(
-        metaphone(req.query.search) + req.query.search,
-        {
-          verified: true,
-        }
-      ).sort("price");
-      // .exec();
+      const data = await Course.fuzzySearch(`${keyword} ${searchQuery}`, {
+        verified: true,
+      }).sort("price");
       res.send(data);
     } catch (error) {
       console.log(error);

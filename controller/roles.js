@@ -32,7 +32,7 @@ function isAdminOrBlogOwner(path) {
     ) {
       res.render(`blog/${path}`, { blog: req.blog });
     } else {
-      res.sendStatus(400);
+      res.render("error", { error: { status: 401 }, message: "Unauthorized" });
     }
   };
 }
