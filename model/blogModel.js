@@ -48,6 +48,18 @@ const blogSchema = new mongoose.Schema({
     required: true,
   },
 });
+dompurify.addHook("afterSanitizeElements", (node) => {
+  // if (node.tagName == "H1") {
+  //   node.classList = "ok";
+  // }
+  if (
+    node.tagName == "FOOTER" ||
+    node.tagName == "FORM" ||
+    node.tagName == "NAV"
+  ) {
+    node.remove();
+  }
+});
 blogSchema.pre("validate", function (next) {
   if (this.title) {
     this.slug = slugify(this.title, { lower: true, strict: true });
