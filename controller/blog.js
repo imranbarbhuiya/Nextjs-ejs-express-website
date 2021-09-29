@@ -28,7 +28,9 @@ function view(path) {
   return async (req, res, next) => {
     let blogs;
     if (path == "myblogs")
-      blogs = await blogModel.find({ author: req.user.id });
+      blogs = await blogModel
+        .find({ author: req.user.id })
+        .sort({ createdAt: -1 });
     else if (path == "all") {
       let searchQuery = req.query.search;
       if (searchQuery) {
@@ -38,9 +40,7 @@ function view(path) {
           .forEach((key) => (keyword += `${metaphone(key)} `));
         try {
           blogs = await blogModel
-            .fuzzySearch(`${keyword} ${searchQuery}`, {
-              verified: true,
-            })
+            .fuzzySearch(`${keyword} ${searchQuery}`)
             .sort({ createdAt: -1 });
         } catch (error) {
           console.log(error);
