@@ -13,12 +13,34 @@
 
 <body>
     <div class="container">
-        <h1 class="mb-4">Blogs</h1>
-        <a href="/blog/new" class="btn btn-outline-success me-2">New Blog</a>
-        <a href="/blog/myblogs" class="btn btn-success me-2">My Blog</a>
-        <a href="/blog/unverified" class="btn btn-warning me-2">Unverified Blogs</a>
-        <a class="btn btn-primary" href="/">Home</a>
-
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mt-5">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/blog">Blogs</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a href="/blog/new" class="btn btn-outline-success me-2">New Blog</a>
+                        </li>
+                        <li class="nav-item"><a href="/blog/myblogs" class="btn btn-success me-2">My Blog</a>
+                        </li>
+                        <li class="nav-item"><a href="/blog/unverified" class="btn btn-warning me-2">Unverified
+                                Blogs</a>
+                        </li>
+                        <li class="nav-item"><a class="btn btn-primary" href="/">Home</a></li>
+                    </ul>
+                    <form class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                            name="search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
         <% blogs.forEach((blog)=>{%>
             <div class="card mt-4">
                 <div class="card-body">

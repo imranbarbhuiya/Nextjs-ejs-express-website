@@ -36,11 +36,10 @@ route
     if (!searchQuery) res.redirect("/");
     let keyword = "";
     searchQuery.split(/ +/).forEach((key) => (keyword += `${metaphone(key)} `));
-    console.log(keyword);
     try {
       const data = await Course.fuzzySearch(`${keyword} ${searchQuery}`, {
         verified: true,
-      }).sort("price");
+      }).sort({ price: -1 });
       res.send(data);
     } catch (error) {
       console.log(error);
