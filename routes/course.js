@@ -1,28 +1,38 @@
 import { ensureLoggedIn } from "connect-ensure-login";
 import { Router } from "express";
-import { metaphone } from "metaphone";
-// import { isAdmin } from "../controller/roles.js";
+import natural from "natural";
 import Course from "../model/courseModel.js";
+const { Metaphone } = natural;
 
 const route = Router();
 
 route
-  .get("/", function (req, res) {
-    res.sendStatus(500);
+  .get("/", async function (req, res) {
+    let courses;
+    let searchQuery = req.query.search;
+    if (searchQuery) {
+      let keywords = Metaphone.process(searchQuery);
+      courses = await Course.fuzzySearch(`${keywords} ${searchQuery}`, {
+        verified: true,
+      }).sort({ price: -1 });
+    } else {
+      courses = await Course.find({ verified: true }).sort({ price: 1 });
+    }
+    res.send(courses);
   })
   .get("/create", ensureLoggedIn("/login"), function (req, res) {
     res.render("course/courseAdd", { done: false });
   })
   .post("/create", ensureLoggedIn("/login"), function (req, res) {
     let { title, author, thumbnail, description, price } = req.body;
-    let keyword = "";
-    title.split(/ +/).forEach((key) => (keyword += `${metaphone(key)} `));
-    keyword += `b ${metaphone(author)}`;
+    let keywords = `${Metaphone.process(`${title} ${author}`)} ${title}`;
     const course = new Course({
       author: author,
       authorId: req.user.id,
       title: title,
-      keywords: keyword,
+      price: price,
+      keywords: keywords,
+      verified: true,
     });
     course.save(function (err) {
       if (err) console.log(err);
@@ -30,20 +40,6 @@ route
         res.render("course/courseAdd", { done: true });
       }
     });
-  })
-  .get("/search", async function (req, res) {
-    let searchQuery = req.query.search;
-    if (!searchQuery) res.redirect("/");
-    let keyword = "";
-    searchQuery.split(/ +/).forEach((key) => (keyword += `${metaphone(key)} `));
-    try {
-      const data = await Course.fuzzySearch(`${keyword} ${searchQuery}`, {
-        verified: true,
-      }).sort({ price: -1 });
-      res.send(data);
-    } catch (error) {
-      console.log(error);
-    }
   });
 // .get("/search/auto", function (req, res) {
 //   var regex = new RegExp(req.query["term"], "i");

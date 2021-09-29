@@ -1,13 +1,12 @@
-import { metaphone } from "metaphone";
+import natural from "natural";
 import blogModel from "../model/blogModel.js";
+const { Metaphone } = natural;
 
 function saveBlogAndRedirect(path) {
   return async (req, res) => {
-    let keyword = "";
-    req.body.title
-      .split(/ +/)
-      .forEach((key) => (keyword += `${metaphone(key)} `));
-    keyword += `b ${metaphone(req.user.username)}`;
+    let keywords = Metaphone.process(
+      `${req.body.title} ${req.user.username} ${req.body.description}`
+    );
     let blog = req.blog;
     blog.authorName = req.user.username;
     blog.author = req.user.id;
@@ -15,7 +14,7 @@ function saveBlogAndRedirect(path) {
     blog.description = req.body.description;
     blog.markdown = req.body.markdown;
     blog.verified = false;
-    blog.keywords = keyword;
+    blog.keywords = keywords;
     try {
       blog = await blog.save();
       res.redirect(`/blog/preview/${blog.id}`);
@@ -65,25 +64,26 @@ function view(path) {
 export { view, saveBlogAndRedirect };
 
 async function search(searchQuery, author, unverified) {
-  let keyword = "";
-  searchQuery.split(/ +/).forEach((key) => (keyword += `${metaphone(key)} `));
+  // let keyword = "";
+  // searchQuery.split(/ +/).forEach((key) => (keyword += `${metaphone(key)} `));
+  let keywords = Metaphone.process(searchQuery);
   try {
     let blogs;
     if (author)
       blogs = await blogModel
-        .fuzzySearch(`${keyword} ${searchQuery}`, {
+        .fuzzySearch(`${keywords} ${searchQuery}`, {
           author: author,
         })
         .sort({ createdAt: -1 });
     else if (unverified) {
       blogs = await blogModel
-        .fuzzySearch(`${keyword} ${searchQuery}`, {
+        .fuzzySearch(`${keywords} ${searchQuery}`, {
           verified: false,
         })
         .sort({ createdAt: -1 });
     } else
       blogs = await blogModel
-        .fuzzySearch(`${keyword} ${searchQuery}`, {
+        .fuzzySearch(`${keywords} ${searchQuery}`, {
           verified: true,
         })
         .sort({ createdAt: -1 });

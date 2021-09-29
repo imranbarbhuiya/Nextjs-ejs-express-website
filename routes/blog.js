@@ -58,7 +58,7 @@ route
     try {
       await blogModel.findByIdAndDelete(req.params.id);
     } catch (err) {}
-    res.redirect("/blog");
+    res.redirect("back");
   })
   .get(
     "/edit/:id",
