@@ -27,24 +27,19 @@ function saveBlogAndRedirect(path) {
 function view(path) {
   return async (req, res, next) => {
     let blogs;
-    if (path == "myblogs")
-      blogs = await blogModel
-        .find({ author: req.user.id })
-        .sort({ createdAt: -1 });
-    else if (path == "all") {
+    if (path == "myblogs") {
       let searchQuery = req.query.search;
       if (searchQuery) {
-        let keyword = "";
-        searchQuery
-          .split(/ +/)
-          .forEach((key) => (keyword += `${metaphone(key)} `));
-        try {
-          blogs = await blogModel
-            .fuzzySearch(`${keyword} ${searchQuery}`)
-            .sort({ createdAt: -1 });
-        } catch (error) {
-          console.log(error);
-        }
+        blogs = await search(searchQuery, req.user.id);
+      } else {
+        blogs = await blogModel
+          .find({ author: req.user.id })
+          .sort({ createdAt: -1 });
+      }
+    } else if (path == "all") {
+      let searchQuery = req.query.search;
+      if (searchQuery) {
+        blogs = await search(searchQuery);
       } else {
         blogs = await blogModel
           .find({ verified: true })
@@ -61,3 +56,26 @@ function view(path) {
   };
 }
 export { view, saveBlogAndRedirect };
+
+async function search(searchQuery, author) {
+  let keyword = "";
+  searchQuery.split(/ +/).forEach((key) => (keyword += `${metaphone(key)} `));
+  try {
+    let blogs;
+    if (author)
+      blogs = await blogModel
+        .fuzzySearch(`${keyword} ${searchQuery}`, {
+          author: author,
+        })
+        .sort({ createdAt: -1 });
+    else
+      blogs = await blogModel
+        .fuzzySearch(`${keyword} ${searchQuery}`, {
+          verified: true,
+        })
+        .sort({ createdAt: -1 });
+    return blogs;
+  } catch (error) {
+    console.log(error);
+  }
+}
