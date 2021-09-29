@@ -26,8 +26,8 @@ function saveBlogAndRedirect(path) {
 function view(path) {
   return async (req, res, next) => {
     let blogs;
+    let searchQuery = req.query.search;
     if (path == "myblogs") {
-      let searchQuery = req.query.search;
       if (searchQuery) {
         blogs = await search(searchQuery, req.user.id);
       } else {
@@ -36,7 +36,6 @@ function view(path) {
           .sort({ createdAt: -1 });
       }
     } else if (path == "all") {
-      let searchQuery = req.query.search;
       if (searchQuery) {
         blogs = await search(searchQuery);
       } else {
@@ -45,7 +44,6 @@ function view(path) {
           .sort({ createdAt: -1 });
       }
     } else if (path == "unverified") {
-      let searchQuery = req.query.search;
       if (searchQuery) {
         blogs = await search(searchQuery, false, true);
       } else {
@@ -58,7 +56,7 @@ function view(path) {
       return req.redirect("/blog");
     }
     res.locals.message = req.flash();
-    res.render("blog/index", { blogs: blogs });
+    res.render("blog/index", { blogs: blogs, query: searchQuery });
   };
 }
 export { view, saveBlogAndRedirect };
