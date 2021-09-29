@@ -45,9 +45,16 @@ function view(path) {
           .find({ verified: true })
           .sort({ createdAt: -1 });
       }
-    } else if (path == "unverified")
-      blogs = await blogModel.find({ verified: false }).sort({ createdAt: -1 });
-    else {
+    } else if (path == "unverified") {
+      let searchQuery = req.query.search;
+      if (searchQuery) {
+        blogs = await search(searchQuery, false, true);
+      } else {
+        blogs = await blogModel
+          .find({ verified: false })
+          .sort({ createdAt: -1 });
+      }
+    } else {
       req.flash("error", "unauthorized");
       return req.redirect("/blog");
     }
@@ -57,7 +64,7 @@ function view(path) {
 }
 export { view, saveBlogAndRedirect };
 
-async function search(searchQuery, author) {
+async function search(searchQuery, author, unverified) {
   let keyword = "";
   searchQuery.split(/ +/).forEach((key) => (keyword += `${metaphone(key)} `));
   try {
@@ -68,7 +75,13 @@ async function search(searchQuery, author) {
           author: author,
         })
         .sort({ createdAt: -1 });
-    else
+    else if (unverified) {
+      blogs = await blogModel
+        .fuzzySearch(`${keyword} ${searchQuery}`, {
+          verified: false,
+        })
+        .sort({ createdAt: -1 });
+    } else
       blogs = await blogModel
         .fuzzySearch(`${keyword} ${searchQuery}`, {
           verified: true,
