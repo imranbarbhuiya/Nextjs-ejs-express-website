@@ -9,6 +9,9 @@ import helmet from "helmet";
 import methodOverride from "method-override";
 import mongoose from "mongoose";
 import passport from "passport";
+import path from "path";
+import serveFavicon from "serve-favicon";
+import { fileURLToPath } from "url";
 // local modules
 import passportSocialAuth from "./controller/auth.js";
 import userModel from "./model/userModel.js";
@@ -22,8 +25,13 @@ const { create } = connect_mongo;
 const { connect } = mongoose;
 // initiate app
 const app = express();
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 app
+  // serve favicon
+  .use(
+    serveFavicon(path.join(__dirname, "public", "assets", "img", "logo.jpeg"))
+  )
   // set static files
   .use(express.static("public"))
   // set view engine
