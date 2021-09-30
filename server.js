@@ -57,8 +57,12 @@ app
     helmet.contentSecurityPolicy({
       useDefaults: true,
       directives: {
-        scriptSrc: ["'self'", "https://cdn.jsdelivr.net"],
-        imgSrc: ["'self'", "https://*"],
+        scriptSrc: [
+          "'self'",
+          "https://cdn.jsdelivr.net",
+          "https://code.jquery.com",
+        ],
+        imgSrc: ["'self'", "https://*", "data:*"],
       },
     })
   )

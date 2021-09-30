@@ -59,11 +59,8 @@ function view(path) {
     res.render("blog/index", { blogs: blogs, query: searchQuery });
   };
 }
-export { view, saveBlogAndRedirect };
 
 async function search(searchQuery, author, unverified) {
-  // let keyword = "";
-  // searchQuery.split(/ +/).forEach((key) => (keyword += `${metaphone(key)} `));
   let keywords = Metaphone.process(searchQuery);
   try {
     let blogs;
@@ -90,3 +87,5 @@ async function search(searchQuery, author, unverified) {
     console.log(error);
   }
 }
+
+export { view, search, saveBlogAndRedirect };
