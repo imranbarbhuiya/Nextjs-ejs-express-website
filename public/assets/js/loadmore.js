@@ -1,13 +1,13 @@
 let skip = 5;
+let data = [];
 $(window).scroll(function () {
   if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
     $.ajax({
       url: "/blog",
       type: "GET",
       data: { skip: skip },
-      success: function (data) {
-        skip += 5;
-        data.forEach((blog) => {
+      success: function (blogs) {
+        blogs.forEach((blog) => {
           let date = new Date(blog.createdAt).toLocaleDateString();
           let card = `<div class="card mt-4">
                 <div class="card-body">
@@ -21,14 +21,18 @@ $(window).scroll(function () {
                        ${blog.description}
                     </div>
                     <a href="/blog/${blog.slug}" class="btn btn-primary">Read more</a>
-                    <a href="/blog/preview/${blog.id}" class="btn btn-outline-primary">Preview</a>
-                    <a class="btn btn-warning me-2" href="/blog/edit/${blog.id}">Edit</a>
-                    <form action="/blog/${blog.id}?_method=DELETE" method="POST" class="d-inline">
+                    <a href="/blog/preview/${blog._id}" class="btn btn-outline-primary">Preview</a>
+                    <a class="btn btn-warning me-2" href="/blog/edit/${blog._id}">Edit</a>
+                    <form action="/blog/${blog._id}?_method=DELETE" method="POST" class="d-inline">
                         <button class="btn btn-danger" type="submit">Delete</button>
                     </form>
                 </div>
             </div>`;
-          $("#appendTo").append(card);
+          if (!data.includes(blog._id)) {
+            $("#appendTo").append(card);
+            data.push(blog._id);
+          }
+          skip += 5;
         });
       },
     });
