@@ -27,9 +27,10 @@ function view(path) {
   return async (req, res, next) => {
     let blogs;
     let searchQuery = req.query.search;
+    let autocompleteQuery = req.query.term;
     if (path == "myblogs") {
       if (searchQuery) {
-        blogs = await search(searchQuery, req.user.id);
+        blogs = await search(searchQuery, 0, req.user.id);
       } else {
         blogs = await blogModel
           .find({ author: req.user.id })
@@ -37,15 +38,24 @@ function view(path) {
       }
     } else if (path == "all") {
       if (searchQuery) {
-        blogs = await search(searchQuery);
+        blogs = await search(searchQuery, 0);
+      } else if (autocompleteQuery) {
+        blogs = await search(autocompleteQuery, 0);
+        blogs = blogs.map((blog) => blog.title);
+        return res.send(blogs);
       } else {
+        let skip = 0;
+        if (req.query.skip) skip = Number(req.query.skip);
         blogs = await blogModel
           .find({ verified: true })
-          .sort({ createdAt: -1 });
+          .sort({ createdAt: -1 })
+          .skip(skip)
+          .limit(5);
+        if (skip != 0) return res.send(blogs);
       }
     } else if (path == "unverified") {
       if (searchQuery) {
-        blogs = await search(searchQuery, false, true);
+        blogs = await search(searchQuery, 0, false, true);
       } else {
         blogs = await blogModel
           .find({ verified: false })
@@ -60,7 +70,8 @@ function view(path) {
   };
 }
 
-async function search(searchQuery, author, unverified) {
+async function search(searchQuery, skip, author, unverified) {
+  if (!skip) skip = 0;
   let keywords = Metaphone.process(searchQuery);
   try {
     let blogs;
@@ -69,23 +80,29 @@ async function search(searchQuery, author, unverified) {
         .fuzzySearch(`${keywords} ${searchQuery}`, {
           author: author,
         })
-        .sort({ createdAt: -1 });
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(5);
     else if (unverified) {
       blogs = await blogModel
         .fuzzySearch(`${keywords} ${searchQuery}`, {
           verified: false,
         })
-        .sort({ createdAt: -1 });
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(5);
     } else
       blogs = await blogModel
         .fuzzySearch(`${keywords} ${searchQuery}`, {
           verified: true,
         })
-        .sort({ createdAt: -1 });
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(5);
     return blogs;
   } catch (error) {
     console.log(error);
   }
 }
 
-export { view, search, saveBlogAndRedirect };
+export { view, saveBlogAndRedirect };

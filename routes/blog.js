@@ -1,7 +1,7 @@
 import { ensureLoggedIn } from "connect-ensure-login";
 import { Router } from "express";
 // model
-import { saveBlogAndRedirect, search, view } from "../controller/blog.js";
+import { saveBlogAndRedirect, view } from "../controller/blog.js";
 import { isAdmin, isAdminOrBlogOwner } from "../controller/roles.js";
 import blogModel from "../model/blogModel.js";
 
@@ -46,11 +46,11 @@ route
     },
     isAdminOrBlogOwner("view")
   )
-  .get("/search", async function (req, res) {
-    let blogs = await search(req.query.term);
-    blogs = blogs.map((blog) => blog.title);
-    res.send(blogs);
-  })
+  // .get("/search", async function (req, res) {
+  //   let blogs = await search(req.query.term);
+  //   blogs = blogs.map((blog) => blog.title);
+  //   res.send(blogs);
+  // })
   .get("/:slug", async (req, res) => {
     let blog = await blogModel.findOne({
       slug: req.params.slug,
