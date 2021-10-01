@@ -61,8 +61,10 @@ dompurify.addHook("afterSanitizeElements", (node) => {
   }
 });
 blogSchema.pre("validate", function (next) {
-  if (this.title) {
+  if (this.title && !this.slug) {
     this.slug = slugify(this.title, { lower: true, strict: true });
+  } else if (this.slug) {
+    this.slug = slugify(this.slug, { lower: true, strict: true });
   }
   if (this.markdown) {
     this.sanitizedHtml =

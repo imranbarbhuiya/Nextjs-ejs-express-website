@@ -15,6 +15,7 @@ function saveBlogAndRedirect(path) {
     blog.markdown = req.body.markdown;
     blog.verified = false;
     blog.keywords = keywords;
+    blog.slug = req.body.slug;
     try {
       blog = await blog.save();
       res.redirect(`/blog/preview/${blog.id}`);
