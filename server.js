@@ -86,15 +86,9 @@ connect(process.env.MONGODB_SRV, (err) => {
 // passport setup
 passport.use(userModel.createStrategy());
 
-passport.serializeUser(function (user, done) {
-  done(null, user.id);
-});
+passport.serializeUser(userModel.serializeUser());
 
-passport.deserializeUser(function (id, done) {
-  userModel.findById(id, function (err, user) {
-    done(err, user);
-  });
-});
+passport.deserializeUser(userModel.deserializeUser());
 
 // calling passport social auth function
 passportSocialAuth(passport);
