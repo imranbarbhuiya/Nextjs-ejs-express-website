@@ -32,7 +32,7 @@ async function verify(req, res) {
       req.flash("error", "mail send failed please try again");
       console.log(error);
     });
-  res.redirect(returnTo || "/");
+  res.redirect(req.query.next || returnTo || "/");
 }
 
 export { verify };

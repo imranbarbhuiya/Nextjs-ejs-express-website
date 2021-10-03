@@ -16,7 +16,10 @@ route
   .get("/unverified", isAdmin, view("unverified"))
   .get("/new", function (req, res) {
     if (!req.user.verified) {
-      req.flash("error", "you must verify before writing blogs");
+      req.flash(
+        "error",
+        "you must verify before writing blogs <a href='/verify'>Verify</a>"
+      );
       return res.redirect("/blog");
     }
     res.render("blog/new", { blog: new blogModel() });
