@@ -92,9 +92,19 @@ passport.deserializeUser(userModel.deserializeUser());
 
 // calling passport social auth function
 passportSocialAuth(passport);
+// defining admin middleware
+
 app
   .use("/", indexRoute)
   .use("/", loginRoute)
+  .use((req, res, next) => {
+    if (req.user && req.user.role == "admin") {
+      req.admin = true;
+      next();
+    } else {
+      next();
+    }
+  })
   .use("/course", courseRoute)
   .use("/blog", blogRoute);
 
