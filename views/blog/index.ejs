@@ -43,6 +43,14 @@
                 </div>
             </div>
         </nav>
+        <div class="my-2">
+            <p class="text-danger">
+                <%-message.error%>
+            </p>
+            <p class="text-success">
+                <%=message.success%>
+            </p>
+        </div>
         <% blogs.forEach((blog)=>{%>
             <div class="card mt-4">
                 <div class="card-body">
@@ -64,14 +72,6 @@
                 </div>
             </div>
             <% }) %>
-                <div class="my-2">
-                    <p class="text-danger">
-                        <%=message.error%>
-                    </p>
-                    <p class="text-success">
-                        <%=message.success%>
-                    </p>
-                </div>
     </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
