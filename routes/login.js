@@ -148,51 +148,63 @@ route
   )
 
   // change password system
-  .get("/change", ensureLoggedIn("/login"), function (req, res) {
-    res.render("login/change");
-  })
-  .post("/change", function (req, res) {
-    User.findOne({ email: req.user.username }, function (err, sanitizedUser) {
-      if (sanitizedUser) {
-        sanitizedUser.changePassword(
-          req.body.oldPassword,
-          req.body.newPassword,
-          function () {
-            sanitizedUser.save();
-          }
-        );
-        res.redirect("/");
-      }
-    });
-  })
+  .get(
+    "/change",
+    ensureLoggedIn({ redirectTo: "/login", setRedirectTo: false }),
+    function (req, res) {
+      res.render("login/change");
+    }
+  )
+  .post(
+    "/change",
+    ensureLoggedIn({ redirectTo: "/login", setRedirectTo: false }),
+    function (req, res) {
+      User.findOne({ email: req.user.username }, function (err, sanitizedUser) {
+        if (sanitizedUser) {
+          sanitizedUser.changePassword(
+            req.body.oldPassword,
+            req.body.newPassword,
+            function () {
+              sanitizedUser.save();
+            }
+          );
+          res.redirect("/");
+        }
+      });
+    }
+  )
 
   // verification system
   .get("/verify", ensureLoggedIn("/login"), verify)
-  .get("/verify/:token", ensureLoggedIn("/login"), function (req, res) {
-    try {
-      let decode = jwt.decode(req.params.token, process.env.JWT_SECRET);
-      User.findOneAndUpdate(
-        { email: req.user.email, verificationToken: decode.token },
-        { verified: true, $unset: { verificationToken: 1 } },
-        function (err, user) {
-          if (err) {
-            console.log(err);
-            req.flash("error", "An error occurred");
-            res.redirect("/verify");
-          } else if (!user) {
-            req.flash("error", "Invalid token");
-            res.redirect("/login");
-          } else {
-            req.flash("success", "Verification successful");
-            res.redirect(req.session.returnTo || "/");
+  .get(
+    "/verify/:token",
+    ensureLoggedIn({ redirectTo: "/login", setRedirectTo: false }),
+    function (req, res) {
+      try {
+        let decode = jwt.decode(req.params.token, process.env.JWT_SECRET);
+        User.findOneAndUpdate(
+          { email: req.user.email, verificationToken: decode.token },
+          { verified: true, $unset: { verificationToken: 1 } },
+          function (err, user) {
+            if (err) {
+              console.log(err);
+              req.flash("error", "An error occurred");
+              res.redirect("/verify");
+            } else if (!user) {
+              req.flash("error", "Invalid token");
+              res.redirect("/login");
+            } else {
+              req.flash("success", "Verification successful");
+              res.redirect(req.session.returnTo || "/");
+            }
           }
-        }
-      );
-    } catch (err) {
-      req.flash("error", "token expired");
-      res.redirect("/verify");
+        );
+      } catch (err) {
+        req.flash("error", "token expired");
+        res.redirect("/verify");
+      }
     }
-  })
+  )
 
   // forgot password system
   .get("/reset", ensureLoggedOut(), function (req, res) {
