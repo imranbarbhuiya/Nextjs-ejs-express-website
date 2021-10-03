@@ -6,6 +6,12 @@ import { isAdmin, isAdminOrBlogOwner } from "../controller/roles.js";
 import blogModel from "../model/blogModel.js";
 
 const route = new Router();
+
+/**
+ * @param {request} req
+ * @param {response} res
+ */
+
 route.use(
   /^\/.*(myblogs|unverified|new|preview|verify|edit).*/i,
   ensureLoggedIn("/login")

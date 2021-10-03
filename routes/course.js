@@ -6,6 +6,11 @@ const { Metaphone } = natural;
 
 const route = Router();
 
+/**
+ * @param {request} req
+ * @param {response} res
+ */
+
 route
   .get("/", async function (req, res) {
     let courses;
