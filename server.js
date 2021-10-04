@@ -13,6 +13,8 @@ import path from "path";
 import serveFavicon from "serve-favicon";
 // local modules
 import passportSocialAuth from "./controller/auth.js";
+import morganMiddleware from "./controller/morgan.js";
+import Logger from "./lib/logger.js";
 import userModel from "./model/userModel.js";
 import blogRoute from "./routes/blog.js";
 import courseRoute from "./routes/course.js";
@@ -72,13 +74,14 @@ app
       },
     })
   )
-  .use(methodOverride("_method"));
+  .use(methodOverride("_method"))
+  .use(morganMiddleware);
 
 // mongodb connect with mongoose
 connect(process.env.MONGODB_SRV, (err) => {
   err
-    ? console.log(err)
-    : console.log("Connected to the MongoDB database successfully.");
+    ? Logger.error(err)
+    : Logger.debug("Connected to the MongoDB database successfully.");
 });
 
 // passport setup
@@ -120,7 +123,7 @@ app.use(function (req, res, next) {
 */
 if (app.get("env") === "development") {
   app.use(function (err, req, res, next) {
-    console.log(err);
+    Logger.warn(err);
     res.status(err.status || 500);
     res.render("error", {
       message: err.message,
@@ -141,11 +144,11 @@ app.use(function (err, req, res, next) {
 
 // unhandled error rejection
 process.on("unhandledRejection", function (reason, promise) {
-  console.log(reason);
+  Logger.error(reason);
 });
 
 // listening to port
 const port = process.env.PORT;
 app.listen(port, () => {
-  console.log(`Server started at port ${port}`);
+  Logger.debug(`Server started at port ${port}`);
 });

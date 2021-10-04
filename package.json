@@ -11,6 +11,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@types/morgan": "^1.9.3",
     "axios": "^0.22.0",
     "connect-ensure-login": "^0.1.1",
     "connect-flash": "^0.1.1",
@@ -29,6 +30,7 @@
     "method-override": "^3.0.0",
     "mongoose": "^6.0.8",
     "mongoose-fuzzy-searching": "^2.0.2",
+    "morgan": "^1.10.0",
     "natural": "^5.1.1",
     "nodemailer": "^6.6.5",
     "passport": "^0.5.0",
@@ -39,7 +41,8 @@
     "rate-limiter-flexible": "^2.3.1",
     "redis": "^3.1.2",
     "serve-favicon": "^2.5.0",
-    "slugify": "^1.6.0"
+    "slugify": "^1.6.0",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.13",

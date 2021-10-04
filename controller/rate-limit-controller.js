@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import passport from "passport";
 import { RateLimiterRedis } from "rate-limiter-flexible";
 import redis from "redis";
+import Logger from "../lib/logger.js";
 dotenv.config();
 
 const maxWrongAttemptsByIPperDay = 100;
@@ -19,12 +20,12 @@ const redisClient = redis.createClient({
 
 redisClient
   .on("connect", function () {
-    console.log("Connected to the Redis database successfully.");
+    Logger.debug("Connected to the Redis database successfully.");
   })
 
   // handle connection errors
   .on("error", (err) => {
-    console.log(err);
+    Logger.error(err);
     return new Error();
   });
 const limiterSlowBruteByIP = new RateLimiterRedis({
