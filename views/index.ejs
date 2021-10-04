@@ -1,58 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:site" content="@codversity" />
-  <meta name="twitter:title" content="Codversity" />
-  <meta name="twitter:description" content="One place for everything" />
-  <meta name="twitter:image" content="https://codversity.herokuapp.com/assets/img/logo.png" />
-  <meta property="fb:app_id" content="886693702262731" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://codversity.herokuapp.com/" />
-  <meta property="og:title" content="Codversity" />
-  <meta property="og:description" content="One place for everything" />
-  <meta property="og:image" content="https://codversity.herokuapp.com/assets/img/long_logo.jpeg" />
-  <meta property="og:image:alt" content="Codversity" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
-    integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+<%- include('partials/header') %>
   <title>Codversity</title>
-</head>
+  </head>
 
-<body>
+  <body>
 
-  <div class="jumbotron centered">
-    <div class="container">
-      <h1 class="display-3">Here's your detail's</h1>
+    <div class="jumbotron centered">
+      <div class="container">
+        <h1 class="display-3">Here's your detail's</h1>
 
-      <hr />
-      <% if(user){%>
-        <ul class="list">
-          <li class="field-text">name: <%= user.username %>
-          </li>
-          <li class="field-text">Email: <%= user.email%>
-          </li>
-        </ul>
-        <a class="btn btn-warning me-5" href="/logout" role="button">Log Out</a>
-        <% if(!user.verified){%>
-          <a class="btn btn-success me-5" href="/verify" role="button">verify</a>
-          <%}}else{%>
-            <a class="btn btn-primary me-5" href="/register" role="button">Register</a>
-            <a class="btn btn-primary ms-5" href="/login" role="button">Login</a>
-            <%}%>
-              <a class="btn btn-success ms-5" href="blog">Blogs</a>
-              <div class="my-2">
-                <p class="text-danger">
-                  <%=message.error%>
-                </p>
-                <p class="text-success">
-                  <%=message.success%>
-                </p>
-              </div>
+        <hr />
+        <% if(user){%>
+          <ul class="list">
+            <li class="field-text">name: <%= user.username %>
+            </li>
+            <li class="field-text">Email: <%= user.email%>
+            </li>
+          </ul>
+          <a class="btn btn-warning me-5" href="/logout" role="button">Log Out</a>
+          <% if(!user.verified){%>
+            <a class="btn btn-success me-5" href="/verify" role="button">verify</a>
+            <%}}else{%>
+              <a class="btn btn-primary me-5" href="/register" role="button">Register</a>
+              <a class="btn btn-primary ms-5" href="/login" role="button">Login</a>
+              <%}%>
+                <a class="btn btn-success ms-5" href="blog">Blogs</a>
+                <div class="my-2">
+                  <p class="text-danger">
+                    <%=message.error%>
+                  </p>
+                  <p class="text-success">
+                    <%=message.success%>
+                  </p>
+                </div>
+      </div>
     </div>
-  </div>
 
-  <%- include('partials/footer') %>
+    <%- include('partials/footer') %>
