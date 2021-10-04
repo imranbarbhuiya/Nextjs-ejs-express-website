@@ -138,6 +138,12 @@ app.use(function (err, req, res, next) {
     error: {},
   });
 });
+
+// unhandled error rejection
+process.on("unhandledRejection", function (reason, promise) {
+  console.log(reason);
+});
+
 // listening to port
 const port = process.env.PORT;
 app.listen(port, () => {
