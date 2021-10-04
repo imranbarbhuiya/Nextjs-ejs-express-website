@@ -14,6 +14,9 @@ import mail from "../module/mail.js";
 // init router
 const route = Router();
 /**
+ * @param {request} req
+ * @param {response} res
+ * @param {NextFunction} next
  * Authenticate user with google, github and facebook
  */
 

@@ -13,6 +13,7 @@ const route = Router();
 /**
  * @param {request} req
  * @param {response} res
+ * @param {NextFunction} next
  */
 
 route
