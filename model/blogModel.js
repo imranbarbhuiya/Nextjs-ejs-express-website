@@ -32,7 +32,7 @@ const blogSchema = new mongoose.Schema({
   slug: {
     type: String,
     required: true,
-    unique: [true, "Slug must be unique"],
+    unique: true,
   },
   sanitizedHtml: {
     type: String,

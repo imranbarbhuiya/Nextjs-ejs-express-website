@@ -30,6 +30,7 @@ function isAdminOrBlogOwner(path) {
       req.user &&
       (req.user.role == "admin" || req.blog.author == req.user.id)
     ) {
+      res.locals.message = req.flash();
       res.render(`blog/${path}`, { blog: req.blog });
     } else {
       res.render("error", { error: { status: 401 }, message: "Unauthorized" });

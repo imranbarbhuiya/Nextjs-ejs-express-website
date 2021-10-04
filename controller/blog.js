@@ -25,7 +25,8 @@ function saveBlogAndRedirect(path) {
       blog = await blog.save();
       res.redirect(`/blog/preview/${blog.id}`);
     } catch (error) {
-      req.flash("error", error.message);
+      const errorMsg = error.message.split(":")[2];
+      req.flash("error", errorMsg ? errorMsg : error.message);
       res.locals.message = req.flash();
       res.render(`blog/${path}`, { blog: blog });
     }
