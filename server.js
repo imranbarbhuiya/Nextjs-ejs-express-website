@@ -11,7 +11,6 @@ import mongoose from "mongoose";
 import passport from "passport";
 import path from "path";
 import serveFavicon from "serve-favicon";
-import { fileURLToPath } from "url";
 // local modules
 import passportSocialAuth from "./controller/auth.js";
 import userModel from "./model/userModel.js";
@@ -19,14 +18,13 @@ import blogRoute from "./routes/blog.js";
 import courseRoute from "./routes/course.js";
 import indexRoute from "./routes/index.js";
 import loginRoute from "./routes/login.js";
+import { __dirname } from "./__.js";
 // object destruction
 dotenv.config();
 const { create } = connect_mongo;
 const { connect } = mongoose;
 // initiate app
 const app = express();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 app
   // serve favicon
   .use(
