@@ -11,7 +11,6 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "@types/morgan": "^1.9.3",
     "axios": "^0.22.0",
     "connect-ensure-login": "^0.1.1",
     "connect-flash": "^0.1.1",
@@ -45,6 +44,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@types/morgan": "^1.9.3",
     "nodemon": "^2.0.13",
     "snyk": "^1.730.0"
   },
