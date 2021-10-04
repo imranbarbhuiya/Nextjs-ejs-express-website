@@ -25,7 +25,7 @@ route
     if (!req.user.verified) {
       req.flash(
         "error",
-        "you must verify before writing blogs <a class='btn btn-warning' href='/verify'>Verify</a>"
+        "you must verify before writing blogs <a class='btn btn-lg btn-outline-warning' href='/verify'>Verify</a>"
       );
       return res.redirect("/blog");
     }
