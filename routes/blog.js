@@ -1,7 +1,7 @@
 import { ensureLoggedIn } from "connect-ensure-login";
 import { Router } from "express";
 // model
-import { saveBlogAndRedirect, view } from "../controller/blog.js";
+import { saveBlogAndRedirect, viewBlogs } from "../controller/blog.js";
 import { isAdmin, isAdminOrBlogOwner } from "../controller/roles.js";
 import blogModel from "../model/blogModel.js";
 
@@ -17,9 +17,9 @@ route.use(
   ensureLoggedIn("/login")
 );
 route
-  .get("/", view("all"))
-  .get("/myblogs", view("myblogs"))
-  .get("/unverified", isAdmin, view("unverified"))
+  .get("/", viewBlogs("all"))
+  .get("/myblogs", viewBlogs("myblogs"))
+  .get("/unverified", isAdmin, viewBlogs("unverified"))
   .get("/new", function (req, res) {
     if (!req.user.verified) {
       req.flash(
@@ -28,6 +28,7 @@ route
       );
       return res.redirect("/blog");
     }
+    res.locals.message = req.flash();
     res.render("blog/new", { blog: new blogModel() });
   })
   .post(
@@ -55,11 +56,6 @@ route
     },
     isAdminOrBlogOwner("view")
   )
-  // .get("/search", async function (req, res) {
-  //   let blogs = await search(req.query.term);
-  //   blogs = blogs.map((blog) => blog.title);
-  //   res.send(blogs);
-  // })
   .get("/:slug", async (req, res) => {
     let blog = await blogModel.findOne({
       slug: req.params.slug,

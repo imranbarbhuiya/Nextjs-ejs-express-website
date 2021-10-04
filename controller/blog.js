@@ -17,14 +17,21 @@ function saveBlogAndRedirect(path) {
     blog.keywords = keywords;
     blog.slug = req.body.slug;
     try {
+      if (blog.emptyHtml()) {
+        req.flash("error", "Markdown can't be empty");
+        res.locals.message = req.flash();
+        return res.render(`blog/${path}`, { blog: blog });
+      }
       blog = await blog.save();
       res.redirect(`/blog/preview/${blog.id}`);
     } catch (error) {
+      req.flash("error", error.message);
+      res.locals.message = req.flash();
       res.render(`blog/${path}`, { blog: blog });
     }
   };
 }
-function view(path) {
+function viewBlogs(path) {
   return async (req, res, next) => {
     let blogs;
     let searchQuery = req.query.search;
@@ -106,4 +113,4 @@ async function search(searchQuery, skip, author, unverified) {
   }
 }
 
-export { view, saveBlogAndRedirect };
+export { viewBlogs, saveBlogAndRedirect };

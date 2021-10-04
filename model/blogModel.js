@@ -32,7 +32,7 @@ const blogSchema = new mongoose.Schema({
   slug: {
     type: String,
     required: true,
-    unique: true,
+    unique: [true, "Slug must be unique"],
   },
   sanitizedHtml: {
     type: String,
@@ -60,6 +60,17 @@ dompurify.addHook("afterSanitizeElements", (node) => {
     node.remove();
   }
 });
+
+function markAndSanitize(markdown) {
+  return dompurify.sanitize(marked(markdown), {
+    USE_PROFILES: { html: true },
+  });
+}
+
+blogSchema.methods.emptyHtml = function () {
+  return !markAndSanitize(this.markdown);
+};
+
 blogSchema.pre("validate", function (next) {
   if (this.title && !this.slug) {
     this.slug = slugify(this.title, { lower: true, strict: true });
@@ -67,12 +78,17 @@ blogSchema.pre("validate", function (next) {
     this.slug = slugify(this.slug, { lower: true, strict: true });
   }
   if (this.markdown) {
-    this.sanitizedHtml =
-      dompurify.sanitize(marked(this.markdown), {
-        USE_PROFILES: { html: true },
-      }) || "no text provided";
+    this.sanitizedHtml = markAndSanitize(this.markdown) || "no text provided";
   }
   next();
+});
+
+blogSchema.post("save", function (error, doc, next) {
+  if (error.name === "MongoServerError" && error.code === 11000) {
+    next(new Error(`${Object.keys(error.keyValue)[0]} must be unique`));
+  } else {
+    next(error);
+  }
 });
 
 blogSchema.plugin(mongoose_fuzzy_searching, {

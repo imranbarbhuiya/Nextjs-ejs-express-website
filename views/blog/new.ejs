@@ -12,7 +12,15 @@
 
 <body>
     <div class="container">
-        <h1 class="mb-4">New Blog</h1>
+        <h1>New Blog</h1>
+        <div>
+            <p class="text-danger">
+                <%=message.error%>
+            </p>
+            <p class="text-success">
+                <%=message.success%>
+            </p>
+        </div>
         <form action="" method="post">
             <%- include("form_fields") %>
         </form>
