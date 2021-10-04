@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<%- include('../partials/header') %>
 
   <!-- ==== import font ==== -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
@@ -16,66 +10,66 @@
   <!-- ===== CSS ===== -->
   <link rel="stylesheet" href="/assets/css/login.css" />
   <title>Forgot Password</title>
-</head>
+  </head>
 
-<body>
+  <body>
 
-  <div id="particles-js"></div>
+    <div id="particles-js"></div>
 
-  <div class="forgot-box">
+    <div class="forgot-box">
 
-    <form method="POST" class=" forgot" id="login-up">
+      <form method="POST" class=" forgot" id="login-up">
 
-      <h1 class="login__title">Forgot Password</h1>
-      <%if(!password){%>
-        <div class="login__box">
-          <i class="fa fa-at login__icon"></i>
-          <input name="email" type="email" placeholder="Email" class="login__input" required
-            <%=password?"disabled":null%> />
-        </div>
-        <%}else{%>
-          <div class=" login__box">
-            <i class="fa fa-lock login__icon"></i>
-            <input name="password" type="password" placeholder="Password" class="login__input password" required />
-
-            <div class="helper-wrapper">
-              <div class="helper-text"><span class="length"><i class="fas fa-times"></i> Between 6-50 characters
-                </span><span class="lowercase"><i class="fas fa-times"></i>
-                  Lowercase letter</span><span class="uppercase"><i class="fas fa-times"></i> Uppercase
-                  letter</span><span class="number"><i class="fas fa-times"></i> A
-                  number</span><span class="special"><i class="fas fa-times"></i> A special character</span></div>
-            </div>
-          </div>
+        <h1 class="login__title">Forgot Password</h1>
+        <%if(!password){%>
           <div class="login__box">
-            <i class="fa fa-lock login__icon"></i>
-            <input name="cPassword" type="password" placeholder="Confirm Password" class="login__input ConfirmPassword"
-              required />
+            <i class="fa fa-at login__icon"></i>
+            <input name="email" type="email" placeholder="Email" class="login__input" required
+              <%=password?"disabled":null%> />
           </div>
-          <%}%>
-            <span class="flash_message <%=message.error?" error":"success" %>" id="flash">
-              <%=message.error||message.success%>
-            </span>
-            <input type="submit" class="login__button" value="Reset">
+          <%}else{%>
+            <div class=" login__box">
+              <i class="fa fa-lock login__icon"></i>
+              <input name="password" type="password" placeholder="Password" class="login__input password" required />
 
-    </form>
-  </div>
+              <div class="helper-wrapper">
+                <div class="helper-text"><span class="length"><i class="fas fa-times"></i> Between 6-50 characters
+                  </span><span class="lowercase"><i class="fas fa-times"></i>
+                    Lowercase letter</span><span class="uppercase"><i class="fas fa-times"></i> Uppercase
+                    letter</span><span class="number"><i class="fas fa-times"></i> A
+                    number</span><span class="special"><i class="fas fa-times"></i> A special character</span></div>
+              </div>
+            </div>
+            <div class="login__box">
+              <i class="fa fa-lock login__icon"></i>
+              <input name="cPassword" type="password" placeholder="Confirm Password"
+                class="login__input ConfirmPassword" required />
+            </div>
+            <%}%>
+              <span class="flash_message <%=message.error?" error":"success" %>" id="flash">
+                <%=message.error||message.success%>
+              </span>
+              <input type="submit" class="login__button" value="Reset">
 
-  <footer class="footer-distributed">
-    <div class="footer-right"> <a href="#"><i class="fab fa-facebook"></i></a>
-      <a href="#"><i class="fab fa-twitter"></i></a>
-      <a href="#"><i class="fab fa-linkedin"></i></a>
-      <a href="#"><i class="fab fa-github"></i></a>
+      </form>
     </div>
-    <div class="footer-left">
-      <p class="footer-links">
-        <a class="link-1" href="#">Home</a> <a href="#">Blog</a> <a href="#">Pricing</a> <a href="#">About</a> <a
-          href="#">Faq</a> <a href="#">Contact</a>
-      </p>
-      <p>Codversity &copy; 2021</p>
-    </div>
-  </footer>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script src="/assets/js/particles.js"></script>
-  <script src="/assets/js/validation.js"></script>
 
-  <%- include('../partials/footer') %>
+    <footer class="footer-distributed">
+      <div class="footer-right"> <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+        <a href="#"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-left">
+        <p class="footer-links">
+          <a class="link-1" href="#">Home</a> <a href="#">Blog</a> <a href="#">Pricing</a> <a href="#">About</a> <a
+            href="#">Faq</a> <a href="#">Contact</a>
+        </p>
+        <p>Codversity &copy; 2021</p>
+      </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="/assets/js/particles.js"></script>
+    <script src="/assets/js/validation.js"></script>
+
+    <%- include('../partials/footer') %>
