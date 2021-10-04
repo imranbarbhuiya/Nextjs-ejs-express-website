@@ -14,7 +14,7 @@ const route = new Router();
 
 route.use(
   /^\/.*(myblogs|unverified|new|preview|verify|edit).*/i,
-  ensureLoggedIn("/login")
+  ensureLoggedIn({ redirectTo: "/login", setRedirectTo: false })
 );
 route
   .get("/", viewBlogs("all"))
