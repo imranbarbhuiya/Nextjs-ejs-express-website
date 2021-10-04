@@ -103,6 +103,7 @@ app
       req.admin = true;
       next();
     } else {
+      req.admin = false;
       next();
     }
   })
