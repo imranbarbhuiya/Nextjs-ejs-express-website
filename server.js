@@ -30,7 +30,7 @@ const app = express();
 app
   // serve favicon
   .use(
-    serveFavicon(path.join(__dirname, "public", "assets", "img", "logo.jpeg"))
+    serveFavicon(path.join(__dirname, "public", "assets", "img", "favicon.ico"))
   )
   // set static files
   .use(express.static("public"))
