@@ -10,7 +10,6 @@ import methodOverride from "method-override";
 import mongoose from "mongoose";
 import passport from "passport";
 import path from "path";
-import redis from "redis";
 import serveFavicon from "serve-favicon";
 // local modules
 import passportSocialAuth from "./controller/auth.js";
@@ -23,10 +22,9 @@ import indexRoute from "./routes/index.js";
 import loginRoute from "./routes/login.js";
 import { __dirname } from "./__.js";
 // object destruction
+config();
 const { create } = connect_mongo;
 const { connect } = mongoose;
-// env variable
-config();
 // initiate app
 const app = express();
 app
@@ -86,24 +84,6 @@ connect(process.env.MONGODB_SRV, (err) => {
     : Logger.debug("Connected to the MongoDB database successfully.");
 });
 
-const redisClient = redis.createClient({
-  host: process.env.REDIS_HOSTNAME,
-  port: process.env.REDIS_PORT,
-  password: process.env.REDIS_PASSWORD,
-
-  enable_offline_queue: false,
-});
-
-redisClient
-  .on("connect", function () {
-    Logger.debug("Connected to the Redis database successfully.");
-  })
-
-  // handle connection errors
-  .on("error", (err) => {
-    Logger.error(err);
-    return new Error();
-  });
 // passport setup
 passport.use(userModel.createStrategy());
 
