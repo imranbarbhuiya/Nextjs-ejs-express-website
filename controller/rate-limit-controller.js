@@ -1,9 +1,12 @@
-import dotenv from "dotenv";
 import passport from "passport";
 import { RateLimiterRedis } from "rate-limiter-flexible";
 import redis from "redis";
 import Logger from "../lib/logger.js";
-dotenv.config();
+
+// env variable configuration
+if (app.get("env") == "development") {
+  import("dotenv").then((dotenv) => dotenv.config());
+}
 
 const maxWrongAttemptsByIPperDay = 100;
 const maxConsecutiveFailsByEmailAndIP = 10;
