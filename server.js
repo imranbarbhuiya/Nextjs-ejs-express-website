@@ -42,6 +42,7 @@ app
       extended: false,
     })
   )
+  // trust proxy
   .set("trust proxy", 1)
   // set cookie parser
   .use(cookieParser())
@@ -60,7 +61,9 @@ app
   .use(flash())
   // init passport
   .use(passport.initialize())
+  // using passport user session in app
   .use(passport.session())
+  // using helmet with custom csp
   .use(
     helmet.contentSecurityPolicy({
       useDefaults: true,
@@ -74,7 +77,9 @@ app
       },
     })
   )
+  // using method override to use put and delete
   .use(methodOverride("_method"))
+  // using morgan to write logs in console
   .use(morganMiddleware);
 
 // mongodb connect with mongoose
@@ -87,17 +92,19 @@ connect(process.env.MONGODB_SRV, (err) => {
 // passport setup
 passport.use(userModel.createStrategy());
 
+// passport serialize and deserialize
 passport.serializeUser(userModel.serializeUser());
-
 passport.deserializeUser(userModel.deserializeUser());
 
 // calling passport social auth function
 passportSocialAuth(passport);
-// defining admin middleware
 
 app
+  // adding index router
   .use("/", indexRoute)
+  // adding login router
   .use("/", loginRoute)
+  // defining admin middleware
   .use((req, res, next) => {
     if (req.user && req.user.role == "admin") {
       req.admin = true;
@@ -107,7 +114,9 @@ app
       next();
     }
   })
+  // adding course router
   .use("/course", courseRoute)
+  // adding blog router
   .use("/blog", blogRoute);
 
 // catch 404 and forward to error handler
@@ -116,12 +125,12 @@ app.use(function (req, res, next) {
   err.status = 404;
   next(err);
 });
-/** 
-* error handlers
+// error handlers
 
-* development error handler
-* will print stacktrace
-*/
+/**
+ * development error handler
+ * will log and print stacktrace
+ */
 if (app.get("env") === "development") {
   app.use(function (err, req, res, next) {
     Logger.warn(err);
@@ -132,9 +141,10 @@ if (app.get("env") === "development") {
     });
   });
 }
-
-// production error handler
-// no stacktrace leaked to user
+/**
+ * production error handler
+ * no stacktrace leaked to user
+ */
 app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error", {
@@ -143,8 +153,8 @@ app.use(function (err, req, res, next) {
   });
 });
 
-// unhandled error rejection
-process.on("unhandledRejection", function (reason, promise) {
+// unhandled error rejection will be customized/removed
+process.on("unhandledRejection", function (reason) {
   Logger.error(reason);
 });
 
