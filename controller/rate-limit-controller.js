@@ -1,10 +1,12 @@
+// import { config } from "dotenv";
 import passport from "passport";
 import { RateLimiterRedis } from "rate-limiter-flexible";
 import redis from "redis";
 import Logger from "../lib/logger.js";
 
-// env variable configuration
-if (app.get("env") == "development") {
+// config();
+
+if (process.env.NODE_ENV !== "production") {
   import("dotenv").then((dotenv) => dotenv.config());
 }
 
