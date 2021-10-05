@@ -2,7 +2,6 @@
 import flash from "connect-flash";
 import connect_mongo from "connect-mongo";
 import cookieParser from "cookie-parser";
-import dotenv from "dotenv";
 import express from "express";
 import session from "express-session";
 import helmet from "helmet";
@@ -22,11 +21,16 @@ import indexRoute from "./routes/index.js";
 import loginRoute from "./routes/login.js";
 import { __dirname } from "./__.js";
 // object destruction
-dotenv.config();
 const { create } = connect_mongo;
 const { connect } = mongoose;
+
 // initiate app
 const app = express();
+// env variable configuration
+if (app.get("env") == "development") {
+  import("dotenv").then((dotenv) => dotenv.config());
+}
+
 app
   // serve favicon
   .use(
