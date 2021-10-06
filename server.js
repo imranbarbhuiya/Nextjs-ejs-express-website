@@ -65,16 +65,20 @@ app
   .use(passport.session())
   // using helmet with custom csp
   .use(
-    helmet.contentSecurityPolicy({
-      useDefaults: true,
-      directives: {
-        scriptSrc: [
-          "'self'",
-          "https://cdn.jsdelivr.net",
-          "https://code.jquery.com",
-        ],
-        imgSrc: ["'self'", "https://*", "data:*"],
+    helmet({
+      contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+          scriptSrc: [
+            "'self'",
+            "https://cdn.jsdelivr.net",
+            "https://code.jquery.com",
+          ],
+          imgSrc: ["'self'", "https://*", "data:*"],
+        },
       },
+      hidePoweredBy: true,
+      referrerPolicy: { policy: "same-origin" },
     })
   )
   // using method override to use put and delete
