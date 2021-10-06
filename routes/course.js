@@ -52,13 +52,33 @@ route
       }
     });
   })
+  .get("/test", ensureLoggedIn(), async (req, res) => {
+    // await courseDataModel.findOneAndUpdate(
+    //   {
+    //     userId: req.user.id,
+    //   },
+    //   {
+    //     $push: {
+    //       courses: {
+    //         courseId: req.user.id,
+    //       },
+    //     },
+    //   }
+    // );
+    const data = await courseDataModel.findOne({
+      courses: { $elemMatch: { courseId: req.user.id } },
+    });
+    console.log(data);
+    res.sendStatus(200);
+  })
   .get("/play", function (req, res) {
     res.render("course/play");
   })
   .get("/video", function (req, res) {
+    const sameReferer = `${req.headers.referer}`.includes(req.headers.host);
     const range = req.headers.range;
-    if (!range) {
-      res.status(400).send("Requires Range header");
+    if (!range || !sameReferer) {
+      return res.status(402).send("Payment required");
     }
 
     // get video stats (about 61MB)
