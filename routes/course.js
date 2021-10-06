@@ -4,6 +4,7 @@ import { createReadStream, statSync } from "fs";
 import natural from "natural";
 import path from "path";
 // local modules
+import courseDataModel from "../model/courseData.js";
 import Course from "../model/courseModel.js";
 import { __dirname } from "../__.js";
 const { Metaphone } = natural;
