@@ -81,11 +81,12 @@ route
       return res.status(402).send("Payment required");
     }
 
-    // get video stats (about 61MB)
+    // get video stats
     const videoPath = path.resolve(__dirname, "public", "test.mp4");
-    const videoSize = statSync(
-      path.resolve(__dirname, "public", "test.mp4")
-    ).size;
+    const stats = statSync(path.resolve(__dirname, "public", "test.mp4"));
+    console.log(stats);
+    // get video size
+    const videoSize = stats.size;
 
     // Parse Range
     // Example: "bytes=32324-"
