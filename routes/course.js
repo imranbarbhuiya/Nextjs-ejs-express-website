@@ -84,7 +84,6 @@ route
     // get video stats
     const videoPath = path.resolve(__dirname, "public", "test.mp4");
     const stats = statSync(path.resolve(__dirname, "public", "test.mp4"));
-    console.log(stats);
     // get video size
     const videoSize = stats.size;
 
