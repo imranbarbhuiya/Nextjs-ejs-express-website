@@ -25,7 +25,7 @@
     "helmet": "^4.6.0",
     "jsdom": "^17.0.0",
     "jsonwebtoken": "^8.5.1",
-    "marked": "^3.0.4",
+    "marked": "^3.0.6",
     "method-override": "^3.0.0",
     "mongoose": "^6.0.8",
     "mongoose-fuzzy-searching": "^2.0.2",
@@ -46,7 +46,7 @@
   "devDependencies": {
     "@types/morgan": "^1.9.3",
     "nodemon": "^2.0.13",
-    "snyk": "^1.730.0"
+    "snyk": "^1.731.0"
   },
   "repository": {
     "type": "git",
