@@ -94,9 +94,12 @@ async function search(searchQuery, skip, author, unverified) {
         .limit(5);
     else if (unverified) {
       blogs = await blogModel
-        .fuzzySearch(`${keywords} ${searchQuery}`, {
-          verified: false,
-        })
+        .fuzzySearch(
+          { query: `${keywords} ${searchQuery}` },
+          {
+            verified: false,
+          }
+        )
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(5);
