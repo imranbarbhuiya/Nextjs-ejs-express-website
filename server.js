@@ -133,7 +133,7 @@ app.use(function (req, res, next) {
 
 /**
  * development error handler
- * will log and print stacktrace
+ * will log and print the error
  */
 if (app.get("env") === "development") {
   app.use(function (err, req, res, next) {
@@ -147,7 +147,7 @@ if (app.get("env") === "development") {
 }
 /**
  * production error handler
- * no stacktrace leaked to user
+ * without logs
  */
 app.use(function (err, req, res, next) {
   res.status(err.status || 500);
