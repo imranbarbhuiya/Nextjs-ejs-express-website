@@ -141,7 +141,7 @@ if (app.get("env") === "development") {
     res.status(err.status || 500);
     res.render("error", {
       message: err.message,
-      error: err,
+      status: err.status,
     });
   });
 }
@@ -153,7 +153,7 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error", {
     message: err.message,
-    error: {},
+    status: err.status,
   });
 });
 
