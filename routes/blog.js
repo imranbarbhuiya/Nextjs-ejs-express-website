@@ -2,6 +2,7 @@ import { ensureLoggedIn } from "connect-ensure-login";
 import { Router } from "express";
 // model
 import { saveBlogAndRedirect, viewBlogs } from "../controller/blog.js";
+import { handleRejection } from "../controller/handleRejection.js";
 import { isAdmin, isAdminOrBlogOwner } from "../controller/roles.js";
 import blogModel from "../model/blogModel.js";
 
@@ -43,18 +44,13 @@ route
   .get(
     "/preview/:id",
     ensureLoggedIn("/login"),
-    async (req, res, next) => {
-      try {
-        let blog = await blogModel.findById(req.params.id);
-        if (blog) {
-          req.blog = blog;
-          next();
-        } else res.sendStatus(404);
-      } catch (err) {
-        res.sendStatus(404);
-        console.log(err);
-      }
-    },
+    handleRejection(async (req, res, next) => {
+      let blog = await blogModel.findById(req.params.id);
+      if (blog) {
+        req.blog = blog;
+        next();
+      } else res.sendStatus(404);
+    }),
     isAdminOrBlogOwner("view")
   )
   .get("/:slug", async (req, res) => {
@@ -65,39 +61,41 @@ route
     if (blog) res.render("blog/view", { blog: blog });
     else res.sendStatus(404);
   })
-  .delete("/:id", isAdmin, async function (req, res) {
-    try {
+  .delete(
+    "/:id",
+    isAdmin,
+    handleRejection(async (req, res) => {
       await blogModel.findByIdAndDelete(req.params.id);
-    } catch (err) {}
-    res.redirect("back");
-  })
+      res.redirect("back");
+    })
+  )
   .get(
     "/edit/:id",
     ensureLoggedIn("/login"),
-    async function (req, res, next) {
-      try {
-        let blog = await blogModel.findById(req.params.id);
-        req.blog = blog;
-        next();
-      } catch (error) {
-        res.sendStatus(404);
-      }
-    },
+    handleRejection(async (req, res, next) => {
+      let blog = await blogModel.findById(req.params.id);
+      req.blog = blog;
+      next();
+    }),
     isAdminOrBlogOwner("edit")
   )
   .put(
     "/:id",
     ensureLoggedIn("/login"),
-    async function (req, res, next) {
+    handleRejection(async function (req, res, next) {
       req.blog = await blogModel.findById(req.params.id);
       next();
-    },
+    }),
     saveBlogAndRedirect("edit")
   )
-  .get("/verify/:id", isAdmin, async (req, res) => {
-    let blog = await blogModel.findById(req.params.id);
-    blog.verified = true;
-    blog.save();
-    res.redirect(`/blog/${blog.slug}`);
-  });
+  .get(
+    "/verify/:id",
+    isAdmin,
+    handleRejection(async (req, res) => {
+      let blog = await blogModel.findById(req.params.id);
+      blog.verified = true;
+      blog.save();
+      res.redirect(`/blog/${blog.slug}`);
+    })
+  );
 export default route;

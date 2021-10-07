@@ -157,11 +157,6 @@ app.use(function (err, req, res, next) {
   });
 });
 
-// unhandled error rejection will be customized/removed
-process.on("unhandledRejection", function (reason) {
-  Logger.error(reason);
-});
-
 // listening to port
 const port = process.env.PORT;
 app.listen(port, () => {
