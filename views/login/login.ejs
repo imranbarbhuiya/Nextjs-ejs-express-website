@@ -31,7 +31,7 @@
         <div class="login__forms">
 
           <form action="/login" method="POST" class="login__register <%=login%>" id="login-in">
-
+            <input type="hidden" name="_csrf" value="<%=csrfToken%>">
             <h1 class="login__title">Sign In</h1>
 
             <div class="login__box">

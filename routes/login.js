@@ -1,6 +1,7 @@
 // requiring dependencies
 import { ensureLoggedIn, ensureLoggedOut } from "connect-ensure-login";
 import { randomBytes } from "crypto";
+import csrf from "csurf";
 import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
@@ -13,6 +14,7 @@ import mail from "../module/mail.js";
 
 // init router
 const route = Router();
+const csrfProtection = csrf({ cookie: true });
 /**
  * @param {request} req
  * @param {response} res
@@ -21,6 +23,7 @@ const route = Router();
  */
 
 // google
+
 route
   .get(
     "/auth/google",
@@ -77,14 +80,15 @@ route
  * logout
  */
 route
-  .get("/login", function (req, res) {
+  .get("/login", csrfProtection, function (req, res) {
     res.locals.message = req.flash();
     res.render("login/login", {
       login: "",
       register: "none",
+      csrfToken: req.csrfToken(),
     });
   })
-  .post("/login", loginRouteRateLimit, verify)
+  .post("/login", csrfProtection, loginRouteRateLimit, verify)
 
   // local register system
   .get("/register", function (req, res) {

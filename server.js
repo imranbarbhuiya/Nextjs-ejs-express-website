@@ -150,6 +150,11 @@ if (app.get("env") === "development") {
  * without logs
  */
 app.use(function (err, req, res, next) {
+  if (err.code === "EBADCSRFTOKEN") {
+    res.status(403);
+    res.send("Forbidden");
+    return;
+  }
   res.status(err.status || 500);
   res.render("error", {
     message: err.message,
@@ -159,6 +164,7 @@ app.use(function (err, req, res, next) {
 
 // listening to port
 const port = process.env.PORT;
-app.listen(port, () => {
+app.listen(port, (err) => {
+  if (err) return Logger.error(err);
   Logger.debug(`Server started at port ${port}`);
 });
