@@ -1,4 +1,4 @@
-// requiring dependencies
+// importing dependencies
 import flash from "connect-flash";
 import connect_redis from "connect-redis";
 import cookieParser from "cookie-parser";
@@ -11,19 +11,26 @@ import mongoose from "mongoose";
 import passport from "passport";
 import path from "path";
 import serveFavicon from "serve-favicon";
-// local modules
+// controllers
 import passportSocialAuth from "./controller/auth.js";
-import morganMiddleware from "./controller/morgan.js";
+// Redis Database
 import redisClient from "./db/redisDB.js";
+// Logger
 import Logger from "./lib/logger.js";
+// middleware
+import morganMiddleware from "./middleware/morgan.js";
+// Mongoose Models
 import userModel from "./model/userModel.js";
+// routes
 import blogRoute from "./routes/blog.js";
 import courseRoute from "./routes/course.js";
 import indexRoute from "./routes/index.js";
 import loginRoute from "./routes/login.js";
+// dirname module
 import { __dirname } from "./__.js";
-// object destruction
+// configuring env variables
 config();
+// making redisStore for session store
 const RedisStore = connect_redis(session);
 // initiate app
 const app = express();

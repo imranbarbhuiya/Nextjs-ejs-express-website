@@ -1,4 +1,4 @@
-// requiring dependencies
+// importing dependencies
 import { ensureLoggedIn, ensureLoggedOut } from "connect-ensure-login";
 import { randomBytes } from "crypto";
 import csrf from "csurf";
@@ -6,22 +6,24 @@ import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import passport from "passport";
-// requiring local modules
-import { loginRouteRateLimit } from "../controller/rate-limit-controller.js";
+// controllers
+import { loginRouteRateLimit } from "../controller/login-controller.js";
 import { verify } from "../controller/verify.js";
+// mongoose models
 import User from "../model/userModel.js";
+// mail module
 import mail from "../module/mail.js";
 
 // init router
 const route = Router();
+// init csrf
 const csrfProtection = csrf({ cookie: true });
 /**
  * @param {request} req
  * @param {response} res
  * @param {NextFunction} next
- * Authenticate user with google, github and facebook
  */
-
+// Authenticate user with google, github and facebook
 // google
 
 route

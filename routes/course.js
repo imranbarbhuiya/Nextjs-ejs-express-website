@@ -1,14 +1,17 @@
+// importing dependencies
 import { ensureLoggedIn } from "connect-ensure-login";
 import { Router } from "express";
 import { createReadStream, statSync } from "fs";
 import natural from "natural";
 import path from "path";
-// local modules
+// mongoose models
 import courseDataModel from "../model/courseData.js";
 import Course from "../model/courseModel.js";
+// dirname module
 import { __dirname } from "../__.js";
+// object destruction
 const { Metaphone } = natural;
-
+// init express route
 const route = Router();
 
 /**

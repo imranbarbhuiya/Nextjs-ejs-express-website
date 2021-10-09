@@ -1,11 +1,14 @@
+// importing dependencies
 import { ensureLoggedIn } from "connect-ensure-login";
 import { Router } from "express";
-// model
+// controllers
 import { saveBlogAndRedirect, viewBlogs } from "../controller/blog.js";
 import { handleRejection } from "../controller/handleRejection.js";
-import { isAdmin, isAdminOrBlogOwner } from "../controller/roles.js";
+// middleware
+import { isAdmin, isAdminOrBlogOwner } from "../middleware/roles.js";
+// mongoose models
 import blogModel from "../model/blogModel.js";
-
+// init express route
 const route = new Router();
 
 /**
