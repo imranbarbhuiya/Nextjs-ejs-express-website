@@ -9,10 +9,10 @@ import passport from "passport";
 // controllers
 import { loginRouteRateLimit } from "../controller/login-controller.js";
 import { verify } from "../controller/verify.js";
+// mail module
+import mail from "../lib/mail.js";
 // mongoose models
 import User from "../model/userModel.js";
-// mail module
-import mail from "../module/mail.js";
 
 // init router
 const route = Router();

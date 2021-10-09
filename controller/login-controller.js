@@ -1,6 +1,7 @@
+// importing dependencies
 import passport from "passport";
 import { RateLimiterRedis } from "rate-limiter-flexible";
-// importing redis client
+// Redis Client
 import redisClient from "../db/redisDB.js";
 
 // setting number of wrong limit

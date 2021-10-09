@@ -1,7 +1,11 @@
+// importing modules
 import natural from "natural";
+// mongoose model
 import blogModel from "../model/blogModel.js";
+// object destruction
 const { Metaphone } = natural;
 
+// blog save controller
 function saveBlogAndRedirect(path) {
   return async (req, res) => {
     let keywords = Metaphone.process(
@@ -32,6 +36,7 @@ function saveBlogAndRedirect(path) {
     }
   };
 }
+// view blog controller
 function viewBlogs(path) {
   return async (req, res, next) => {
     let blogs;
@@ -78,7 +83,7 @@ function viewBlogs(path) {
     res.render("blog/index", { blogs: blogs, query: searchQuery });
   };
 }
-
+// search function
 async function search(searchQuery, skip, author, unverified) {
   if (!skip) skip = 0;
   let keywords = Metaphone.process(searchQuery);

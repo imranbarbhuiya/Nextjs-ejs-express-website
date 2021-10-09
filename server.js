@@ -13,7 +13,7 @@ import path from "path";
 import serveFavicon from "serve-favicon";
 // controllers
 import passportSocialAuth from "./controller/auth.js";
-// Redis Database
+// Redis Client
 import redisClient from "./db/redisDB.js";
 // Logger
 import Logger from "./lib/logger.js";

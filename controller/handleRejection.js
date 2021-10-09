@@ -1,3 +1,4 @@
+// defining promise handler
 function handleRejection(done) {
   return async (req, res, next) => {
     try {

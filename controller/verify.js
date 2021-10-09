@@ -1,7 +1,11 @@
+// importing dependencies
 import { randomBytes } from "crypto";
 import jwt from "jsonwebtoken";
+// mail module
+import mail from "../lib/mail.js";
+// mongoose model
 import User from "../model/userModel.js";
-import mail from "../module/mail.js";
+// verify controller
 async function verify(req, res) {
   let verificationToken = randomBytes(20).toString("hex");
   const encoded = jwt.sign(
