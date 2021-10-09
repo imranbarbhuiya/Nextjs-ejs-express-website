@@ -26,6 +26,7 @@ import blogRoute from "./routes/blog.js";
 import courseRoute from "./routes/course.js";
 import indexRoute from "./routes/index.js";
 import loginRoute from "./routes/login.js";
+import testRoute from "./routes/test.js";
 // dirname module
 import { __dirname } from "./__.js";
 // configuring env variables
@@ -35,6 +36,24 @@ const RedisStore = connect_redis(session);
 // initiate app
 const app = express();
 app
+  // using helmet for csp hide powered by and referer policy
+  .use(
+    helmet({
+      contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+          scriptSrc: [
+            "'self'",
+            "https://cdn.jsdelivr.net",
+            "https://code.jquery.com",
+          ],
+          imgSrc: ["'self'", "https://*"],
+        },
+      },
+      hidePoweredBy: true,
+      referrerPolicy: { policy: "strict-origin-when-cross-origin" },
+    })
+  )
   // serve favicon
   .use(
     serveFavicon(path.join(__dirname, "public", "assets", "img", "favicon.ico"))
@@ -70,24 +89,6 @@ app
   .use(passport.initialize())
   // using passport user session in app
   .use(passport.session())
-  // using helmet with custom csp
-  .use(
-    helmet({
-      contentSecurityPolicy: {
-        useDefaults: true,
-        directives: {
-          scriptSrc: [
-            "'self'",
-            "https://cdn.jsdelivr.net",
-            "https://code.jquery.com",
-          ],
-          imgSrc: ["'self'", "https://*", "data:*"],
-        },
-      },
-      hidePoweredBy: true,
-      referrerPolicy: { policy: "same-origin" },
-    })
-  )
   // using method override to use put and delete
   .use(methodOverride("_method"))
   // using morgan to write logs in console
@@ -115,6 +116,8 @@ app
   .use("/", indexRoute)
   // adding login router
   .use("/", loginRoute)
+  // a test route
+  .use("/test", testRoute)
   // defining admin middleware
   .use((req, res, next) => {
     if (req.user && req.user.role == "admin") {
