@@ -93,6 +93,13 @@ route
     const start = Number(range.replace(/\D/g, ""));
     const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
 
+    // if file start is greater than start
+    if (start >= fileSize) {
+      res
+        .status(416)
+        .send("Requested range not satisfiable\n" + start + " >= " + fileSize);
+      return;
+    }
     // Create headers
     const contentLength = end - start + 1;
     const headers = {
