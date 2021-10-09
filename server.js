@@ -1,6 +1,6 @@
 // requiring dependencies
 import flash from "connect-flash";
-import connect_mongo from "connect-mongo";
+import connect_redis from "connect-redis";
 import cookieParser from "cookie-parser";
 import { config } from "dotenv";
 import express from "express";
@@ -14,6 +14,7 @@ import serveFavicon from "serve-favicon";
 // local modules
 import passportSocialAuth from "./controller/auth.js";
 import morganMiddleware from "./controller/morgan.js";
+import redisClient from "./db/redisDB.js";
 import Logger from "./lib/logger.js";
 import userModel from "./model/userModel.js";
 import blogRoute from "./routes/blog.js";
@@ -23,8 +24,7 @@ import loginRoute from "./routes/login.js";
 import { __dirname } from "./__.js";
 // object destruction
 config();
-const { create } = connect_mongo;
-const { connect } = mongoose;
+const RedisStore = connect_redis(session);
 // initiate app
 const app = express();
 app
@@ -53,7 +53,7 @@ app
       secret: process.env.SECRET,
       resave: false,
       saveUninitialized: false,
-      store: create({ mongoUrl: process.env.MONGODB_SRV }),
+      store: new RedisStore({ client: redisClient }),
       cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
     })
   )
@@ -87,7 +87,7 @@ app
   .use(morganMiddleware);
 
 // mongodb connect with mongoose
-connect(process.env.MONGODB_SRV, (err) => {
+mongoose.connect(process.env.MONGODB_SRV, (err) => {
   err
     ? Logger.error(err)
     : Logger.debug("Connected to the MongoDB database successfully.");

@@ -1,33 +1,13 @@
-import { config } from "dotenv";
 import passport from "passport";
 import { RateLimiterRedis } from "rate-limiter-flexible";
-import redis from "redis";
-import Logger from "../lib/logger.js";
-config();
+// importing redis client
+import redisClient from "../db/redisDB.js";
 
+// setting number of wrong limit
 const maxWrongAttemptsByIPperDay = 100;
 const maxConsecutiveFailsByEmailAndIP = 10;
 
 // the rate limiter instance counts and limits the number of failed logins by key
-// const limiterSlowBruteByIP = new RateLimiterMongo({
-const redisClient = redis.createClient({
-  host: process.env.REDIS_HOSTNAME,
-  port: process.env.REDIS_PORT,
-  password: process.env.REDIS_PASSWORD,
-
-  enable_offline_queue: false,
-});
-
-redisClient
-  .on("connect", function () {
-    Logger.debug("Connected to the Redis database successfully.");
-  })
-
-  // handle connection errors
-  .on("error", (err) => {
-    Logger.error(err);
-    return new Error();
-  });
 const limiterSlowBruteByIP = new RateLimiterRedis({
   storeClient: redisClient,
   keyPrefix: "codversity_login_fail_ip_per_day",
