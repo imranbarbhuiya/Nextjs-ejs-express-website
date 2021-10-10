@@ -1,7 +1,6 @@
 // importing dependencies
 import { ensureLoggedIn } from "connect-ensure-login";
 import { Router } from "express";
-import helmet from "helmet";
 import natural from "natural";
 // mongoose models
 import courseDataModel from "../model/courseData.js";
@@ -71,28 +70,7 @@ route
     console.log(data);
     res.sendStatus(200);
   })
-  .get(
-    "/play",
-    helmet({
-      contentSecurityPolicy: {
-        useDefaults: true,
-        directives: {
-          scriptSrc: [
-            "'self'",
-            "https://cdn.jsdelivr.net",
-            "https://code.jquery.com",
-            "https://fast.wistia.com",
-            "blob:",
-          ],
-          imgSrc: ["'self'", "https://*"],
-          styleSrc: ["'self'", "https://*", "'unsafe-inline'"],
-          connectSrc: ["'self'", "https://*"],
-          mediaSrc: ["'self'", "blob:"],
-        },
-      },
-    }),
-    function (req, res) {
-      res.render("course/play");
-    }
-  );
+  .get("/play", function (req, res) {
+    res.render("course/play");
+  });
 export default route;

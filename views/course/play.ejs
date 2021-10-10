@@ -6,20 +6,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Play</title>
+    <link href="https://vjs.zencdn.net/7.8.2/video-js.css" rel="stylesheet" />
+
+    <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
 </head>
 
 <body>
-    <div class="wistia_responsive_padding">
-        <div class="wistia_responsive_wrapper">
-            <div class="wistia_embed wistia_async_dhas5zh155 videoFoam=true">
-                <div class="wistia_swatch">
-                    <img src="https://fast.wistia.com/embed/medias/dhas5zh155/swatch" alt="" aria-hidden="true" />
-                </div>
-            </div>
-        </div>
-    </div>
+
+    <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="640" height="264"
+        data-setup="{}" muted="muted">
+        <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a
+            web browser that
+            <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+        </p>
+    </video>
+
+    <script src="https://vjs.zencdn.net/7.8.2/video.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="/assets/js/video.js"></script>
 </body>
-<script src="https://fast.wistia.com/embed/medias/dhas5zh155.jsonp" async></script>
-<script src="https://fast.wistia.com/assets/external/E-v1.js" async></script>
 
 </html>
