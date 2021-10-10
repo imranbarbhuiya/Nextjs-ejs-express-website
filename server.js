@@ -46,16 +46,11 @@ app
             "'self'",
             "https://cdn.jsdelivr.net",
             "https://code.jquery.com",
-            "https://vjs.zencdn.net",
           ],
           imgSrc: ["'self'", "https://*"],
-          styleSrc: ["'self'", "https://vjs.zencdn.net", "'unsafe-inline'"],
-          workerSrc: ["'self'", "blob:"],
-          mediaSrc: ["'self'", "blob:"],
         },
       },
       hidePoweredBy: true,
-      referrerPolicy: { policy: "strict-origin-when-cross-origin" },
     })
   )
   // serve favicon
