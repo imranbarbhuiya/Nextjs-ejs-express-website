@@ -97,6 +97,7 @@ route
     res.render("login/login", {
       login: "none",
       register: "",
+      csrfToken: req.csrfToken(),
       message: req.flash(),
     });
   })
