@@ -1,0 +1,66 @@
+.flash {
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  height: auto;
+  width: 600px;
+  box-sizing: border-box;
+  z-index: 999999;
+}
+
+.flash .success,
+.flash .error {
+  background-color: #ffffff;
+  height: 80px;
+  font-size: 16px;
+  margin-bottom: 5px;
+  box-shadow: 1px 2px 8px 2px #888888;
+  border-radius: 2px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: appear 1s;
+}
+
+@keyframes appear {
+  0% {
+    height: 0;
+  }
+}
+
+.flash .success {
+  border-left: 5px solid #47d664;
+}
+
+.flash .error {
+  border-left: 5px solid #f14014;
+}
+
+.flash .success .icon {
+  color: #47d664;
+}
+
+.flash .error .icon {
+  color: #f14014;
+}
+
+.flash .fa {
+  font-size: 30px;
+  padding: 0 24px;
+  background-color: transparent;
+  border: none;
+}
+
+.flash .flash-message-box {
+  width: 550px;
+  line-height: 10px;
+}
+
+.flash .flash-title {
+  font-weight: bold;
+}
+
+.flash .flash-message {
+  color: #555353;
+}
