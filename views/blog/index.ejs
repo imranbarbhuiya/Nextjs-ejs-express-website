@@ -5,65 +5,58 @@
     </head>
 
     <body>
-        <div class="container" id="appendTo">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light mt-5">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="/blog">Blogs</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a href="/blog/new" class="btn btn-outline-success me-2">New Blog</a>
-                            </li>
-                            <li class="nav-item"><a href="/blog/myblogs" class="btn btn-success me-2">My Blog</a>
-                            </li>
-                            <li class="nav-item"><a href="/blog/unverified" class="btn btn-warning me-2">Unverified
-                                    Blogs</a>
-                            </li>
-                            <li class="nav-item"><a class="btn btn-primary" href="/">Home</a></li>
-                        </ul>
-                        <form id="quick-search" class="d-flex">
-                            <input id="search" class="form-control me-2" type="search" placeholder="Search"
-                                aria-label="Search" name="search" value="<%=query%>">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
+        <%- include('../flash')%>
+            <div class="container" id="appendTo">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light mt-5">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="/blog">Blogs</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a href="/blog/new" class="btn btn-outline-success me-2">New Blog</a>
+                                </li>
+                                <li class="nav-item"><a href="/blog/myblogs" class="btn btn-success me-2">My Blog</a>
+                                </li>
+                                <li class="nav-item"><a href="/blog/unverified" class="btn btn-warning me-2">Unverified
+                                        Blogs</a>
+                                </li>
+                                <li class="nav-item"><a class="btn btn-primary" href="/">Home</a></li>
+                            </ul>
+                            <form id="quick-search" class="d-flex">
+                                <input id="search" class="form-control me-2" type="search" placeholder="Search"
+                                    aria-label="Search" name="search" value="<%=query%>">
+                                <button class="btn btn-outline-success" type="submit">Search</button>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            </nav>
-            <div class="my-2">
-                <p class="text-danger">
-                    <%-message.error%>
-                </p>
-                <p class="text-success">
-                    <%=message.success%>
-                </p>
+                </nav>
+                <% blogs.forEach((blog)=>{%>
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <%= blog.title %>
+                            </h4>
+                            <div class="card-subtitle text-muted mb-2">
+                                <%=blog.createdAt.toLocaleDateString()%>
+                            </div>
+                            <div class="card-text mb-2">
+                                <%=blog.description%>
+                            </div>
+                            <a href="/blog/<%=blog.slug%>" class="btn btn-primary">Read more</a>
+                            <a href="/blog/preview/<%=blog.id%>" class="btn btn-outline-primary">Preview</a>
+                            <a class="btn btn-warning me-2" href="/blog/edit/<%=blog.id%>">Edit</a>
+                            <form action="/blog/<%=blog.id%>?_method=DELETE" method="POST" class="d-inline">
+                                <button class="btn btn-danger" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    <% }) %>
             </div>
-            <% blogs.forEach((blog)=>{%>
-                <div class="card mt-4">
-                    <div class="card-body">
-                        <h4 class="card-title">
-                            <%= blog.title %>
-                        </h4>
-                        <div class="card-subtitle text-muted mb-2">
-                            <%=blog.createdAt.toLocaleDateString()%>
-                        </div>
-                        <div class="card-text mb-2">
-                            <%=blog.description%>
-                        </div>
-                        <a href="/blog/<%=blog.slug%>" class="btn btn-primary">Read more</a>
-                        <a href="/blog/preview/<%=blog.id%>" class="btn btn-outline-primary">Preview</a>
-                        <a class="btn btn-warning me-2" href="/blog/edit/<%=blog.id%>">Edit</a>
-                        <form action="/blog/<%=blog.id%>?_method=DELETE" method="POST" class="d-inline">
-                            <button class="btn btn-danger" type="submit">Delete</button>
-                        </form>
-                    </div>
-                </div>
-                <% }) %>
-        </div>
     </body>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
