@@ -31,7 +31,7 @@ async function verify(req, res) {
     `<p>Verify account</p>
         <a href="${req.protocol}://${req.headers.host}/verify/${encoded}">Click here</a>`
   )
-    .then(req.flash("success", "Check email to verify"))
+    .then(req.flash("info", "Check email to verify"))
     .catch((error) => {
       req.flash("error", "mail send failed please try again");
       console.log(error);
