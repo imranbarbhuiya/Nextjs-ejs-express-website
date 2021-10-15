@@ -47,7 +47,7 @@ app
             "https://cdn.jsdelivr.net",
             "https://code.jquery.com",
           ],
-          imgSrc: ["'self'", "https://*"],
+          imgSrc: ["'self'", "https://*", "data:"],
         },
       },
       hidePoweredBy: true,
