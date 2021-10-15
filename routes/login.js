@@ -103,6 +103,7 @@ route
   })
   .post(
     "/register",
+    csrfProtection,
     body("username")
       .trim()
       .isLength({ min: 1 })
@@ -160,14 +161,18 @@ route
   // change password system
   .get(
     "/change",
+    csrfProtection,
     ensureLoggedIn({ redirectTo: "/login", setRedirectTo: false }),
     function (req, res) {
-      res.render("login/change");
+      res.render("login/change", {
+        csrfToken: req.csrfToken(),
+      });
     }
   )
   .post(
     "/change",
     ensureLoggedIn({ redirectTo: "/login", setRedirectTo: false }),
+    csrfProtection,
     function (req, res) {
       User.findOne({ email: req.user.username }, function (err, sanitizedUser) {
         if (sanitizedUser) {
@@ -217,10 +222,14 @@ route
   )
 
   // forgot password system
-  .get("/reset", ensureLoggedOut(), function (req, res) {
-    res.render("login/forgot", { password: false, message: req.flash() });
+  .get("/reset", csrfProtection, ensureLoggedOut(), function (req, res) {
+    res.render("login/forgot", {
+      password: false,
+      message: req.flash(),
+      csrfToken: req.csrfToken(),
+    });
   })
-  .post("/reset", async function (req, res) {
+  .post("/reset", csrfProtection, async function (req, res) {
     let resetPasswordToken = randomBytes(20).toString("hex");
     const mailTo = req.body.email;
     const user = await User.findOneAndUpdate(

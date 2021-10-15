@@ -21,6 +21,7 @@
       <form method="POST" class=" forgot" id="login-up">
 
         <h1 class="login__title">Forgot Password</h1>
+        <input type="hidden" name="_csrf" value="<%=csrfToken%>">
         <%if(!password){%>
           <div class="login__box">
             <i class="fa fa-at login__icon"></i>
