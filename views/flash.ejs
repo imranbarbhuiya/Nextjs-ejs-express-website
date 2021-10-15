@@ -10,29 +10,29 @@
             <button class="fa fa-times flash-close"></button>
         </div>
         <% } %>
-            <% if (message.error) { %>
-                <div class="flash-box error">
-                    <i class="icon fa fa-times-circle"></i>
+            <% if (message.info) { %>
+                <div class="flash-box info">
+                    <i class="icon fa fa-info-circle"></i>
                     <p class="flash-message">
-                        <%-message.error%>
+                        <%-message.info%>
                     </p>
                     <button class="fa fa-times flash-close"></button>
                 </div>
                 <% } %>
-                    <% if (message.info) { %>
-                        <div class="flash-box info">
-                            <i class="icon fa fa-info-circle"></i>
+                    <% if (message.warning) { %>
+                        <div class="flash-box warning">
+                            <i class="icon fa fa-warning-circle"></i>
                             <p class="flash-message">
-                                <%-message.info%>
+                                <%-message.warning%>
                             </p>
                             <button class="fa fa-times flash-close"></button>
                         </div>
                         <% } %>
-                            <% if (message.warning) { %>
-                                <div class="flash-box warning">
-                                    <i class="icon fa fa-warning-circle"></i>
+                            <% if (message.error) { %>
+                                <div class="flash-box error">
+                                    <i class="icon fa fa-times-circle"></i>
                                     <p class="flash-message">
-                                        <%-message.warning%>
+                                        <%-message.error%>
                                     </p>
                                     <button class="fa fa-times flash-close"></button>
                                 </div>
