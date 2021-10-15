@@ -3,7 +3,7 @@
   right: 10px;
   top: 10px;
   height: auto;
-  width: 600px;
+  width: 500px;
   box-sizing: border-box;
   z-index: 999999;
 }
@@ -53,7 +53,7 @@
 }
 
 .flash .flash-message-box {
-  width: 550px;
+  width: 450px;
   line-height: 10px;
 }
 
@@ -63,4 +63,13 @@
 
 .flash .flash-message {
   color: #555353;
+}
+
+@media screen and (max-width: 500px) {
+  .flash {
+    width: 400px;
+  }
+  .flash .flash-message-box {
+    width: 350px;
+  }
 }
