@@ -23,16 +23,14 @@ function saveBlogAndRedirect(path) {
     try {
       if (blog.emptyHtml()) {
         req.flash("error", "Markdown can't be empty");
-        res.locals.message = req.flash();
-        return res.render(`blog/${path}`, { blog: blog });
+        return res.render(`blog/${path}`, { blog: blog, message: req.flash() });
       }
       blog = await blog.save();
       res.redirect(`/blog/preview/${blog.id}`);
     } catch (error) {
       const errorMsg = error.message.split(":")[2];
       req.flash("error", errorMsg ? errorMsg : error.message);
-      res.locals.message = req.flash();
-      res.render(`blog/${path}`, { blog: blog });
+      res.render(`blog/${path}`, { blog: blog, message: req.flash() });
     }
   };
 }
@@ -79,8 +77,11 @@ function viewBlogs(path) {
       req.flash("error", "unauthorized");
       return req.redirect("/blog");
     }
-    res.locals.message = req.flash();
-    res.render("blog/index", { blogs: blogs, query: searchQuery });
+    res.render("blog/index", {
+      blogs: blogs,
+      query: searchQuery,
+      message: req.flash(),
+    });
   };
 }
 // search function

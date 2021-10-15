@@ -83,21 +83,21 @@ route
  */
 route
   .get("/login", csrfProtection, function (req, res) {
-    res.locals.message = req.flash();
     res.render("login/login", {
       login: "",
       register: "none",
       csrfToken: req.csrfToken(),
+      message: req.flash(),
     });
   })
   .post("/login", csrfProtection, loginRouteRateLimit, verify)
 
   // local register system
   .get("/register", function (req, res) {
-    res.locals.message = req.flash();
     res.render("login/login", {
       login: "none",
       register: "",
+      message: req.flash(),
     });
   })
   .post(
@@ -217,8 +217,7 @@ route
 
   // forgot password system
   .get("/reset", ensureLoggedOut(), function (req, res) {
-    res.locals.message = req.flash();
-    res.render("login/forgot", { password: false });
+    res.render("login/forgot", { password: false, message: req.flash() });
   })
   .post("/reset", async function (req, res) {
     let resetPasswordToken = randomBytes(20).toString("hex");
@@ -230,7 +229,7 @@ route
       }
     );
     if (!user) {
-      res.locals.message = req.flash("error", "User doesn't exist");
+      req.flash("error", "User doesn't exist");
       res.redirect("/reset");
     } else {
       const encoded = jwt.sign(
@@ -241,7 +240,7 @@ route
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
-      res.locals.message = req.flash("success", "Check email to proceed");
+      req.flash("success", "Check email to proceed");
       res.redirect("/reset");
       mail(
         mailTo,
@@ -260,8 +259,7 @@ route
         req.flash("error", "token expired");
         res.redirect("/login");
       } else {
-        res.locals.message = req.flash();
-        res.render("login/forgot", { password: true });
+        res.render("login/forgot", { password: true, message: req.flash() });
       }
     });
   })

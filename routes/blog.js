@@ -33,8 +33,7 @@ route
       );
       return res.redirect("/blog");
     }
-    res.locals.message = req.flash();
-    res.render("blog/new", { blog: new blogModel() });
+    res.render("blog/new", { blog: new blogModel(), message: req.flash() });
   })
   .post(
     "/new",
