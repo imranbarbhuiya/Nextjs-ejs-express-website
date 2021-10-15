@@ -2,28 +2,40 @@
 <link rel="stylesheet" href="assets/css/flash.css">
 <div class="flash">
     <% if (message.success) { %>
-        <div class="success">
+        <div class="flash-box success">
             <i class="icon fa fa-check-circle"></i>
-            <div class="flash-message-box">
-                <h5 class="flash-title">Success</h5>
-                <p class="flash-message">
-                    <%-message.success%>
-                </p>
-            </div>
+            <p class="flash-message">
+                <%-message.success%>
+            </p>
             <button class="fa fa-times flash-close"></button>
         </div>
         <% } %>
             <% if (message.error) { %>
-                <div class="error">
+                <div class="flash-box error">
                     <i class="icon fa fa-times-circle"></i>
-                    <div class="flash-message-box">
-                        <h5 class="flash-title">Error</h5>
-                        <p class="flash-message">
-                            <%-message.error%>
-                        </p>
-                    </div>
+                    <p class="flash-message">
+                        <%-message.error%>
+                    </p>
                     <button class="fa fa-times flash-close"></button>
                 </div>
                 <% } %>
+                    <% if (message.info) { %>
+                        <div class="flash-box info">
+                            <i class="icon fa fa-info-circle"></i>
+                            <p class="flash-message">
+                                <%-message.info%>
+                            </p>
+                            <button class="fa fa-times flash-close"></button>
+                        </div>
+                        <% } %>
+                            <% if (message.warning) { %>
+                                <div class="flash-box warning">
+                                    <i class="icon fa fa-warning-circle"></i>
+                                    <p class="flash-message">
+                                        <%-message.warning%>
+                                    </p>
+                                    <button class="fa fa-times flash-close"></button>
+                                </div>
+                                <% } %>
 </div>
 <script src="assets/js/flash.js"></script>

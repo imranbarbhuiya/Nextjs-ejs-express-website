@@ -3,15 +3,14 @@
   right: 10px;
   top: 10px;
   height: auto;
-  width: 500px;
+  width: 400px;
   box-sizing: border-box;
   z-index: 999999;
 }
 
-.flash .success,
-.flash .error {
+.flash .flash-box {
   background-color: #ffffff;
-  height: 80px;
+  min-height: 50px;
   font-size: 16px;
   margin-bottom: 5px;
   box-shadow: 1px 2px 8px 2px #888888;
@@ -37,6 +36,14 @@
   border-left: 5px solid #f14014;
 }
 
+.flash .info {
+  border-left: 5px solid blue;
+}
+
+.flash .warning {
+  border-left: 5px solid yellow;
+}
+
 .flash .success .icon {
   color: #47d664;
 }
@@ -45,31 +52,22 @@
   color: #f14014;
 }
 
+.flash .info .icon {
+  color: blue;
+}
+
+.flash .warning .icon {
+  color: yellow;
+}
+
 .flash .fa {
-  font-size: 30px;
+  font-size: 24px;
   padding: 0 24px;
   background-color: transparent;
   border: none;
 }
 
-.flash .flash-message-box {
-  width: 450px;
-  line-height: 10px;
-}
-
-.flash .flash-title {
-  font-weight: bold;
-}
-
 .flash .flash-message {
+  margin: 10px 0;
   color: #555353;
-}
-
-@media screen and (max-width: 500px) {
-  .flash {
-    width: 400px;
-  }
-  .flash .flash-message-box {
-    width: 350px;
-  }
 }
