@@ -93,7 +93,7 @@ route
   .post("/login", csrfProtection, loginRouteRateLimit, verify)
 
   // local register system
-  .get("/register", function (req, res) {
+  .get("/register", csrfProtection, function (req, res) {
     res.render("login/login", {
       login: "none",
       register: "",
