@@ -140,10 +140,9 @@ app.use(function (req, res, next) {
 });
 // error handlers
 
-/**
- * development error handler
- * will log and print the error
- */
+// development error handler
+// will log and print the error
+
 if (app.get("env") === "development") {
   app.use(function (err, req, res, next) {
     Logger.warn(err);
@@ -154,10 +153,9 @@ if (app.get("env") === "development") {
     });
   });
 }
-/**
- * production error handler
- * without logs
- */
+// production error handler
+// without logs
+
 app.use(function (err, req, res, next) {
   if (err.code === "EBADCSRFTOKEN") {
     res.status(403);

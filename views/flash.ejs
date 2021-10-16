@@ -3,38 +3,46 @@
 <div class="flash">
     <% if (message.success) { %>
         <div class="flash-box success">
+            <span class="flash-line error-bg"></span>
             <i class="icon fa fa-check-circle"></i>
             <p class="flash-message">
                 <%-message.success%>
             </p>
             <button class="fa fa-times flash-close"></button>
+            <span class="flash-range"></span>
         </div>
         <% } %>
             <% if (message.info) { %>
                 <div class="flash-box info">
+                    <span class="flash-line error-bg"></span>
                     <i class="icon fa fa-info-circle"></i>
                     <p class="flash-message">
                         <%-message.info%>
                     </p>
                     <button class="fa fa-times flash-close"></button>
+                    <span class="flash-range"></span>
                 </div>
                 <% } %>
                     <% if (message.warning) { %>
                         <div class="flash-box warning">
+                            <span class="flash-line error-bg"></span>
                             <i class="icon fa fa-warning-circle"></i>
                             <p class="flash-message">
                                 <%-message.warning%>
                             </p>
                             <button class="fa fa-times flash-close"></button>
+                            <span class="flash-range"></span>
                         </div>
                         <% } %>
                             <% if (message.error) { %>
                                 <div class="flash-box error">
+                                    <span class="flash-line error-bg"></span>
                                     <i class="icon fa fa-times-circle"></i>
                                     <p class="flash-message">
                                         <%-message.error%>
                                     </p>
                                     <button class="fa fa-times flash-close"></button>
+                                    <span class="flash-range"></span>
                                 </div>
                                 <% } %>
 </div>
