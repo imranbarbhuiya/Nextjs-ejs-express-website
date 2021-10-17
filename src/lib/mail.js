@@ -1,5 +1,6 @@
 // importing dependencies
 import { createTransport } from "nodemailer";
+import Logger from "./logger";
 // defining mail function
 async function mail(mailTo, subject, html, text) {
   let transporter = createTransport({
@@ -19,7 +20,7 @@ async function mail(mailTo, subject, html, text) {
       html: html,
     })
     .catch((err) => {
-      console.log(err);
+      Logger.error(err);
     });
 }
 export default mail;

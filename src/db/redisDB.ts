@@ -1,7 +1,7 @@
 import { config } from "dotenv";
 import { createClient } from "redis";
 // importing logger
-import Logger from "../lib/logger.js";
+import Logger from "../lib/logger";
 
 config();
 
@@ -14,11 +14,11 @@ const redisClient = createClient({
 });
 
 redisClient
-  .on("connect", function () {
+  .on("connect", () => {
     Logger.debug("Connected to the Redis database successfully.");
   })
   // handle connection errors
-  .on("error", (err) => {
+  .on("error", (err: any) => {
     Logger.error(err);
     return new Error();
   });

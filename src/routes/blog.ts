@@ -1,21 +1,15 @@
 // importing dependencies
 import { ensureLoggedIn } from "connect-ensure-login";
-import { Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 // controllers
-import { saveBlogAndRedirect, viewBlogs } from "../controller/blog.js";
-import { handleRejection } from "../controller/handleRejection.js";
+import { saveBlogAndRedirect, viewBlogs } from "../controller/blog";
+import { handleRejection } from "../controller/handleRejection";
 // middleware
-import { isAdmin, isAdminOrBlogOwner } from "../middleware/roles.js";
+import { isAdmin, isAdminOrBlogOwner } from "../middleware/roles";
 // mongoose models
-import blogModel from "../model/blogModel.js";
+import blogModel from "../model/blogModel";
 // init express route
-const route = new Router();
-
-/**
- * @param {request} req
- * @param {response} res
- * @param {NextFunction} next
- */
+const route = Router();
 
 route.use(
   /^\/.*(myblogs|unverified|new|preview|verify|edit).*/i,
@@ -25,7 +19,7 @@ route
   .get("/", viewBlogs("all"))
   .get("/myblogs", viewBlogs("myblogs"))
   .get("/unverified", isAdmin, viewBlogs("unverified"))
-  .get("/new", function (req, res) {
+  .get("/new", (req: Request, res: Response) => {
     if (!req.user.verified) {
       req.flash(
         "error",
@@ -37,7 +31,7 @@ route
   })
   .post(
     "/new",
-    async function (req, res, next) {
+    async (req: Request, res: Response, next: NextFunction) => {
       req.blog = new blogModel();
       next();
     },
@@ -46,8 +40,8 @@ route
   .get(
     "/preview/:id",
     ensureLoggedIn("/login"),
-    handleRejection(async (req, res, next) => {
-      let blog = await blogModel.findById(req.params.id);
+    handleRejection(async (req: Request, res: Response, next: NextFunction) => {
+      const blog = await blogModel.findById(req.params.id);
       if (blog) {
         req.blog = blog;
         next();
@@ -55,18 +49,18 @@ route
     }),
     isAdminOrBlogOwner("view")
   )
-  .get("/:slug", async (req, res) => {
-    let blog = await blogModel.findOne({
+  .get("/:slug", async (req: Request, res: Response) => {
+    const blog = await blogModel.findOne({
       slug: req.params.slug,
       verified: true,
     });
-    if (blog) res.render("blog/view", { blog: blog });
+    if (blog) res.render("blog/view", { blog });
     else res.sendStatus(404);
   })
   .delete(
     "/:id",
     isAdmin,
-    handleRejection(async (req, res) => {
+    handleRejection(async (req: Request, res: Response) => {
       await blogModel.findByIdAndDelete(req.params.id);
       res.redirect("back");
     })
@@ -74,8 +68,8 @@ route
   .get(
     "/edit/:id",
     ensureLoggedIn("/login"),
-    handleRejection(async (req, res, next) => {
-      let blog = await blogModel.findById(req.params.id);
+    handleRejection(async (req: Request, res: Response, next: NextFunction) => {
+      const blog = await blogModel.findById(req.params.id);
       req.blog = blog;
       next();
     }),
@@ -84,7 +78,7 @@ route
   .put(
     "/:id",
     ensureLoggedIn("/login"),
-    handleRejection(async function (req, res, next) {
+    handleRejection(async (req: Request, res: Response, next: NextFunction) => {
       req.blog = await blogModel.findById(req.params.id);
       next();
     }),
@@ -93,11 +87,20 @@ route
   .get(
     "/verify/:id",
     isAdmin,
-    handleRejection(async (req, res) => {
-      let blog = await blogModel.findById(req.params.id);
+    handleRejection(async (req: Request, res: Response) => {
+      const blog: any = await blogModel.findById(req.params.id);
       blog.verified = true;
       blog.save();
       res.redirect(`/blog/${blog.slug}`);
     })
   );
 export default route;
+
+// extend types
+declare global {
+  namespace Express {
+    export interface User {
+      verified?: boolean;
+    }
+  }
+}

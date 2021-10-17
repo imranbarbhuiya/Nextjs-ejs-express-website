@@ -1,5 +1,5 @@
 async function isAdmin(req, res, next) {
-  if (req.user && req.user.role == "admin") {
+  if (req.user && req.user.role === "admin") {
     next();
   } else {
     res.sendStatus(401);
@@ -7,7 +7,10 @@ async function isAdmin(req, res, next) {
 }
 
 async function canAddCourse(req, res, next) {
-  if (req.user && (req.user.role == "instructor" || req.user.role == "admin")) {
+  if (
+    req.user &&
+    (req.user.role === "instructor" || req.user.role === "admin")
+  ) {
     next();
   } else {
     res.sendStatus(400);
@@ -17,18 +20,18 @@ async function canAddCourse(req, res, next) {
 async function canEditCourse(req, res, next) {
   if (
     req.user &&
-    (req.user.role == "admin" || req.course.author == req.user.id)
+    (req.user.role === "admin" || req.course.author === req.user.id)
   ) {
     next();
   } else {
     res.sendStatus(400);
   }
 }
-function isAdminOrBlogOwner(path) {
+function isAdminOrBlogOwner(path: string) {
   return (req, res, next) => {
     if (
       req.user &&
-      (req.user.role == "admin" || req.blog.author == req.user.id)
+      (req.user.role === "admin" || req.blog.author === req.user.id)
     ) {
       req.flash();
       res.render(`blog/${path}`, { blog: req.blog, message: req.flash() });

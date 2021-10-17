@@ -1,8 +1,10 @@
 // importing dependencies
+import { NextFunction, Request, Response } from "express";
 import passport from "passport";
 import { RateLimiterRedis } from "rate-limiter-flexible";
 // Redis Client
-import redisClient from "../db/redisDB.js";
+import redisClient from "../db/redisDB";
+// types
 
 // setting number of wrong limit
 const maxWrongAttemptsByIPperDay = 100;
@@ -30,10 +32,14 @@ const limiterConsecutiveFailsByEmailAndIP = new RateLimiterRedis({
 });
 
 // create key string
-const getEmailIPkey = (email, ip) => `${email}_${ip}`;
+const getEmailIPkey = (email: any, ip: any) => `${email}_${ip}`;
 
 // rate-limiting middleware controller
-export async function loginRouteRateLimit(req, res, next) {
+export async function loginRouteRateLimit(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const ipAddr = req.ip;
   const emailIPkey = getEmailIPkey(req.body.email, ipAddr);
 
@@ -61,7 +67,7 @@ export async function loginRouteRateLimit(req, res, next) {
     if (retrySecs > 0) {
       // sets the response’s HTTP header field
       res.set("Retry-After", String(retrySecs));
-      let remainingTime =
+      const remainingTime =
         retrySecs > 60
           ? `${(retrySecs / 60).toFixed(2)} minute`
           : `${retrySecs} seconds`;
@@ -74,7 +80,7 @@ export async function loginRouteRateLimit(req, res, next) {
   } catch (err) {
     return next(err);
   }
-  passport.authenticate("local", async function (err, user, info) {
+  passport.authenticate("local", async (err, user, info) => {
     if (err) {
       return next(err);
     }
@@ -98,10 +104,10 @@ export async function loginRouteRateLimit(req, res, next) {
         } else {
           const timeOut =
             String(Math.round(rlRejected.msBeforeNext / 1000)) || 1;
-          res.set("Retry-After", timeOut);
-          let remainingTime =
+          res.set("Retry-After", timeOut as string);
+          const remainingTime =
             timeOut > 60
-              ? `${(timeOut / 60).toFixed(2)} minute`
+              ? `${((timeOut as number) / 60).toFixed(2)} minute`
               : `${timeOut} seconds`;
           req.flash(
             "error",
@@ -118,14 +124,14 @@ export async function loginRouteRateLimit(req, res, next) {
         await limiterConsecutiveFailsByEmailAndIP.delete(emailIPkey);
       }
       // login (Passport.js method)
-      req.logIn(user, function (err) {
+      req.logIn(user, (err: any) => {
         if (err) {
           return next(err);
         }
         if (user.verified) {
           const returnTo = req.session.returnTo;
           delete req.session.returnTo;
-          res.redirect(req.query.next || returnTo || "/");
+          res.redirect((req.query.next as string) || returnTo || "/");
         } else next();
         return;
       });
