@@ -1,7 +1,29 @@
-import mongoose from "mongoose";
+import {
+  Document,
+  model,
+  PassportLocalDocument,
+  PassportLocalModel,
+  PassportLocalSchema,
+  Schema,
+} from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose";
-const { model, Schema } = mongoose;
-
+//#region Test Models
+interface User extends PassportLocalDocument {
+  _id: string;
+  username: string;
+  authId?: string;
+  authProvider?: string;
+  verified: boolean;
+  role: any;
+  referralCode?: string;
+  referredBy?: string;
+  hash?: string;
+  salt?: string;
+  attempts?: number;
+  last: Date;
+  resetPasswordToken?: string;
+  verificationToken?: string;
+}
 const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   username: { type: String, required: true, default: "guest" },
@@ -23,7 +45,7 @@ const userSchema = new Schema({
   referredBy: { type: String, default: null },
   resetPasswordToken: { type: String },
   verificationToken: { type: String },
-});
+}) as PassportLocalSchema;
 
 userSchema.plugin(passportLocalMongoose, {
   usernameField: "email",
@@ -42,6 +64,7 @@ userSchema.plugin(passportLocalMongoose, {
     AttemptTooSoonError: "You're trying too fast please wait and try again.",
   },
 });
-const User = model("User", userSchema);
+interface UserModel<T extends Document> extends PassportLocalModel<T> {}
+const User: UserModel<User> = model<User>("User", userSchema);
 
 export default User;

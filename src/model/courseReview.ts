@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const reviewSchema = mongoose.Schema({
+const reviewSchema = new mongoose.Schema({
   courseId: { type: mongoose.Types.ObjectId, require: true, unique: true },
   reviews: [
     {
