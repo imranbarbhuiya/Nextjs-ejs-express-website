@@ -21,6 +21,7 @@ interface Blog {
   sanitizedHtml?: string;
   keywords: string;
   verified: boolean;
+  fuzzySearch?: any;
 }
 
 const blogSchema = new mongoose.Schema<Blog>({
