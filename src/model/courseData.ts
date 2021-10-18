@@ -1,8 +1,13 @@
-import mongoose from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
 
-const courseDataSchema = new mongoose.Schema({
+interface Course {
+  userId: string;
+  courses: object;
+}
+
+const courseDataSchema = new Schema<Course>({
   userId: {
-    type: mongoose.Types.ObjectId,
+    type: String,
     required: true,
   },
   courses: [
@@ -18,6 +23,6 @@ const courseDataSchema = new mongoose.Schema({
   ],
 });
 
-const courseDataModel = mongoose.model("course-data", courseDataSchema);
+const courseDataModel = model<Course>("course-data", courseDataSchema);
 
 export default courseDataModel;

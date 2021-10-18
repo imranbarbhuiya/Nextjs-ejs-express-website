@@ -1,8 +1,20 @@
-import mongoose from "mongoose";
-import mongoose_fuzzy_searching from "mongoose-fuzzy-searching";
-const { model, Schema } = mongoose;
+import { model, Schema } from "mongoose";
+import mongoose_fuzzy_searching, {
+  MongooseFuzzyModel,
+} from "mongoose-fuzzy-searching";
 
-const courseSchema = new Schema({
+interface Course {
+  title: string;
+  author: string;
+  authorId: string;
+  thumbnail: string;
+  description: string;
+  price: number;
+  keywords: string;
+  verified?: boolean;
+}
+
+const courseSchema = new Schema<Course>({
   title: { type: String, required: true },
   author: { type: String, required: true },
   authorId: { type: String, required: true },
@@ -17,4 +29,8 @@ courseSchema.plugin(mongoose_fuzzy_searching, {
   fields: ["keywords", "author", "description", "title"],
 });
 
-export default model("Course", courseSchema);
+const courseModel = model<Course>(
+  "Course",
+  courseSchema
+) as MongooseFuzzyModel<Course>;
+export default courseModel;

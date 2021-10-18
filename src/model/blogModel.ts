@@ -3,7 +3,7 @@ import createDOMPurify from "dompurify";
 import { JSDOM } from "jsdom";
 import marked from "marked";
 import { model, Schema } from "mongoose";
-import fuzzySearching from "mongoose-fuzzy-searching";
+import fuzzySearching, { MongooseFuzzyModel } from "mongoose-fuzzy-searching";
 import slugify from "slugify";
 
 // dom setup
@@ -110,5 +110,6 @@ blogSchema.post("save", (error, doc, next) => {
 blogSchema.plugin(fuzzySearching, {
   fields: ["keywords", "author", "description", "title"],
 });
-export default model<Blog>("blog", blogSchema);
+const blogModel = model<Blog>("blog", blogSchema) as MongooseFuzzyModel<Blog>;
+export default blogModel;
 export type { Blog };
