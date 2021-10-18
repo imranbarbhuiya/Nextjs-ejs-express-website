@@ -1,10 +1,17 @@
 // requiring dependencies
 import axios from "axios";
-import { Strategy as FacebookStrategy } from "passport-facebook";
+import {
+  Profile as FacebookProfile,
+  Strategy as FacebookStrategy,
+} from "passport-facebook";
 import { Strategy as GitHubStrategy } from "passport-github2";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import {
+  Profile,
+  Strategy as GoogleStrategy,
+  VerifyCallback,
+} from "passport-google-oauth20";
 // mongoose model
-import User from "../model/userModel";
+import UserModel, { User } from "../model/userModel";
 
 // setup the google facebook and github strategy
 const passportSocialAuth = (passport: any) => {
@@ -15,43 +22,32 @@ const passportSocialAuth = (passport: any) => {
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: `/auth/google/login`,
         userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+        passReqToCallback: false,
       },
       (
-        _accessToken: any,
-        _refreshToken: any,
-        profile: {
-          emails: { value: any }[];
-          id: any;
-          provider: any;
-          displayName: any;
-        },
-        next: (arg0: any, arg1?: any, arg2?: { message: string }) => any
+        _accessToken: string,
+        _refreshToken: string,
+        profile: Profile,
+        next: VerifyCallback
       ) => {
-        User.findOne(
+        UserModel.findOne(
           {
             email: profile.emails[0].value,
           },
-          (
-            err: any,
-            user: {
-              authId: any;
-              authProvider: any;
-              save: (arg0: (err: any, user: any) => any) => void;
-            }
-          ) => {
+          (err: Error, user: any) => {
             if (err) {
               return next(err);
             }
             if (user) {
               if (user.authId === profile.id) return next(err, user);
               else
-                return next(null, false, {
+                return next(null, null, {
                   message: `You'd authenticated with ${
                     user.authProvider || "password"
                   }`,
                 });
             } else {
-              user = new User({
+              user = new UserModel({
                 authProvider: profile.provider,
                 authId: profile.id,
                 username: profile.displayName,
@@ -78,12 +74,17 @@ const passportSocialAuth = (passport: any) => {
         callbackURL: "/auth/github/login",
       },
       async (
-        accessToken: any,
-        _refreshToken: any,
-        profile: { provider: any; id: any; username: any; displayName: any },
+        accessToken: string,
+        _refreshToken: string,
+        profile: {
+          provider: string;
+          id: string;
+          username: string;
+          displayName: string;
+        },
         next: (arg0: any, arg1?: any, arg2?: { message: string }) => any
       ) => {
-        let primaryEmail: any;
+        let primaryEmail: string;
         await axios
           .get(`https://api.github.com/user/emails`, {
             headers: { authorization: `token ${accessToken}` },
@@ -100,18 +101,11 @@ const passportSocialAuth = (passport: any) => {
                 message: `${profile.provider} isn't providing any email address try different method`,
               });
             }
-            User.findOne(
+            UserModel.findOne(
               {
                 email: primaryEmail,
               },
-              (
-                err: any,
-                user: {
-                  authId: any;
-                  authProvider: any;
-                  save: (arg0: (err: any, user: any) => any) => void;
-                }
-              ) => {
+              (err: any, user: User) => {
                 if (err) {
                   return next(err);
                 }
@@ -124,7 +118,7 @@ const passportSocialAuth = (passport: any) => {
                       }`,
                     });
                 } else {
-                  user = new User({
+                  user = new UserModel({
                     authProvider: profile.provider,
                     authId: profile.id,
                     username: profile.username || profile.displayName,
@@ -154,46 +148,34 @@ const passportSocialAuth = (passport: any) => {
         profileFields: ["id", "emails", "displayName"],
       },
       (
-        _accessToken: any,
-        _refreshToken: any,
-        profile: {
-          emails: { value: any }[];
-          provider: any;
-          id: any;
-          displayName: any;
-        },
+        _accessToken: string,
+        _refreshToken: string,
+        profile: FacebookProfile,
         next: (arg0: any, arg1?: any, arg2?: { message: string }) => any
       ) => {
         if (!profile.emails[0].value) {
-          return next(null, false, {
+          return next(null, null, {
             message: `${profile.provider} isn't providing any email address try different method`,
           });
         }
-        User.findOne(
+        UserModel.findOne(
           {
             email: profile.emails[0].value,
           },
-          (
-            err: any,
-            user: {
-              authId: any;
-              authProvider: any;
-              save: (arg0: (err: any, user: any) => any) => void;
-            }
-          ) => {
+          (err: any, user: User) => {
             if (err) {
               return next(err);
             }
             if (user) {
               if (user.authId === profile.id) return next(err, user);
               else
-                return next(null, false, {
+                return next(null, null, {
                   message: `You'd authenticated with ${
                     user.authProvider || "password"
                   }`,
                 });
             } else {
-              user = new User({
+              user = new UserModel({
                 authProvider: profile.provider,
                 authId: profile.id,
                 username: profile.displayName,

@@ -2,7 +2,7 @@
 import { ensureLoggedIn, ensureLoggedOut } from "connect-ensure-login";
 import { randomBytes } from "crypto";
 import csrf from "csurf";
-import { Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import { body, validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import passport from "passport";
@@ -12,7 +12,7 @@ import { verify } from "../controller/verify";
 // mail module
 import mail from "../lib/mail";
 // mongoose models
-import User from "../model/userModel";
+import UserModel, { User } from "../model/userModel";
 
 // init router
 const route = Router();
@@ -120,21 +120,21 @@ route
         throw new Error("Passwords and confirm password must be same");
       }
     }),
-    (req, res, next) => {
+    (req: Request, res: Response, next: NextFunction) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         req.flash("error", errors.array()[0].msg);
         return res.redirect("/register");
       }
-      User.register(
-        {
+      UserModel.register(
+        new UserModel({
           email: req.body.email,
           username: req.body.username,
           verified: false,
           referredBy: req.session.referred,
-        },
+        }),
         req.body.password,
-        (err: Error, user: any) => {
+        (err: Error, user: User) => {
           if (err) {
             req.flash("error", err.message);
             res.redirect("/register");
@@ -166,9 +166,9 @@ route
     ensureLoggedIn({ redirectTo: "/login", setRedirectTo: false }),
     csrfProtection,
     function (req, res) {
-      User.findOne(
+      UserModel.findOne(
         { email: req.user.username },
-        function (err: Error, sanitizedUser) {
+        function (err: Error, sanitizedUser: User) {
           if (sanitizedUser) {
             sanitizedUser.changePassword(
               req.body.oldPassword,
@@ -195,10 +195,10 @@ route
           req.params.token,
           process.env.JWT_SECRET
         );
-        User.findOneAndUpdate(
+        UserModel.findOneAndUpdate(
           { email: req.user.email, verificationToken: decode.token },
           { verified: true, $unset: { verificationToken: 1 } },
-          function (err: Error, user) {
+          function (err: Error, user: User) {
             if (err) {
               console.log(err);
               req.flash("error", "An error occurred");
@@ -230,7 +230,7 @@ route
   .post("/reset", csrfProtection, async function (req, res) {
     const resetPasswordToken = randomBytes(20).toString("hex");
     const mailTo = req.body.email;
-    const user = await User.findOneAndUpdate(
+    const user = await UserModel.findOneAndUpdate(
       { email: mailTo },
       {
         resetPasswordToken,
@@ -290,7 +290,7 @@ route
         throw new Error("Passwords and confirm password must be same");
       }
     }),
-    function (req, res) {
+    function (req: Request, res: Response) {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         req.flash("error", errors.array()[0].msg);
@@ -301,9 +301,9 @@ route
           req.params.token,
           process.env.JWT_SECRET
         );
-        User.findOne(
+        UserModel.findOne(
           { id: decode.id, resetPasswordToken: decode.token },
-          function (err, sanitizedUser) {
+          function (err: Error, sanitizedUser: User) {
             if (err) {
               console.log(err);
               req.flash("error", "an error occurred please try again");
@@ -312,10 +312,10 @@ route
               sanitizedUser.setPassword(req.body.password, function () {
                 sanitizedUser.save();
               });
-              User.updateOne(
+              UserModel.updateOne(
                 { resetPasswordToken: decode.token },
                 { $unset: { resetPasswordToken: 1 } },
-                function (err, user) {
+                function (err: Error, user: User) {
                   if (err) req.flash("error", err.message);
                 }
               );
@@ -337,7 +337,7 @@ route
 
   // logout
   .get("/logout", function (req, res) {
-    req.session.destroy(function (err) {
+    req.session.destroy(function () {
       res.redirect("/");
     });
   });

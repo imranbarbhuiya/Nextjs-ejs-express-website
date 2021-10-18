@@ -7,7 +7,7 @@ config();
 
 const redisClient = createClient({
   host: process.env.REDIS_HOSTNAME,
-  port: process.env.REDIS_PORT,
+  port: parseInt(process.env.REDIS_PORT, 10),
   password: process.env.REDIS_PASSWORD,
 
   enable_offline_queue: false,

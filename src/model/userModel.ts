@@ -2,7 +2,9 @@ import {
   Document,
   model,
   PassportLocalDocument,
+  PassportLocalErrorMessages,
   PassportLocalModel,
+  PassportLocalOptions,
   PassportLocalSchema,
   Schema,
 } from "mongoose";
@@ -10,17 +12,18 @@ import passportLocalMongoose from "passport-local-mongoose";
 //#region Test Models
 interface User extends PassportLocalDocument {
   _id: string;
+  email: string;
   username: string;
   authId?: string;
   authProvider?: string;
-  verified: boolean;
-  role: any;
+  verified?: boolean;
+  role?: string;
   referralCode?: string;
   referredBy?: string;
   hash?: string;
   salt?: string;
   attempts?: number;
-  last: Date;
+  last?: Date;
   resetPasswordToken?: string;
   verificationToken?: string;
 }
@@ -47,24 +50,29 @@ const userSchema = new Schema({
   verificationToken: { type: String },
 }) as PassportLocalSchema;
 
-userSchema.plugin(passportLocalMongoose, {
-  usernameField: "email",
-  limitAttempts: true,
-  maxAttempts: 100,
-  maxInterval: 500,
-  errorMessages: {
-    NoSaltValueStoredError:
-      "Your account was created with social auth. Try signing in with social auth.",
-    IncorrectPasswordError: "Incorrect password entered",
-    IncorrectUsernameError: "User with the given email id doesn't exist",
-    MissingUsernameError: "No email id provided",
-    UserExistsError: "User with the given email id already exist",
-    TooManyAttemptsError:
-      "Account locked permanently due to too many failed login attempts. Please reset password to unlock.",
-    AttemptTooSoonError: "You're trying too fast please wait and try again.",
-  },
-});
-interface UserModel<T extends Document> extends PassportLocalModel<T> {}
-const User: UserModel<User> = model<User>("User", userSchema);
+let options: PassportLocalOptions = <PassportLocalOptions>{};
+options.usernameField = "email";
+options.limitAttempts = true;
+options.maxAttempts = 100;
+options.maxInterval = 500;
 
-export default User;
+let errorMessages: PassportLocalErrorMessages = {};
+errorMessages.NoSaltValueStoredError =
+  "Your account was created with social auth. Try signing in with social auth.";
+errorMessages.IncorrectPasswordError = "Incorrect password entered";
+errorMessages.IncorrectUsernameError =
+  "User with the given email id doesn't exist";
+errorMessages.MissingUsernameError = "No email id provided";
+errorMessages.UserExistsError = "User with the given email id already exist";
+errorMessages.TooManyAttemptsError =
+  "Account locked permanently due to too many failed login attempts. Please reset password to unlock.";
+errorMessages.AttemptTooSoonError =
+  "You're trying too fast please wait and try again.";
+
+options.errorMessages = errorMessages;
+userSchema.plugin(passportLocalMongoose, options);
+interface UserModel<T extends Document> extends PassportLocalModel<T> {}
+const UserModel: UserModel<User> = model<User>("User", userSchema);
+
+export default UserModel;
+export type { User };

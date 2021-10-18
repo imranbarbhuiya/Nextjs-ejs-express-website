@@ -2,8 +2,8 @@
 import createDOMPurify from "dompurify";
 import { JSDOM } from "jsdom";
 import marked from "marked";
-import mongoose from "mongoose";
-import mongoose_fuzzy_searching from "mongoose-fuzzy-searching";
+import { model, Schema } from "mongoose";
+import fuzzySearching from "mongoose-fuzzy-searching";
 import slugify from "slugify";
 
 // dom setup
@@ -23,7 +23,7 @@ interface Blog {
   verified: boolean;
 }
 
-const blogSchema = new mongoose.Schema<Blog>({
+const blogSchema = new Schema<Blog>({
   authorName: {
     type: String,
     required: true,
@@ -107,7 +107,8 @@ blogSchema.post("save", (error, doc, next) => {
   }
 });
 
-blogSchema.plugin(mongoose_fuzzy_searching, {
+blogSchema.plugin(fuzzySearching, {
   fields: ["keywords", "author", "description", "title"],
 });
-export default mongoose.model<Blog>("blog", blogSchema);
+export default model<Blog>("blog", blogSchema);
+export type { Blog };

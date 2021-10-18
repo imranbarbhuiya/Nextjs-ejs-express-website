@@ -3,7 +3,7 @@ import flash from "connect-flash";
 import connect_redis from "connect-redis";
 import cookieParser from "cookie-parser";
 import { config } from "dotenv";
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import session from "express-session";
 import helmet from "helmet";
 import methodOverride from "method-override";
@@ -21,7 +21,7 @@ import Logger from "./lib/logger";
 // middleware
 import morganMiddleware from "./middleware/morgan";
 // Mongoose Models
-import userModel from "./model/userModel";
+import UserModel, { User } from "./model/userModel";
 // routes
 import blogRoute from "./routes/blog";
 import courseRoute from "./routes/course";
@@ -109,11 +109,14 @@ client.prepare().then(() => {
   });
 
   // passport setup
-  passport.use(userModel.createStrategy());
+  passport.use(UserModel.createStrategy());
 
   // passport serialize and deserialize
-  passport.serializeUser(userModel.serializeUser());
-  passport.deserializeUser(userModel.deserializeUser());
+  passport.serializeUser(function (user, done) {
+    done(null, user);
+  });
+  // passport.serializeUser(UserModel.serializeUser());
+  passport.deserializeUser(UserModel.deserializeUser());
 
   // calling passport social auth function
   passportSocialAuth(passport);
@@ -174,7 +177,12 @@ client.prepare().then(() => {
   // production error handler
   // without logs
 
-  app.use(function (err, req, res, next) {
+  app.use(function (
+    err: Error,
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     if (err.code === "EBADCSRFTOKEN") {
       res.status(403);
       res.send("Forbidden");
@@ -195,18 +203,18 @@ client.prepare().then(() => {
 
 // Interface setup
 interface Error {
+  code?: string;
   status?: number;
   message?: string;
 }
 
 // extend types
+type _User = User;
 declare global {
   namespace Express {
+    export interface User extends _User {}
     export interface Request {
       admin?: boolean;
-    }
-    export interface User {
-      role?: string;
     }
   }
 }
