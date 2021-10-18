@@ -112,10 +112,7 @@ client.prepare().then(() => {
   passport.use(UserModel.createStrategy());
 
   // passport serialize and deserialize
-  passport.serializeUser(function (user, done) {
-    done(null, user);
-  });
-  // passport.serializeUser(UserModel.serializeUser());
+  passport.serializeUser(UserModel.serializeUser());
   passport.deserializeUser(UserModel.deserializeUser());
 
   // calling passport social auth function

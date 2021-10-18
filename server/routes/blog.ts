@@ -7,7 +7,7 @@ import { handleRejection } from "../controller/handleRejection";
 // middleware
 import { isAdmin, isAdminOrBlogOwner } from "../middleware/roles";
 // mongoose models
-import blogModel from "../model/blogModel";
+import blogModel, { Blog } from "../model/blogModel";
 // init express route
 const route = Router();
 
@@ -40,22 +40,22 @@ route
   .get(
     "/preview/:id",
     ensureLoggedIn("/login"),
-    handleRejection(async (req: Request, res: Response, next: NextFunction) => {
-      const blog = await blogModel.findById(req.params.id);
+    handleRejection(async (req: Request, res: Response, next: any) => {
+      const blog: Blog = await blogModel.findById(req.params.id);
       if (blog) {
         req.blog = blog;
         next();
-      } else res.sendStatus(404);
+      } else next({ status: 404, message: "Not found" }, req, res);
     }),
     isAdminOrBlogOwner("view")
   )
-  .get("/:slug", async (req: Request, res: Response) => {
-    const blog = await blogModel.findOne({
+  .get("/:slug", async (req: Request, res: Response, next: any) => {
+    const blog: Blog = await blogModel.findOne({
       slug: req.params.slug,
       verified: true,
     });
     if (blog) res.render("blog/view", { blog });
-    else res.sendStatus(404);
+    else next({ status: 404, message: "Not found" }, req, res);
   })
   .delete(
     "/:id",

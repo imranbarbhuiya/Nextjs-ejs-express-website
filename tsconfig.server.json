@@ -5,6 +5,6 @@
     "outDir": "dist",
     "noEmit": false
   },
-  "typeRoots": ["./src/types", "./node_modules/@types"],
-  "include": ["src"]
+  "typeRoots": ["./server/types", "./node_modules/@types"],
+  "include": ["server"]
 }
