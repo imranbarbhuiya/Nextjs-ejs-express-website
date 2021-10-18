@@ -2,9 +2,6 @@ import type { Request } from "express";
 import type { NextPage } from "next";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
-import React from "react";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 // user type
 import { User } from "../server/model/userModel";
 
@@ -28,7 +25,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 const About: NextPage = ({
   data,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const notify = () => toast("Wow so easy!");
   let user: User;
   if (data) user = JSON.parse(data);
   else user = null;
@@ -47,10 +43,6 @@ const About: NextPage = ({
           </Link>
         </li>
       </ul>
-      <div>
-        <button onClick={notify}>Notify!</button>
-        <ToastContainer />
-      </div>
     </>
   );
 };
