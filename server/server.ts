@@ -7,7 +7,7 @@ import express, { NextFunction, Request, Response } from "express";
 import session from "express-session";
 import helmet from "helmet";
 import methodOverride from "method-override";
-import mongoose from "mongoose";
+import { connect } from "mongoose";
 import next from "next";
 import passport from "passport";
 import path from "path";
@@ -102,7 +102,7 @@ client.prepare().then(() => {
     .use(morganMiddleware);
 
   // mongodb connect with mongoose
-  mongoose.connect(process.env.MONGODB_SRV, (err) => {
+  connect(process.env.MONGODB_SRV, (err) => {
     err
       ? Logger.error(err)
       : Logger.debug("Connected to the MongoDB database successfully.");
@@ -151,35 +151,14 @@ client.prepare().then(() => {
     return handle(req, res);
   });
   // catch 404 and forward to error handler
-  app.use(function (req, res, next) {
-    const err: any = new Error("Not Found");
+  app.use(function (_req: Request, _res: Response, next: NextFunction) {
+    const err: Error = new Error("Not Found");
     err.status = 404;
     next(err);
   });
+
   // error handlers
-
-  // development error handler
-  // will log and print the error
-
-  if (app.get("env") === "development") {
-    app.use(function (err: Error, req, res, next) {
-      Logger.warn(err);
-      res.status(err.status || 500);
-      res.render("error", {
-        message: err.message,
-        status: err.status,
-      });
-    });
-  }
-  // production error handler
-  // without logs
-
-  app.use(function (
-    err: Error,
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
+  app.use(function (err: Error, _req: Request, res: Response) {
     if (err.code === "EBADCSRFTOKEN") {
       res.status(403);
       res.send("Forbidden");

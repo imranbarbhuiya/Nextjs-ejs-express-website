@@ -8,6 +8,7 @@ import { handleRejection } from "../controller/handleRejection";
 import { isAdmin, isAdminOrBlogOwner } from "../middleware/roles";
 // mongoose models
 import blogModel, { Blog } from "../model/blogModel";
+import { User } from "../model/userModel";
 // init express route
 const route = Router();
 
@@ -97,10 +98,9 @@ route
 export default route;
 
 // extend types
+type _User = User;
 declare global {
   namespace Express {
-    export interface User {
-      verified?: boolean;
-    }
+    export interface User extends _User {}
   }
 }

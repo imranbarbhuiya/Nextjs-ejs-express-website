@@ -1,8 +1,9 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 const route = Router();
 
-route.get("/", async (req, res) => {
-  res.send(401);
+route.get("/", (req: Request, res: Response) => {
+  req.flash("info", "check email");
+  res.redirect("/about");
 });
 
 export default route;

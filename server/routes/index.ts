@@ -19,5 +19,11 @@ declare module "express-session" {
   interface SessionData {
     referred: string;
     returnTo: string;
+    flash: {
+      info?: string[];
+      success?: string[];
+      error?: string[];
+      warning?: string[];
+    };
   }
 }
