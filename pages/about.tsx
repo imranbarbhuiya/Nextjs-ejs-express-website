@@ -1,6 +1,7 @@
-import Link from 'next/link'
+import type { NextPage } from "next";
+import Link from "next/link";
 
-export default function Home() {
+const About: NextPage = () => {
   return (
     <ul>
       <li>
@@ -14,5 +15,7 @@ export default function Home() {
         </Link>
       </li>
     </ul>
-  )
-}
+  );
+};
+
+export default About;
