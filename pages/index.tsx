@@ -14,6 +14,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { user, session } = req as Request;
   let info: string[] = null;
   let error: string[] = null;
+  let success: string[] = null;
+  if (session.flash?.success?.length) {
+    success = session.flash.success;
+    delete session.flash["success"];
+  }
   if (session.flash?.error?.length) {
     error = session.flash.error;
     delete session.flash["error"];
@@ -28,6 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       data: user ? JSON.stringify(user) : null,
       info,
       error,
+      success,
     },
   };
 };
@@ -35,8 +41,13 @@ const Home: NextPage = ({
   data,
   info,
   error,
+  success,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   let user: User = data ? JSON.parse(data) : null;
+  if (success)
+    success.forEach((message: string) => {
+      toast["success"](message);
+    });
   if (info)
     info.forEach((message: string) => {
       toast["info"](message);
