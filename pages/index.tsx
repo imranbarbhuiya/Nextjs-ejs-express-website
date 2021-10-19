@@ -4,7 +4,7 @@ import type { NextPage } from "next";
 // next components
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
-import React, { useEffect } from "react";
+import React from "react";
 // components
 import toast from "../components/Toast";
 // user type
@@ -31,9 +31,7 @@ const Home: NextPage = ({
   info,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   let user: User = data ? JSON.parse(data) : null;
-  useEffect(() => {
-    if (info) toast({ type: "info", message: info });
-  }, [info]);
+  if (info) toast({ type: "info", message: info });
   return (
     <>
       <Head>
@@ -66,7 +64,6 @@ const Home: NextPage = ({
       </Head>
 
       <div className="jumbotron centered">
-        <h1>{info}</h1>
         <div className="container">
           <h1 className="display-3">Here&apos;s your detail&apos;s</h1>
           <hr />
