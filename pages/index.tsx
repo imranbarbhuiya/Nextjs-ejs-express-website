@@ -16,26 +16,18 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     delete session.flash["info"];
   }
 
-  if (!user) {
-    return {
-      props: {
-        data: null,
-        info: null,
-      },
-    };
-  }
-  const data = JSON.stringify(user);
-  return { props: { data, info: info ? info : null } };
+  return {
+    props: {
+      data: user ? JSON.stringify(user) : null,
+      info: info || null,
+    },
+  };
 };
 const Home: NextPage = ({
   data,
   info,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  let user: User;
-  if (data) user = JSON.parse(data);
-  else user = null;
-  console.log(info);
-
+  let user: User = data ? JSON.parse(data) : null;
   return (
     <>
       <Head>
