@@ -26,7 +26,6 @@ import blogRoute from "./routes/blog";
 import courseRoute from "./routes/course";
 import indexRoute from "./routes/index";
 import loginRoute from "./routes/login";
-import testRoute from "./routes/test";
 // configuring env variables
 config();
 // connecting to mongodb
@@ -117,8 +116,6 @@ client.prepare().then(() => {
     .use("/", indexRoute)
     // adding login router
     .use("/", loginRoute)
-    // a test route
-    .use("/test", testRoute)
     // defining admin middleware
     .use(
       (

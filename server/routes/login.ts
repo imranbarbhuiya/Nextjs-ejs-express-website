@@ -347,6 +347,10 @@ route
     req.session.destroy(() => {
       res.redirect("/");
     });
-  });
+  })
 
+  .get("/test", csrfProtection, (req, res, next) => {
+    res.locals.csrf = req.csrfToken();
+    next();
+  });
 export default route;
