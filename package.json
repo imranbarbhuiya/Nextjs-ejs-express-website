@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon --watch server --ext ts --exec ts-node --project tsconfig.server.json server/server.ts",
+    "dev": "ts-node --project tsconfig.server.json server/server.ts",
     "build:server": "tsc --project tsconfig.server.json",
     "build:next": "next build",
     "build": "npm run build:next && npm run build:server",
