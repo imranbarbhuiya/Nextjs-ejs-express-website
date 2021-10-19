@@ -4,7 +4,7 @@ import type { NextPage } from "next";
 // next components
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 // components
 import toast from "../components/Toast";
 // user type
@@ -31,9 +31,11 @@ const Home: NextPage = ({
   info,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   let user: User = data ? JSON.parse(data) : null;
-  React.useEffect(() => {
-    toast({ type: "info", message: info });
-  }, [info]);
+  const [flash, setflash] = useState([]);
+  useEffect(() => {
+    toast({ type: "info", message: flash });
+  }, [flash]);
+  if (info?.length) setflash(info[0]);
   return (
     <>
       <Head>
