@@ -26,17 +26,18 @@ async function verify(req, res) {
   );
   const returnTo = req.session.returnTo;
   delete req.session["returnTo"];
-  mail(
-    mailTo,
-    "Verify account",
-    `<p>Verify account</p>
+  try {
+    await mail(
+      mailTo,
+      "Verify account",
+      `<p>Verify account</p>
         <a href="${req.protocol}://${req.headers.host}/verify/${encoded}">Click here</a>`
-  )
-    .then(req.flash("info", "Check email to verify"))
-    .catch((error) => {
-      req.flash("error", "Mail send failed please try again");
-      Logger.error(error);
-    });
+    );
+    req.flash("info", "Check email to verify");
+  } catch (error) {
+    req.flash("error", "Mail send failed please try again");
+    Logger.error(error);
+  }
   res.redirect(req.query.next || returnTo || "/");
 }
 
