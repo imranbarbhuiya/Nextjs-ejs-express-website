@@ -2,7 +2,6 @@
 import flash from "connect-flash";
 import connect_redis from "connect-redis";
 import cookieParser from "cookie-parser";
-import { config } from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import session from "express-session";
 import helmet from "helmet";
@@ -27,7 +26,7 @@ import courseRoute from "./routes/course";
 import indexRoute from "./routes/index";
 import loginRoute from "./routes/login";
 // configuring env variables
-config();
+require("dotenv").config();
 // connecting to mongodb
 require("./db/mongoDB");
 // next setup

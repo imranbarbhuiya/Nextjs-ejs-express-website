@@ -1,9 +1,8 @@
-import { config } from "dotenv";
 import { createClient } from "redis";
 // importing logger
 import Logger from "../lib/logger";
 
-config();
+require("dotenv").config();
 
 const redisClient = createClient({
   host: process.env.REDIS_HOSTNAME,

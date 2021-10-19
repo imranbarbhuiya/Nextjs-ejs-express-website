@@ -1,7 +1,6 @@
-import { config } from "dotenv";
 import { connect } from "mongoose";
 import Logger from "../lib/logger";
-config();
+require("dotenv").config();
 connect(process.env.MONGODB_SRV, (err) => {
   err
     ? Logger.error(err)
