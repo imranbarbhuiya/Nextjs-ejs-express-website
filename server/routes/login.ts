@@ -195,10 +195,10 @@ route
             if (err) {
               console.log(err);
               req.flash("error", "An error occurred");
-              res.redirect("/verify");
+              res.redirect("/");
             } else if (!user) {
               req.flash("error", "Invalid token");
-              res.redirect("/login");
+              res.redirect("/");
             } else {
               req.flash("success", "Verification successful");
               res.redirect(req.session.returnTo || "/");
@@ -207,7 +207,7 @@ route
         );
       } catch (err) {
         req.flash("error", "token expired");
-        res.redirect("/verify");
+        res.redirect("/");
       }
     }
   )
