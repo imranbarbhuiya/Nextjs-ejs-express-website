@@ -1,16 +1,12 @@
 // importing dependencies
-import { Request, Response, Router } from "express";
-import { SessionData } from "express-session";
+import { NextFunction, Request, Response, Router } from "express";
 // init express route
 const route = Router();
 
-route.get("/", (req: Request, res: Response) => {
+route.get("/", (req: Request, res: Response, next: NextFunction) => {
   if (!req.isAuthenticated())
     if (req.query.referred) req.session.referred = req.query.referred as string;
-  res.render("index", {
-    user: req.user ? req.user : null,
-    message: req.flash(),
-  });
+  next();
 });
 
 export default route;
