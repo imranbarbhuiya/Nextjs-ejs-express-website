@@ -35,7 +35,7 @@ const Home: NextPage = ({
   useEffect(() => {
     toast({ type: "info", message: flash });
   }, [flash]);
-  if (info?.length) setflash(info[0]);
+  if (info?.length) setflash(info);
   return (
     <>
       <Head>
