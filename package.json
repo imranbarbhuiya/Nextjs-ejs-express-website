@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "dev": "ts-node --project tsconfig.server.json server/server.ts",
+    "dev": "nodemon --watch server --ext ts --exec ts-node --project tsconfig.server.json server/server.ts",
     "build:server": "tsc --project tsconfig.server.json",
     "build:next": "next build",
     "build": "npm run build:next && npm run build:server",
@@ -79,6 +79,7 @@
     "@types/serve-favicon": "^2.5.3",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
+    "nodemon": "^2.0.13",
     "snyk": "^1.737.0",
     "ts-node": "^10.3.0",
     "tslint": "^6.1.3",
