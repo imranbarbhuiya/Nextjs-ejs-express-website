@@ -44,18 +44,9 @@ const Home: NextPage = ({
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   let user: User = userData ? JSON.parse(userData) : null;
-  if (success)
-    success.forEach((successMsg: string) => {
-      toast["success"](successMsg);
-    });
-  if (info)
-    info.forEach((infoMsg: string) => {
-      toast["info"](infoMsg);
-    });
-  if (error)
-    info.forEach((errorMsg: string) => {
-      toast["error"](errorMsg);
-    });
+  if (success) toast["success"](success);
+  if (info) toast["info"](info);
+  if (error) toast["error"](error);
   return (
     <>
       <Head>
