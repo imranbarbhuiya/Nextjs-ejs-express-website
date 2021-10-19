@@ -7,14 +7,13 @@ import express, { NextFunction, Request, Response } from "express";
 import session from "express-session";
 import helmet from "helmet";
 import methodOverride from "method-override";
-import { connect } from "mongoose";
 import next from "next";
 import passport from "passport";
 import path from "path";
 import serveFavicon from "serve-favicon";
 // controllers
 import passportSocialAuth from "./controller/auth";
-// Redis Client
+// connecting to redis
 import redisClient from "./db/redisDB";
 // Logger
 import Logger from "./lib/logger";
@@ -30,6 +29,8 @@ import loginRoute from "./routes/login";
 import testRoute from "./routes/test";
 // configuring env variables
 config();
+// connecting to mongodb
+require("./db/mongoDB");
 // next setup
 const port = parseInt(process.env.PORT, 10) || 8080;
 const dev = process.env.NODE_ENV !== "production";
@@ -100,13 +101,6 @@ client.prepare().then(() => {
     .use(methodOverride("_method"))
     // using morgan to write logs in console
     .use(morganMiddleware);
-
-  // mongodb connect with mongoose
-  connect(process.env.MONGODB_SRV, (err) => {
-    err
-      ? Logger.error(err)
-      : Logger.debug("Connected to the MongoDB database successfully.");
-  });
 
   // passport setup
   passport.use(UserModel.createStrategy());
