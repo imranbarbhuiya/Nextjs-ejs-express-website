@@ -15,6 +15,7 @@
     "snyk",
     "Toastify",
     "Ullam",
-    "wistia"
+    "wistia",
+    "XSRF"
   ]
 }
