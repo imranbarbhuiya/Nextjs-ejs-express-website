@@ -72,7 +72,7 @@ const Home: NextPage = ({
               <a className="btn btn-warning me-5" href="/logout" role="button">
                 Log Out
               </a>
-              {!user.verified ? (
+              {!user.verified && (
                 <a
                   className="btn btn-success me-5"
                   href="/verify"
@@ -80,8 +80,6 @@ const Home: NextPage = ({
                 >
                   verify
                 </a>
-              ) : (
-                <></>
               )}
             </>
           ) : (
