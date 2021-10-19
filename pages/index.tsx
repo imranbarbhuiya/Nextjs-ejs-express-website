@@ -31,7 +31,10 @@ const Home: NextPage = ({
   info,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   let user: User = data ? JSON.parse(data) : null;
-  if (info) toast({ type: "info", message: info });
+  if (info)
+    info.forEach((i: string) => {
+      toast({ type: "info", message: i });
+    });
   return (
     <>
       <Head>
