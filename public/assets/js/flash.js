@@ -6,7 +6,7 @@ closeButton.forEach((close) => {
   });
   setTimeout(() => {
     closeFlash(close.parentElement);
-  }, 5000);
+  }, 8000);
 });
 
 function closeFlash(node) {

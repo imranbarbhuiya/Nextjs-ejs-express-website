@@ -1,20 +1,19 @@
 .flash {
+  margin: 0 10px;
   position: fixed;
-  right: 10px;
+  right: 0px;
   top: 10px;
-  height: auto;
-  width: 400px;
   box-sizing: border-box;
   z-index: 999999;
 }
 
 .flash .flash-box {
   background-color: #ffffff;
-  min-height: 50px;
+  min-height: 65px;
   font-size: 16px;
   margin-bottom: 5px;
   box-shadow: 1px 2px 8px 2px #888888;
-  border-radius: 2px;
+  border-radius: 5px;
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -41,29 +40,6 @@
   }
 }
 
-.flash .flash-line {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 5px;
-}
-.flash .success-bg {
-  background-color: #47d664;
-}
-
-.flash .error-bg {
-  background-color: #f14014;
-}
-
-.flash .info-bg {
-  background-color: blue;
-}
-
-.flash .warning-bg {
-  background-color: yellow;
-}
-
 .flash .success .icon {
   color: #47d664;
 }
@@ -81,32 +57,35 @@
 }
 
 .flash .fa {
-  font-size: 24px;
-  padding: 0 24px;
+  font-size: 20px;
+  padding: 0 12px;
   background-color: transparent;
   border: none;
 }
 
 .flash .flash-message {
   margin: 10px 0;
-  color: #555353;
+  color: rgb(117, 117, 161);
 }
 
 .flash .flash-range {
   position: absolute;
-  bottom: -5px;
+  bottom: 0px;
   left: 0;
   height: 5px;
   width: 0;
   background-color: #47d664;
-  animation: range 5s;
+  border-radius: 0 0 0px 5px;
+  animation: range 8s;
 }
 
 @keyframes range {
   0% {
     width: 100%;
+    border-radius: 0 0 5px 5px;
   }
-  20% {
+  15% {
+    border-radius: 0 0 0px 5px;
     width: 100%;
   }
 }

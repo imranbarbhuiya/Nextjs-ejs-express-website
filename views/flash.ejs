@@ -3,7 +3,6 @@
 <div class="flash">
     <% if (message.success) { %>
         <div class="flash-box success">
-            <span class="flash-line error-bg"></span>
             <i class="icon fa fa-check-circle"></i>
             <p class="flash-message">
                 <%-message.success%>
@@ -14,7 +13,6 @@
         <% } %>
             <% if (message.info) { %>
                 <div class="flash-box info">
-                    <span class="flash-line error-bg"></span>
                     <i class="icon fa fa-info-circle"></i>
                     <p class="flash-message">
                         <%-message.info%>
@@ -25,7 +23,6 @@
                 <% } %>
                     <% if (message.warning) { %>
                         <div class="flash-box warning">
-                            <span class="flash-line error-bg"></span>
                             <i class="icon fa fa-warning-circle"></i>
                             <p class="flash-message">
                                 <%-message.warning%>
@@ -36,7 +33,6 @@
                         <% } %>
                             <% if (message.error) { %>
                                 <div class="flash-box error">
-                                    <span class="flash-line error-bg"></span>
                                     <i class="icon fa fa-times-circle"></i>
                                     <p class="flash-message">
                                         <%-message.error%>
