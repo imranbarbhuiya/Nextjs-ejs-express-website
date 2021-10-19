@@ -34,9 +34,7 @@ const Home: NextPage = ({
   const notify = React.useCallback((type, message) => {
     toast({ type, message });
   }, []);
-  const dismiss = React.useCallback(() => {
-    toast.dismiss();
-  }, []);
+  notify("success", "Success!");
   return (
     <>
       <Head>
@@ -65,22 +63,9 @@ const Home: NextPage = ({
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
           crossOrigin="anonymous"
         ></link>
+        <title>Codversity</title>
       </Head>
-      <div onClick={() => notify("success", "Success!")} className="message">
-        <p>Success Message</p>
-      </div>
-      <div onClick={() => notify("error", "Error!")} className="message">
-        <p>Error Message</p>
-      </div>
-      <div onClick={() => notify("info", "Info!")} className="message">
-        <p>Info Message</p>
-      </div>
-      <div onClick={() => notify("warning", "Warning!")} className="message">
-        <p>Warning Message</p>
-      </div>
-      <div onClick={dismiss} className="message">
-        <p>Dismiss All Messages</p>
-      </div>
+
       <div className="jumbotron centered">
         <h1>{info}</h1>
         <div className="container">
