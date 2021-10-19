@@ -26,7 +26,7 @@ export const displayIcon = (type: string) => {
 
 const ToastMessage = ({ type, message }) =>
   toast[type](
-    <div style={{ display: "flex", color: "white" }}>
+    <div style={{ display: "flex", color: "black" }}>
       <div
         style={{
           fontSize: 15,

@@ -31,10 +31,9 @@ const Home: NextPage = ({
   info,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   let user: User = data ? JSON.parse(data) : null;
-  const notify = React.useCallback((type, message) => {
-    toast({ type, message });
-  }, []);
-  notify("success", "Success!");
+  React.useEffect(() => {
+    toast({ type: "info", message: info });
+  }, [info]);
   return (
     <>
       <Head>
@@ -109,20 +108,6 @@ const Home: NextPage = ({
           </a>
         </div>
       </div>
-      <style jsx>{`
-        .message {
-          cursor: pointer;
-          font: 15px Helvetica, Arial, sans-serif;
-          background: #eee;
-          padding: 20px;
-          text-align: center;
-          transition: 100ms ease-in background;
-          margin: 10px;
-        }
-        .message:hover {
-          background: #ccc;
-        }
-      `}</style>
     </>
   );
 };
