@@ -10,7 +10,7 @@ import { User } from "../server/model/userModel";
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { req } = ctx;
   const { user, session } = req as Request;
-  delete session.flash["info"];
+  if (session.flash?.info.length) session.flash.info.shift();
 
   if (!user) {
     return {
