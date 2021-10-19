@@ -248,7 +248,7 @@ route
         "Reset Password",
         `<p>Reset Password</p>
         <a href="${req.protocol}://${req.headers.host}/reset/${encoded}">Click here</a>`
-      ).catch((error) => {
+      ).catch((error: any) => {
         req.flash("error", "auth fail");
         console.log(error);
       });

@@ -140,8 +140,7 @@ client.prepare().then(() => {
     // adding blog router
     .use("/blog", blogRoute);
   // next route
-
-  app.get("*", (req, res) => {
+  app.get("*", (req: Request, res: Response) => {
     return handle(req, res);
   });
   // catch 404 and forward to error handler

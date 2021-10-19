@@ -3,7 +3,7 @@ import { NextFunction, Request, Response, Router } from "express";
 // init express route
 const route = Router();
 
-route.get("/", (req: Request, res: Response, next: NextFunction) => {
+route.get("/", (req: Request, _res: Response, next: NextFunction) => {
   if (!req.isAuthenticated())
     if (req.query.referred) req.session.referred = req.query.referred as string;
   next();
