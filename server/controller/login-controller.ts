@@ -32,7 +32,7 @@ const limiterConsecutiveFailsByEmailAndIP = new RateLimiterRedis({
 });
 
 // create key string
-const getEmailIPkey = (email: any, ip: any) => `${email}_${ip}`;
+const getEmailIPkey = (email: string, ip: string) => `${email}_${ip}`;
 
 // rate-limiting middleware controller
 export async function loginRouteRateLimit(
@@ -124,10 +124,11 @@ export async function loginRouteRateLimit(
         await limiterConsecutiveFailsByEmailAndIP.delete(emailIPkey);
       }
       // login (Passport.js method)
-      req.logIn(user, (err: any) => {
+      req.logIn(user, (err: Error) => {
         if (err) {
           return next(err);
         }
+        delete req.session["referred"];
         if (user.verified) {
           const returnTo = req.session.returnTo;
           delete req.session["returnTo"];

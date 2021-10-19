@@ -4,7 +4,10 @@ import {
   Profile as FacebookProfile,
   Strategy as FacebookStrategy,
 } from "passport-facebook";
-import { Strategy as GitHubStrategy } from "passport-github2";
+import {
+  Profile as GithubProfile,
+  Strategy as GitHubStrategy,
+} from "passport-github2";
 import {
   Profile,
   Strategy as GoogleStrategy,
@@ -12,6 +15,7 @@ import {
 } from "passport-google-oauth20";
 // mongoose model
 import UserModel, { User } from "../model/userModel";
+//
 
 // setup the google facebook and github strategy
 const passportSocialAuth = (passport: any) => {
@@ -54,7 +58,7 @@ const passportSocialAuth = (passport: any) => {
                 email: profile.emails[0].value,
                 verified: true,
               });
-              user.save((err: Error, user: any) => {
+              user.save((err: Error, user: User) => {
                 if (err) {
                   return next(err);
                 }
@@ -76,13 +80,8 @@ const passportSocialAuth = (passport: any) => {
       async (
         accessToken: string,
         _refreshToken: string,
-        profile: {
-          provider: string;
-          id: string;
-          username: string;
-          displayName: string;
-        },
-        next: (arg0: any, arg1?: any, arg2?: { message: string }) => any
+        profile: GithubProfile,
+        next: (error: Error, user?: User, info?: { message: string }) => any
       ) => {
         let primaryEmail: string;
         await axios
@@ -97,7 +96,7 @@ const passportSocialAuth = (passport: any) => {
               (email: { primary: boolean }) => email.primary === true
             )[0].email;
             if (!primaryEmail) {
-              return next(null, false, {
+              return next(null, null, {
                 message: `${profile.provider} isn't providing any email address try different method`,
               });
             }
@@ -105,14 +104,14 @@ const passportSocialAuth = (passport: any) => {
               {
                 email: primaryEmail,
               },
-              (err: any, user: User) => {
+              (err: Error, user: User) => {
                 if (err) {
                   return next(err);
                 }
                 if (user) {
                   if (user.authId === profile.id) return next(err, user);
                   else
-                    return next(null, false, {
+                    return next(null, null, {
                       message: `You'd authenticated with ${
                         user.authProvider || "password"
                       }`,
@@ -125,7 +124,7 @@ const passportSocialAuth = (passport: any) => {
                     email: primaryEmail,
                     verified: true,
                   });
-                  user.save((err: any, user: any) => {
+                  user.save((err: Error, user: User) => {
                     if (err) {
                       return next(err);
                     }
@@ -151,7 +150,7 @@ const passportSocialAuth = (passport: any) => {
         _accessToken: string,
         _refreshToken: string,
         profile: FacebookProfile,
-        next: (arg0: any, arg1?: any, arg2?: { message: string }) => any
+        next: (error: Error, user?: User, info?: { message: string }) => any
       ) => {
         if (!profile.emails[0].value) {
           return next(null, null, {
@@ -162,7 +161,7 @@ const passportSocialAuth = (passport: any) => {
           {
             email: profile.emails[0].value,
           },
-          (err: any, user: User) => {
+          (err: Error, user: User) => {
             if (err) {
               return next(err);
             }
@@ -182,7 +181,7 @@ const passportSocialAuth = (passport: any) => {
                 email: profile.emails[0].value,
                 verified: true,
               });
-              user.save((err: any, user: any) => {
+              user.save((err: Error, user: User) => {
                 if (err) {
                   return next(err);
                 }
