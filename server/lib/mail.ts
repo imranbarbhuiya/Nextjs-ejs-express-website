@@ -1,6 +1,5 @@
 // importing dependencies
 import { createTransport } from "nodemailer";
-import Logger from "./logger";
 // defining mail function
 async function mail(
   mailTo: string,
@@ -16,16 +15,12 @@ async function mail(
     },
   });
 
-  await transporter
-    .sendMail({
-      from: '"Codversity" <reset@codversity.com>',
-      to: mailTo,
-      subject: subject,
-      text: text,
-      html: html,
-    })
-    .catch((err: any) => {
-      Logger.error(err);
-    });
+  await transporter.sendMail({
+    from: '"Codversity" <reset@codversity.com>',
+    to: mailTo,
+    subject: subject,
+    text: text,
+    html: html,
+  });
 }
 export default mail;

@@ -34,7 +34,7 @@ async function verify(req, res) {
   )
     .then(req.flash("info", "Check email to verify"))
     .catch((error) => {
-      req.flash("error", "mail send failed please try again");
+      req.flash("error", "Mail send failed please try again");
       Logger.error(error);
     });
   res.redirect(req.query.next || returnTo || "/");

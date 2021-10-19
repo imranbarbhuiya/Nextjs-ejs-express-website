@@ -13,6 +13,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { req } = ctx;
   const { user, session } = req as Request;
   let info: string[] = null;
+  let error: string[] = null;
+  if (session.flash?.error?.length) {
+    error = session.flash.error;
+    delete session.flash["error"];
+  }
   if (session.flash?.info?.length) {
     info = session.flash.info;
     delete session.flash["info"];
@@ -22,17 +27,23 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     props: {
       data: user ? JSON.stringify(user) : null,
       info,
+      error,
     },
   };
 };
 const Home: NextPage = ({
   data,
   info,
+  error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   let user: User = data ? JSON.parse(data) : null;
   if (info)
     info.forEach((message: string) => {
       toast["info"](message);
+    });
+  if (error)
+    info.forEach((message: string) => {
+      toast["error"](message);
     });
   return (
     <>
