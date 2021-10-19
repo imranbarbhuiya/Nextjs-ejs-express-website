@@ -62,17 +62,10 @@ route
       failureFlash: true,
     })
   );
-/**
- * Local passport authenticate
- * uses passport-local-mongoose
- * for rate limiter rate-limiter-flexible is used
- * register
- * login
- * verify
- * change password
- * reset password
- * logout
- */
+// Local passport authenticate
+// uses passport-local-mongoose
+// for rate limiter rate-limiter-flexible is used
+
 route
   .get("/login", csrfProtection, (req, res) => {
     res.render("login/login", {
@@ -165,15 +158,15 @@ route
     "/change",
     ensureLoggedIn({ redirectTo: "/login", setRedirectTo: false }),
     csrfProtection,
-    function (req, res) {
+    (req: Request, res: Response) => {
       UserModel.findOne(
         { email: req.user.username },
-        function (err: Error, sanitizedUser: User) {
+        (_err: Error, sanitizedUser: User) => {
           if (sanitizedUser) {
             sanitizedUser.changePassword(
               req.body.oldPassword,
               req.body.newPassword,
-              function () {
+              () => {
                 sanitizedUser.save();
               }
             );
@@ -189,7 +182,7 @@ route
   .get(
     "/verify/:token",
     ensureLoggedIn({ redirectTo: "/login", setRedirectTo: false }),
-    function (req, res) {
+    (req: Request, res: Response) => {
       try {
         const decode: any = jwt.verify(
           req.params.token,
@@ -261,18 +254,32 @@ route
       });
     }
   })
-  .get("/reset/:token", ensureLoggedOut("/"), function (req, res) {
-    jwt.verify(req.params.token, process.env.JWT_SECRET, (err, token) => {
-      if (err) {
-        req.flash("error", "token expired");
-        res.redirect("/login");
-      } else {
-        res.render("login/forgot", { password: true, message: req.flash() });
-      }
-    });
-  })
+  .get(
+    "/reset/:token",
+    ensureLoggedOut("/"),
+    csrfProtection,
+    (req: Request, res: Response) => {
+      jwt.verify(
+        req.params.token,
+        process.env.JWT_SECRET,
+        (err: Error, _token) => {
+          if (err) {
+            req.flash("error", "token expired");
+            res.redirect("/login");
+          } else {
+            res.render("login/forgot", {
+              password: true,
+              message: req.flash(),
+              csrfToken: req.csrfToken(),
+            });
+          }
+        }
+      );
+    }
+  )
   .post(
     "/reset/:token",
+    csrfProtection,
     body("password")
       .isLength({ min: 8, max: 50 })
       .withMessage("Password length should be 8-50 character long.")
@@ -290,7 +297,7 @@ route
         throw new Error("Passwords and confirm password must be same");
       }
     }),
-    function (req: Request, res: Response) {
+    (req: Request, res: Response) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         req.flash("error", errors.array()[0].msg);
@@ -315,7 +322,7 @@ route
               UserModel.updateOne(
                 { resetPasswordToken: decode.token },
                 { $unset: { resetPasswordToken: 1 } },
-                function (err: Error, user: User) {
+                (err: Error, _user: User) => {
                   if (err) req.flash("error", err.message);
                 }
               );
@@ -326,7 +333,7 @@ route
             res.redirect("/login");
           }
         );
-      } catch (error) {
+      } catch (error: any) {
         if (error.message == "jwt expired") {
           req.flash("error", "Token expired");
         } else req.flash("error", "Invalid token");
@@ -336,8 +343,8 @@ route
   )
 
   // logout
-  .get("/logout", function (req, res) {
-    req.session.destroy(function () {
+  .get("/logout", (req: Request, res: Response) => {
+    req.session.destroy(() => {
       res.redirect("/");
     });
   });

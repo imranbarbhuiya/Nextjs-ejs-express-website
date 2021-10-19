@@ -1,5 +1,6 @@
 // import dependencies
 import createDOMPurify from "dompurify";
+import { NextFunction } from "express";
 import { JSDOM } from "jsdom";
 import marked from "marked";
 import { model, Schema } from "mongoose";
@@ -77,7 +78,7 @@ DOMpurify.addHook("afterSanitizeElements", (node) => {
   }
 });
 
-function markAndSanitize(markdown) {
+function markAndSanitize(markdown: string) {
   return DOMpurify.sanitize(marked(markdown), {
     USE_PROFILES: { html: true },
   });
@@ -99,7 +100,7 @@ blogSchema.pre("validate", function (next) {
   next();
 });
 
-blogSchema.post("save", (error, doc, next) => {
+blogSchema.post("save", (error: Error, doc: string, next: NextFunction) => {
   if (error.name === "MongoServerError" && error.code === 11000) {
     next(new Error(`${Object.keys(error.keyValue)[0]} must be unique`));
   } else {
@@ -113,3 +114,9 @@ blogSchema.plugin(fuzzySearching, {
 const blogModel = model<Blog>("blog", blogSchema) as MongooseFuzzyModel<Blog>;
 export default blogModel;
 export type { Blog };
+
+interface Error {
+  name?: string;
+  code?: number;
+  keyValue?: string[];
+}
