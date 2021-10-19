@@ -19,42 +19,42 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     success = session.flash.success;
     delete session.flash["success"];
   }
-  if (session.flash?.error?.length) {
-    error = session.flash.error;
-    delete session.flash["error"];
-  }
   if (session.flash?.info?.length) {
     info = session.flash.info;
     delete session.flash["info"];
   }
+  if (session.flash?.error?.length) {
+    error = session.flash.error;
+    delete session.flash["error"];
+  }
 
   return {
     props: {
-      data: user ? JSON.stringify(user) : null,
+      userData: user ? JSON.stringify(user) : null,
+      success,
       info,
       error,
-      success,
     },
   };
 };
 const Home: NextPage = ({
-  data,
+  userData,
+  success,
   info,
   error,
-  success,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  let user: User = data ? JSON.parse(data) : null;
+  let user: User = userData ? JSON.parse(userData) : null;
   if (success)
-    success.forEach((message: string) => {
-      toast["success"](message);
+    success.forEach((successMsg: string) => {
+      toast["success"](successMsg);
     });
   if (info)
-    info.forEach((message: string) => {
-      toast["info"](message);
+    info.forEach((infoMsg: string) => {
+      toast["info"](infoMsg);
     });
   if (error)
-    info.forEach((message: string) => {
-      toast["error"](message);
+    info.forEach((errorMsg: string) => {
+      toast["error"](errorMsg);
     });
   return (
     <>
