@@ -30,7 +30,7 @@ require("dotenv").config();
 // connecting to mongodb
 require("./db/mongoDB");
 // next setup
-const port = parseInt(process.env.PORT, 10) || 8080;
+const port = parseInt(process.env.PORT, 10);
 const dev = process.env.NODE_ENV !== "production";
 const client = next({ dev });
 const handle = client.getRequestHandler();

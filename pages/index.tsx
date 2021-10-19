@@ -4,6 +4,9 @@ import type { NextPage } from "next";
 // next components
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
+import * as React from "react";
+// components
+import toast from "../components/Toast";
 // user type
 import { User } from "../server/model/userModel";
 
@@ -28,6 +31,12 @@ const Home: NextPage = ({
   info,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   let user: User = data ? JSON.parse(data) : null;
+  const notify = React.useCallback((type, message) => {
+    toast({ type, message });
+  }, []);
+  const dismiss = React.useCallback(() => {
+    toast.dismiss();
+  }, []);
   return (
     <>
       <Head>
@@ -57,6 +66,21 @@ const Home: NextPage = ({
           crossOrigin="anonymous"
         ></link>
       </Head>
+      <div onClick={() => notify("success", "Success!")} className="message">
+        <p>Success Message</p>
+      </div>
+      <div onClick={() => notify("error", "Error!")} className="message">
+        <p>Error Message</p>
+      </div>
+      <div onClick={() => notify("info", "Info!")} className="message">
+        <p>Info Message</p>
+      </div>
+      <div onClick={() => notify("warning", "Warning!")} className="message">
+        <p>Warning Message</p>
+      </div>
+      <div onClick={dismiss} className="message">
+        <p>Dismiss All Messages</p>
+      </div>
       <div className="jumbotron centered">
         <h1>{info}</h1>
         <div className="container">
@@ -100,6 +124,20 @@ const Home: NextPage = ({
           </a>
         </div>
       </div>
+      <style jsx>{`
+        .message {
+          cursor: pointer;
+          font: 15px Helvetica, Arial, sans-serif;
+          background: #eee;
+          padding: 20px;
+          text-align: center;
+          transition: 100ms ease-in background;
+          margin: 10px;
+        }
+        .message:hover {
+          background: #ccc;
+        }
+      `}</style>
     </>
   );
 };
