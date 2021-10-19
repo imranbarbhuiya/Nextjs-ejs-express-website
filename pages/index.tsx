@@ -10,25 +10,31 @@ import { User } from "../server/model/userModel";
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { req } = ctx;
   const { user, session } = req as Request;
-  if (session.flash?.info.length) session.flash.info.shift();
+  let info: string[];
+  if (session.flash?.info?.length) {
+    info = session.flash.info;
+    delete session.flash["info"];
+  }
 
   if (!user) {
     return {
       props: {
         data: null,
+        info: null,
       },
     };
   }
   const data = JSON.stringify(user);
-
-  return { props: { data } };
+  return { props: { data, info: info ? info : null } };
 };
 const Home: NextPage = ({
   data,
+  info,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   let user: User;
   if (data) user = JSON.parse(data);
   else user = null;
+  console.log(info);
 
   return (
     <>
@@ -60,6 +66,7 @@ const Home: NextPage = ({
         ></link>
       </Head>
       <div className="jumbotron centered">
+        <h1>{info}</h1>
         <div className="container">
           <h1 className="display-3">Here&apos;s your detail&apos;s</h1>
           <hr />
