@@ -33,7 +33,7 @@ const Home: NextPage = ({
   let user: User = data ? JSON.parse(data) : null;
   const [flash, setflash] = useState([]);
   useEffect(() => {
-    toast({ type: "info", message: flash });
+    if (flash?.length) toast({ type: "info", message: flash });
   }, [flash]);
   if (info?.length) setflash(info);
   return (
