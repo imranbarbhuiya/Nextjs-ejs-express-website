@@ -12,9 +12,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         position="top-right"
         autoClose={8000}
         hideProgressBar={false}
-        newestOnTop={false}
+        newestOnTop={true}
         draggable={false}
-        closeOnClick
         pauseOnHover
       />
     </>

@@ -5,8 +5,7 @@ import type { NextPage } from "next";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import React from "react";
-// components
-import toast from "../components/Toast";
+import { toast } from "react-toastify";
 // user type
 import { User } from "../server/model/userModel";
 
@@ -32,8 +31,8 @@ const Home: NextPage = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   let user: User = data ? JSON.parse(data) : null;
   if (info)
-    info.forEach((i: string) => {
-      toast({ type: "info", message: i });
+    info.forEach((message: string) => {
+      toast["info"](message);
     });
   return (
     <>
