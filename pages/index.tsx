@@ -10,7 +10,7 @@ import { User } from "../server/model/userModel";
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { req } = ctx;
   const { user, session } = req as Request;
-  let info: string[];
+  let info: string[] = null;
   if (session.flash?.info?.length) {
     info = session.flash.info;
     delete session.flash["info"];
@@ -19,7 +19,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       data: user ? JSON.stringify(user) : null,
-      info: info || null,
+      info,
     },
   };
 };

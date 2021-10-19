@@ -25,7 +25,7 @@ async function verify(req, res) {
     }
   );
   const returnTo = req.session.returnTo;
-  delete req.session.returnTo;
+  delete req.session["returnTo"];
   mail(
     mailTo,
     "Verify account",

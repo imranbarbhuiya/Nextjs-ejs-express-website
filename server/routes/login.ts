@@ -133,7 +133,7 @@ route
             res.redirect("/register");
           } else {
             passport.authenticate("local")(req, res, () => {
-              delete req.session.referred;
+              delete req.session["referred"];
               next();
             });
           }
