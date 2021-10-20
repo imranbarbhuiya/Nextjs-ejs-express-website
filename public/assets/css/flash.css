@@ -12,17 +12,20 @@
   min-height: 65px;
   font-size: 16px;
   margin-bottom: 5px;
-  box-shadow: 1px 2px 8px 2px #888888;
+  box-shadow: 0 1px 10px 0 rgb(0 0 0 / 10%), 0 2px 15px 0 rgb(0 0 0 / 5%);
   border-radius: 5px;
   position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  animation: flash_appear 1s;
+  animation: flash_appear none ease 500ms;
+  overflow: hidden;
+  cursor: pointer;
 }
 .flash .flash-box.flash_hide {
+  opacity: 0;
   transform: translateX(90%);
-  animation: flash_remove 2s;
+  animation: flash_remove none ease 500ms;
 }
 @keyframes flash_appear {
   0% {
@@ -35,37 +38,41 @@
     transform: translateX(0);
   }
   100% {
-    opacity: 0;
     transform: translateX(100%);
   }
 }
 
 .flash .success .icon {
-  color: #47d664;
+  fill: #07bc0c;
 }
 
 .flash .error .icon {
-  color: #f14014;
+  fill: #e74c3c;
 }
 
 .flash .info .icon {
-  color: blue;
+  fill: #3498db;
 }
 
 .flash .warning .icon {
-  color: yellow;
+  fill: #f1c40f;
 }
 
-.flash .fa {
-  font-size: 20px;
+.flash .icon {
   padding: 0 12px;
-  background-color: transparent;
-  border: none;
 }
 
 .flash .flash-message {
-  margin: 10px 0;
-  color: rgb(117, 117, 161);
+  margin: 10px 30px 10px 0;
+  color: #757575;
+}
+
+.flash .flash-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  fill: dimgray;
+  cursor: pointer;
 }
 
 .flash .flash-range {
@@ -76,7 +83,7 @@
   width: 0;
   background-color: #47d664;
   border-radius: 0 0 0px 5px;
-  animation: range 8s;
+  animation: range linear 1 forwards 5s;
 }
 
 @keyframes range {
@@ -84,7 +91,7 @@
     width: 100%;
     border-radius: 0 0 5px 5px;
   }
-  15% {
+  5% {
     border-radius: 0 0 0px 5px;
     width: 100%;
   }

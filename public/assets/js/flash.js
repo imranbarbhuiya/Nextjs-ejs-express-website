@@ -6,12 +6,12 @@ closeButton.forEach((close) => {
   });
   setTimeout(() => {
     closeFlash(close.parentElement);
-  }, 8000);
+  }, 5000);
 });
 
 function closeFlash(node) {
   node.classList.add("flash_hide");
   setTimeout(() => {
     node.remove();
-  }, 2000);
+  }, 500);
 }
