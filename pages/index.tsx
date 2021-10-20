@@ -4,6 +4,7 @@ import type { NextPage } from "next";
 // next components
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
+import Link from "next/link";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 // user type
@@ -123,6 +124,9 @@ const Home: NextPage = ({
           <a className="btn btn-success ms-5" href="blog">
             Blogs
           </a>
+          <Link href="/test">
+            <a className="btn btn-success ms-5">Test</a>
+          </Link>
         </div>
       </div>
     </>
