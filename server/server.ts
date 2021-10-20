@@ -60,11 +60,9 @@ client.prepare().then(() => {
     )
     // serve favicon
     .use(
-      serveFavicon(
-        path.join(__dirname, "..", "public", "assets", "img", "favicon.ico")
-      )
+      serveFavicon(path.join(__dirname, "..", "public", "img", "favicon.ico"))
     )
-    // set static files
+    // set static file directory
     .use(express.static("public"))
     // set view engine
     .set("view engine", "ejs")
@@ -161,8 +159,8 @@ client.prepare().then(() => {
   });
 
   // listening to port
-  app.listen(port, () => {
-    Logger.debug(`Server started at port ${port}`);
+  const listener = app.listen(port, () => {
+    Logger.info(`Started server on ${JSON.stringify(listener.address())}`);
   });
 });
 

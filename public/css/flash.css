@@ -42,23 +42,23 @@
   }
 }
 
-.flash .success .icon {
-  fill: #07bc0c;
+.flash .success {
+  --color: #07bc0c;
+}
+.flash .error {
+  --color: #e74c3c;
 }
 
-.flash .error .icon {
-  fill: #e74c3c;
+.flash .info {
+  --color: #3498db;
 }
 
-.flash .info .icon {
-  fill: #3498db;
-}
-
-.flash .warning .icon {
-  fill: #f1c40f;
+.flash .warning {
+  --color: #f1c40f;
 }
 
 .flash .icon {
+  fill: var(--color);
   padding: 0 12px;
 }
 
@@ -81,7 +81,7 @@
   left: 0;
   height: 5px;
   width: 0;
-  background-color: #47d664;
+  background-color: var(--color);
   border-radius: 0 0 0px 5px;
   animation: range linear 1 forwards 5s;
 }
