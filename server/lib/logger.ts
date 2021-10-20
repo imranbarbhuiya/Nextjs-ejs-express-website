@@ -1,5 +1,5 @@
 import winston from "winston";
-
+import "winston-daily-rotate-file";
 // Define severity levels.
 const levels = {
   error: 0,
@@ -48,14 +48,24 @@ const format = winston.format.combine(
 const transports = [
   // Allow the use the console to print the messages
   new winston.transports.Console(),
-  // Allow to print all the error level messages inside the error.log file
-  new winston.transports.File({
-    filename: "logs/error.log",
+  // Allow to print all the error level messages inside the error.log file and delete them if file size becomes 10mb
+  new winston.transports.DailyRotateFile({
+    dirname: "logs",
+    filename: "error-%DATE%",
+    datePattern: "YYYY-MM-DD-HH",
+    extension: ".log",
+    maxSize: "10m",
     level: "error",
   }),
   // Allow to print all the error message inside the all.log file
   // (also the error log that are also printed inside the error.log)
-  new winston.transports.File({ filename: "logs/all.log" }),
+  new winston.transports.DailyRotateFile({
+    dirname: "logs",
+    filename: "all-%DATE%",
+    datePattern: "YYYY-MM-DD-HH",
+    extension: ".log",
+    maxSize: "10m",
+  }),
 ];
 
 // Create the logger instance that has to be exported
