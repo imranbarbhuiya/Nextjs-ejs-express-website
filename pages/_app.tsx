@@ -1,7 +1,7 @@
 // next types
 import type { AppProps } from "next/app";
 import NextNprogress from "nextjs-progressbar";
-import * as React from "react";
+import React from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
