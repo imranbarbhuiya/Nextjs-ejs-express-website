@@ -4,7 +4,7 @@ import type { NextPage } from "next";
 // next components
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
-import React from "react";
+import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 // user type
 import { User } from "../server/model/userModel";
@@ -12,9 +12,9 @@ import { User } from "../server/model/userModel";
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { req } = ctx;
   const { user, session } = req as Request;
-  let info: string[] = null;
-  let error: string[] = null;
-  let success: string[] = null;
+  let info: string[] = [];
+  let error: string[] = [];
+  let success: string[] = [];
   if (session.flash?.success?.length) {
     success = session.flash.success;
     delete session.flash["success"];
@@ -43,11 +43,15 @@ const Home: NextPage = ({
   info,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  let user: User = userData ? JSON.parse(userData) : null;
-  toast["error"]("error");
-  if (success) toast["success"](success);
-  if (info) toast["info"](info);
-  if (error) toast["error"](error);
+  let user: User = userData ? JSON.parse(userData) : null,
+    successMsg = success[0],
+    infoMsg = info[0],
+    errorMsg = error[0];
+  useEffect(() => {
+    if (successMsg) toast["success"](successMsg);
+    if (infoMsg) toast["info"](infoMsg);
+    if (errorMsg) toast["error"](errorMsg);
+  }, [successMsg, infoMsg, errorMsg]);
   return (
     <>
       <Head>
