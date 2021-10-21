@@ -69,20 +69,24 @@ route
   .get(
     "/edit/:id",
     ensureLoggedIn("/login"),
-    handleRejection(async (req: Request, res: Response, next: NextFunction) => {
-      const blog = await blogModel.findById(req.params.id);
-      req.blog = blog;
-      next();
-    }),
+    handleRejection(
+      async (req: Request, _res: Response, next: NextFunction) => {
+        const blog = await blogModel.findById(req.params.id);
+        req.blog = blog;
+        next();
+      }
+    ),
     isAdminOrBlogOwner("edit")
   )
   .put(
     "/:id",
     ensureLoggedIn("/login"),
-    handleRejection(async (req: Request, res: Response, next: NextFunction) => {
-      req.blog = await blogModel.findById(req.params.id);
-      next();
-    }),
+    handleRejection(
+      async (req: Request, _res: Response, next: NextFunction) => {
+        req.blog = await blogModel.findById(req.params.id);
+        next();
+      }
+    ),
     saveBlogAndRedirect("edit")
   )
   .get(

@@ -34,3 +34,4 @@ const courseModel = model<Course>(
   courseSchema
 ) as MongooseFuzzyModel<Course>;
 export default courseModel;
+export type { Course };

@@ -2,7 +2,12 @@
 import flash from "connect-flash";
 import connect_redis from "connect-redis";
 import cookieParser from "cookie-parser";
-import express, { NextFunction, Request, Response } from "express";
+import express, {
+  ErrorRequestHandler,
+  NextFunction,
+  Request,
+  Response,
+} from "express";
 import session from "express-session";
 import helmet from "helmet";
 import methodOverride from "method-override";
@@ -106,7 +111,7 @@ client.prepare().then(() => {
   passport.deserializeUser(UserModel.deserializeUser());
 
   // calling passport social auth function
-  passportSocialAuth(passport);
+  passportSocialAuth();
 
   app
     // adding index router
@@ -138,14 +143,14 @@ client.prepare().then(() => {
     return handle(req, res);
   });
   // catch 404 and forward to error handler
-  app.use(function (_req: Request, _res: Response, next: NextFunction) {
+  app.use((_req: Request, _res: Response, next: NextFunction) => {
     const err: Error = new Error("Not Found");
     err.status = 404;
     next(err);
   });
 
   // error handlers
-  app.use(function (err: Error, _req: Request, res: Response) {
+  app.use(((err: Error, _req: Request, res: Response) => {
     if (err.code === "EBADCSRFTOKEN") {
       res.status(403);
       res.send("Forbidden");
@@ -156,7 +161,7 @@ client.prepare().then(() => {
       message: err.message,
       status: err.status,
     });
-  });
+  }) as ErrorRequestHandler);
 
   // listening to port
   const listener = app.listen(port, () => {

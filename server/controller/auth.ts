@@ -1,5 +1,6 @@
 // requiring dependencies
 import axios from "axios";
+import passport from "passport";
 import {
   Profile as FacebookProfile,
   Strategy as FacebookStrategy,
@@ -18,7 +19,7 @@ import UserModel, { User } from "../model/userModel";
 //
 
 // setup the google facebook and github strategy
-const passportSocialAuth = (passport: any) => {
+const passportSocialAuth = () => {
   passport.use(
     new GoogleStrategy(
       {
