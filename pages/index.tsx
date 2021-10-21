@@ -31,20 +31,27 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      userData: user ? JSON.stringify(user) : null,
+      userData: user
+        ? {
+            username: user.username,
+            verified: user.verified,
+            email: user.email,
+          }
+        : null,
       success,
       info,
       error,
     },
   };
 };
+
 const Home: NextPage = ({
   userData,
   success,
   info,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  let user: User = userData ? JSON.parse(userData) : null,
+  let user: User = userData || null,
     successMsg = success[0],
     infoMsg = info[0],
     errorMsg = error[0];
