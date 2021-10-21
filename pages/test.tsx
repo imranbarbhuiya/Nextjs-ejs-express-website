@@ -6,6 +6,14 @@ const Test: NextPage = () => {
     <>
       <h1>Why you&#39;ve came here? </h1>
       <Link href="/">Go Back</Link>
+      <p>
+        Ok let&#39;s try something funny. Go to inspect find body tag add a
+        background color (bright) then click
+      </p>
+      <Link href="/">
+        <a>Home</a>
+      </Link>
+      <p>Lemme what magic happened.</p>
     </>
   );
 };
