@@ -1,9 +1,9 @@
-import { model, Schema } from "mongoose";
+import { Document, model, Schema } from "mongoose";
 import mongoose_fuzzy_searching, {
   MongooseFuzzyModel,
 } from "mongoose-fuzzy-searching";
 
-interface Course {
+interface Course extends Document {
   title: string;
   author: string;
   authorId: string;

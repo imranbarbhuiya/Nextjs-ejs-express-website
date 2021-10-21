@@ -13,7 +13,7 @@ import helmet from "helmet";
 import methodOverride from "method-override";
 import next from "next";
 import passport from "passport";
-import path from "path";
+import { join } from "path";
 import serveFavicon from "serve-favicon";
 // controllers
 import passportSocialAuth from "./controller/auth";
@@ -35,7 +35,7 @@ require("dotenv").config();
 // connecting to mongodb
 require("./db/mongoDB");
 // next setup
-const port = parseInt(process.env.PORT, 10);
+const port = parseInt(process.env.PORT as string, 10);
 const dev = process.env.NODE_ENV !== "production";
 const client = next({ dev });
 const handle = client.getRequestHandler();
@@ -64,9 +64,7 @@ client.prepare().then(() => {
       })
     )
     // serve favicon
-    .use(
-      serveFavicon(path.join(__dirname, "..", "public", "img", "favicon.ico"))
-    )
+    .use(serveFavicon(join(__dirname, "..", "public", "img", "favicon.ico")))
     // set static file directory
     .use(express.static("public"))
     // set view engine
@@ -85,7 +83,7 @@ client.prepare().then(() => {
     .use(
       session({
         name: "codversity_session_id",
-        secret: process.env.SECRET,
+        secret: process.env.SECRET as string,
         resave: false,
         saveUninitialized: false,
         store: new RedisStore({ client: redisClient }),
@@ -122,7 +120,7 @@ client.prepare().then(() => {
     .use(
       (
         req: express.Request,
-        res: express.Response,
+        _res: express.Response,
         next: express.NextFunction
       ) => {
         if (req.user && req.user.role == "admin") {

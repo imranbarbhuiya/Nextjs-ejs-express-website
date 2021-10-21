@@ -1,6 +1,6 @@
-import mongoose, { model, Schema } from "mongoose";
+import mongoose, { Document, model, Schema } from "mongoose";
 
-interface Course {
+interface Course extends Document {
   userId: string;
   courses: object;
 }

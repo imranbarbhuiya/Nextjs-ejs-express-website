@@ -23,8 +23,8 @@ const passportSocialAuth = () => {
   passport.use(
     new GoogleStrategy(
       {
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        clientID: process.env.GOOGLE_CLIENT_ID as string,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
         callbackURL: `/auth/google/login`,
         userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
         passReqToCallback: false,
@@ -74,8 +74,8 @@ const passportSocialAuth = () => {
   passport.use(
     new GitHubStrategy(
       {
-        clientID: process.env.GITHUB_CLIENT_ID,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        clientID: process.env.GITHUB_CLIENT_ID as string,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
         callbackURL: "/auth/github/login",
       },
       async (
@@ -141,8 +141,8 @@ const passportSocialAuth = () => {
   passport.use(
     new FacebookStrategy(
       {
-        clientID: process.env.FACEBOOK_APP_ID,
-        clientSecret: process.env.FACEBOOK_APP_SECRET,
+        clientID: process.env.FACEBOOK_APP_ID as string,
+        clientSecret: process.env.FACEBOOK_APP_SECRET as string,
         callbackURL: "/auth/facebook/login",
         enableProof: true,
         profileFields: ["id", "emails", "displayName"],
@@ -182,7 +182,7 @@ const passportSocialAuth = () => {
                 email: profile.emails[0].value,
                 verified: true,
               });
-              user.save((err: Error, user: User) => {
+              user.save((error: Error, user: User) => {
                 if (err) {
                   return next(err);
                 }
