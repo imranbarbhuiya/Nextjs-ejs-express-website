@@ -13,21 +13,13 @@ import { User } from "../server/model/userModel";
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { req } = ctx;
   const { user, session } = req as Request;
-  let info: string[] = [];
-  let error: string[] = [];
-  let success: string[] = [];
-  if (session.flash?.success?.length) {
-    success = session.flash.success;
-    delete session.flash["success"];
-  }
-  if (session.flash?.info?.length) {
-    info = session.flash.info;
-    delete session.flash["info"];
-  }
-  if (session.flash?.error?.length) {
-    error = session.flash.error;
-    delete session.flash["error"];
-  }
+  let message: { info?: string[]; error?: string[]; success?: string[] } = {};
+  ["success", "info", "error"].forEach((type) => {
+    if (session.flash?.[type]?.length) {
+      message[type] = session.flash[type];
+      delete session.flash[type];
+    }
+  });
 
   return {
     props: {
@@ -38,23 +30,19 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             email: user.email,
           }
         : null,
-      success,
-      info,
-      error,
+      message,
     },
   };
 };
 
 const Home: NextPage = ({
   userData,
-  success,
-  info,
-  error,
+  message,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   let user: User = userData || null,
-    successMsg = success[0],
-    infoMsg = info[0],
-    errorMsg = error[0];
+    successMsg = message.success?.[0],
+    infoMsg = message.info?.[0],
+    errorMsg = message.error?.[0];
   useEffect(() => {
     if (successMsg) toast["success"](successMsg);
     if (infoMsg) toast["info"](infoMsg);
