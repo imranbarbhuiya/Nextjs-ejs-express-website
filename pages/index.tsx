@@ -102,13 +102,17 @@ const Home: NextPage = ({
                 <li className="field-text">Email: {user.email}</li>
               </ul>
               <Link href="/logout">
-                <a className="btn btn-warning" href="/logout" role="button">
+                <a
+                  className="btn btn-warning me-2"
+                  href="/logout"
+                  role="button"
+                >
                   Log Out
                 </a>
               </Link>
               {!user.verified && (
                 <Link href="/verify">
-                  <a className="btn btn-success" role="button">
+                  <a className="btn btn-success me-2" role="button">
                     verify
                   </a>
                 </Link>
@@ -117,24 +121,24 @@ const Home: NextPage = ({
           ) : (
             <>
               <Link href="/register">
-                <a className="btn btn-primary" role="button">
+                <a className="btn btn-primary me-2" role="button">
                   Register
                 </a>
               </Link>
               <Link href="/login">
-                <a className="btn btn-primary" role="button">
+                <a className="btn btn-primary me-2" role="button">
                   Login
                 </a>
               </Link>
             </>
           )}
           <Link href="/blog">
-            <a className="btn btn-success" role="button">
+            <a className="btn btn-success me-2" role="button">
               Blogs
             </a>
           </Link>
           <Link href="/test">
-            <a className="btn btn-success" role="button">
+            <a className="btn btn-success me-2" role="button">
               Test
             </a>
           </Link>
