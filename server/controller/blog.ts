@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import natural from "natural";
 import Logger from "../lib/logger";
 // mongoose model
-import blogModel from "../model/blogModel";
+import blogModel, { Blog } from "../model/blogModel";
 import { User } from "../model/userModel";
 // object destruction
 const { Metaphone } = natural;
@@ -40,12 +40,12 @@ function saveBlogAndRedirect(path: string) {
 // view blog controller
 function viewBlogs(path: string) {
   return async (req: Request, res: Response, next: NextFunction) => {
-    let blogs: any;
+    let blogs: Blog | any;
     const searchQuery = req.query.search;
     const autocompleteQuery = req.query.term;
     if (path === "myblogs") {
       if (searchQuery) {
-        blogs = await search(searchQuery, 0, req.user.id);
+        blogs = await search(searchQuery as string, 0, req.user.id);
       } else {
         blogs = await blogModel
           .find({ author: req.user.id })
@@ -53,9 +53,9 @@ function viewBlogs(path: string) {
       }
     } else if (path === "all") {
       if (searchQuery) {
-        blogs = await search(searchQuery, 0);
+        blogs = await search(searchQuery as string, 0);
       } else if (autocompleteQuery) {
-        blogs = await search(autocompleteQuery, 0);
+        blogs = await search(autocompleteQuery as string, 0);
         blogs = blogs.map((blog: { title: any }) => blog.title);
         return res.send(blogs);
       } else {
@@ -70,7 +70,7 @@ function viewBlogs(path: string) {
       }
     } else if (path === "unverified") {
       if (searchQuery) {
-        blogs = await search(searchQuery, 0, false, true);
+        blogs = await search(searchQuery as string, 0, false, true);
       } else {
         blogs = await blogModel
           .find({ verified: false })
@@ -89,7 +89,7 @@ function viewBlogs(path: string) {
 }
 // search function
 async function search(
-  searchQuery: any,
+  searchQuery: string,
   skip?: number,
   author?: boolean | string,
   unverified?: boolean
@@ -97,7 +97,7 @@ async function search(
   if (!skip) skip = 0;
   const keywords = Metaphone.process(searchQuery);
   try {
-    let blogs: any;
+    let blogs: Blog | any;
     if (author)
       blogs = await blogModel
         .fuzzySearch(`${keywords} ${searchQuery}`, {
