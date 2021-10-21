@@ -101,38 +101,42 @@ const Home: NextPage = ({
                 <li className="field-text">name: {user.username}</li>
                 <li className="field-text">Email: {user.email}</li>
               </ul>
-              <a className="btn btn-warning me-5" href="/logout" role="button">
-                Log Out
-              </a>
-              {!user.verified && (
-                <a
-                  className="btn btn-success me-5"
-                  href="/verify"
-                  role="button"
-                >
-                  verify
+              <Link href="/logout">
+                <a className="btn btn-warning" href="/logout" role="button">
+                  Log Out
                 </a>
+              </Link>
+              {!user.verified && (
+                <Link href="/verify">
+                  <a className="btn btn-success" role="button">
+                    verify
+                  </a>
+                </Link>
               )}
             </>
           ) : (
             <>
-              <a
-                className="btn btn-primary me-5"
-                href="/register"
-                role="button"
-              >
-                Register
-              </a>
-              <a className="btn btn-primary ms-5" href="/login" role="button">
-                Login
-              </a>
+              <Link href="/register">
+                <a className="btn btn-primary" role="button">
+                  Register
+                </a>
+              </Link>
+              <Link href="/login">
+                <a className="btn btn-primary" role="button">
+                  Login
+                </a>
+              </Link>
             </>
           )}
-          <a className="btn btn-success ms-5" href="blog">
-            Blogs
-          </a>
+          <Link href="/blog">
+            <a className="btn btn-success" role="button">
+              Blogs
+            </a>
+          </Link>
           <Link href="/test">
-            <a className="btn btn-success ms-5">Test</a>
+            <a className="btn btn-success" role="button">
+              Test
+            </a>
           </Link>
         </div>
       </div>
