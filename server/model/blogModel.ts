@@ -3,7 +3,7 @@ import createDOMPurify from "dompurify";
 import { NextFunction } from "express";
 import { JSDOM } from "jsdom";
 import marked from "marked";
-import { Document, model, Schema } from "mongoose";
+import { Error, model, Schema } from "mongoose";
 import fuzzySearching, { MongooseFuzzyModel } from "mongoose-fuzzy-searching";
 import slugify from "slugify";
 
@@ -11,7 +11,7 @@ import slugify from "slugify";
 const window: any = new JSDOM("").window;
 const DOMpurify = createDOMPurify(window);
 
-interface Blog extends Document {
+interface Blog {
   authorName: string;
   author: string;
   title: string;
@@ -100,7 +100,7 @@ blogSchema.pre("validate", function (next) {
   next();
 });
 
-blogSchema.post("save", (error: Error, _doc: string, next: NextFunction) => {
+blogSchema.post("save", (error: _Error, _doc: Blog, next: NextFunction) => {
   if (error.name === "MongoServerError" && error.code === 11000) {
     next(new Error(`${Object.keys(error.keyValue)[0]} must be unique`));
   } else {
@@ -115,8 +115,7 @@ const blogModel = model<Blog>("blog", blogSchema) as MongooseFuzzyModel<Blog>;
 export default blogModel;
 export type { Blog };
 
-interface Error {
-  name?: string;
+class _Error extends Error {
   code?: number;
-  keyValue: {};
+  keyValue?: string;
 }
