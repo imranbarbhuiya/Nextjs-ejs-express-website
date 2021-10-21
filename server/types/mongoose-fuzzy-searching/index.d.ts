@@ -8,7 +8,15 @@ declare module "mongoose-fuzzy-searching" {
   export interface MongooseFuzzyModel<T extends Document, QueryHelpers = {}>
     extends Model<T, QueryHelpers> {
     fuzzySearch(
-      search: String,
+      search:
+        | String
+        | {
+            query: string;
+            minSize?: number;
+            prefixOnly: boolean;
+            exact: boolean;
+          },
+      filter?: Object,
       callBack?: (err: any, data: Model<T, QueryHelpers>[]) => void
     ): DocumentQuery<T[], T, QueryHelpers>;
   }

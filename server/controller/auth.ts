@@ -1,5 +1,6 @@
 // requiring dependencies
 import axios from "axios";
+import { CallbackError } from "mongoose";
 import passport from "passport";
 import {
   Profile as FacebookProfile,
@@ -10,7 +11,7 @@ import {
   Strategy as GitHubStrategy,
 } from "passport-github2";
 import {
-  Profile,
+  Profile as GoogleProfile,
   Strategy as GoogleStrategy,
   VerifyCallback,
 } from "passport-google-oauth20";
@@ -32,21 +33,21 @@ const passportSocialAuth = () => {
       (
         _accessToken: string,
         _refreshToken: string,
-        profile: Profile,
+        profile: GoogleProfile,
         next: VerifyCallback
       ) => {
         UserModel.findOne(
           {
             email: profile.emails[0].value,
           },
-          (err: Error, user: any) => {
+          (err: Error, user: User) => {
             if (err) {
               return next(err);
             }
             if (user) {
               if (user.authId === profile.id) return next(err, user);
               else
-                return next(null, null, {
+                return next(null, undefined, {
                   message: `You'd authenticated with ${
                     user.authProvider || "password"
                   }`,
@@ -59,7 +60,7 @@ const passportSocialAuth = () => {
                 email: profile.emails[0].value,
                 verified: true,
               });
-              user.save((err: Error, user: User) => {
+              user.save((err: CallbackError, user: User) => {
                 if (err) {
                   return next(err);
                 }
@@ -82,7 +83,11 @@ const passportSocialAuth = () => {
         accessToken: string,
         _refreshToken: string,
         profile: GithubProfile,
-        next: (error: Error, user?: User, info?: { message: string }) => any
+        next: (
+          error: string | Error | null,
+          user?: User,
+          info?: { message: string }
+        ) => any
       ) => {
         let primaryEmail: string;
         await axios
@@ -97,7 +102,7 @@ const passportSocialAuth = () => {
               (email: { primary: boolean }) => email.primary === true
             )[0].email;
             if (!primaryEmail) {
-              return next(null, null, {
+              return next(null, undefined, {
                 message: `${profile.provider} isn't providing any email address try different method`,
               });
             }
@@ -112,7 +117,7 @@ const passportSocialAuth = () => {
                 if (user) {
                   if (user.authId === profile.id) return next(err, user);
                   else
-                    return next(null, null, {
+                    return next(null, undefined, {
                       message: `You'd authenticated with ${
                         user.authProvider || "password"
                       }`,
@@ -125,7 +130,7 @@ const passportSocialAuth = () => {
                     email: primaryEmail,
                     verified: true,
                   });
-                  user.save((err: Error, user: User) => {
+                  user.save((err: CallbackError, user: User) => {
                     if (err) {
                       return next(err);
                     }
@@ -151,10 +156,14 @@ const passportSocialAuth = () => {
         _accessToken: string,
         _refreshToken: string,
         profile: FacebookProfile,
-        next: (error: Error, user?: User, info?: { message: string }) => any
+        next: (
+          error: string | Error | null,
+          user?: User,
+          info?: { message: string }
+        ) => any
       ) => {
         if (!profile.emails[0].value) {
-          return next(null, null, {
+          return next(null, undefined, {
             message: `${profile.provider} isn't providing any email address try different method`,
           });
         }
@@ -169,7 +178,7 @@ const passportSocialAuth = () => {
             if (user) {
               if (user.authId === profile.id) return next(err, user);
               else
-                return next(null, null, {
+                return next(null, undefined, {
                   message: `You'd authenticated with ${
                     user.authProvider || "password"
                   }`,
@@ -182,7 +191,7 @@ const passportSocialAuth = () => {
                 email: profile.emails[0].value,
                 verified: true,
               });
-              user.save((error: Error, user: User) => {
+              user.save((err: CallbackError, user: User) => {
                 if (err) {
                   return next(err);
                 }
