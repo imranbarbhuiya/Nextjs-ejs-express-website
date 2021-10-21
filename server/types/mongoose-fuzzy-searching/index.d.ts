@@ -1,4 +1,4 @@
-declare module "mongoose-fuzzy-search" {
+declare module "mongoose-fuzzy-searching" {
   import { Document, DocumentQuery, Model, Schema } from "mongoose";
 
   export interface MongooseFuzzyOptions<T> {

@@ -20,10 +20,6 @@ interface User extends PassportLocalDocument {
   role?: string;
   referralCode?: string;
   referredBy?: string;
-  hash?: string;
-  salt?: string;
-  attempts?: number;
-  last?: Date;
   resetPasswordToken?: string;
   verificationToken?: string;
 }

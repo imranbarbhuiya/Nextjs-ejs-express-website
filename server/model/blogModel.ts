@@ -3,7 +3,7 @@ import createDOMPurify from "dompurify";
 import { NextFunction } from "express";
 import { JSDOM } from "jsdom";
 import marked from "marked";
-import { Error, model, Schema } from "mongoose";
+import { Document, Error, model, Schema } from "mongoose";
 import fuzzySearching, { MongooseFuzzyModel } from "mongoose-fuzzy-searching";
 import slugify from "slugify";
 
@@ -11,7 +11,7 @@ import slugify from "slugify";
 const window: any = new JSDOM("").window;
 const DOMpurify = createDOMPurify(window);
 
-interface Blog {
+interface Blog extends Document {
   authorName: string;
   author: string;
   title: string;
