@@ -32,7 +32,7 @@ const userSchema = new Schema({
   role: { type: String, required: true, default: "student" },
   referralCode: {
     type: String,
-    default() {
+    default: function () {
       let hash = 0;
       for (let i = 0; i < this.email.length; i++) {
         hash = this.email.charCodeAt(i) + ((hash << 5) - hash);

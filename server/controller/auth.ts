@@ -38,7 +38,7 @@ const passportSocialAuth = () => {
       ) => {
         UserModel.findOne(
           {
-            email: profile.emails[0].value,
+            email: profile.emails?.[0].value,
           },
           (err: Error, user: User) => {
             if (err) {
@@ -57,7 +57,7 @@ const passportSocialAuth = () => {
                 authProvider: profile.provider,
                 authId: profile.id,
                 username: profile.displayName,
-                email: profile.emails[0].value,
+                email: profile.emails?.[0].value,
                 verified: true,
               });
               user.save((err: CallbackError, user: User) => {
@@ -162,14 +162,14 @@ const passportSocialAuth = () => {
           info?: { message: string }
         ) => any
       ) => {
-        if (!profile.emails[0].value) {
+        if (!profile.emails?.[0].value) {
           return next(null, undefined, {
             message: `${profile.provider} isn't providing any email address try different method`,
           });
         }
         UserModel.findOne(
           {
-            email: profile.emails[0].value,
+            email: profile.emails?.[0].value,
           },
           (err: Error, user: User) => {
             if (err) {
@@ -188,7 +188,7 @@ const passportSocialAuth = () => {
                 authProvider: profile.provider,
                 authId: profile.id,
                 username: profile.displayName,
-                email: profile.emails[0].value,
+                email: profile.emails?.[0].value,
                 verified: true,
               });
               user.save((err: CallbackError, user: User) => {
