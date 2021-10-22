@@ -38,14 +38,10 @@ route
       keywords,
       verified: true,
     });
-    course.save((err: Error) => {
-      if (err) Logger.error(err);
-      else {
-        res.render("course/courseAdd", { done: true });
-      }
-    });
+    course.save();
+    res.render("course/courseAdd", { done: true });
   })
-  .get("/test", ensureLoggedIn(), async (req, res) => {
+  .get("/mycourses", ensureLoggedIn(), async (req, res) => {
     // await courseDataModel.findOneAndUpdate(
     //   {
     //     userId: req.user.id,
@@ -61,8 +57,7 @@ route
     const data = await courseDataModel.findOne({
       courses: { $elemMatch: { courseId: req.user.id } },
     });
-    Logger.debug(data);
-    res.sendStatus(200);
+    res.send(data);
   })
   .get("/play", (_req: Request, res: Response) => {
     res.render("course/play");
