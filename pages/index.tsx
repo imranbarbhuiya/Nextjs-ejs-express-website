@@ -12,7 +12,9 @@ import { User } from "../server/model/userModel";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { req } = ctx;
-  const { user, session } = req as Request;
+  const { user, session, isAuthenticated, query } = req as Request;
+  if (!isAuthenticated())
+    if (query.referred) session.referred = query.referred as string;
   let message: { info?: string[]; error?: string[]; success?: string[] } = {};
   ["success", "info", "error"].forEach((type) => {
     if (session.flash?.[type]?.length) {
