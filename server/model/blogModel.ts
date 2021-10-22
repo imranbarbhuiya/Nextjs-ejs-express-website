@@ -12,6 +12,7 @@ const window: any = new JSDOM("").window;
 const DOMpurify = createDOMPurify(window);
 
 interface Blog extends Document {
+  emptyHtml(): boolean;
   authorName: string;
   author: string;
   title: string;

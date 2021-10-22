@@ -40,7 +40,7 @@ function saveBlogAndRedirect(path: string) {
 // view blog controller
 function viewBlogs(path: string) {
   return async (req: Request, res: Response, next: NextFunction) => {
-    let blogs: Blog | any;
+    let blogs: Blog[];
     const searchQuery = req.query.search;
     const autocompleteQuery = req.query.term;
     if (path === "myblogs") {
@@ -97,7 +97,7 @@ async function search(
   if (!skip) skip = 0;
   const keywords = Metaphone.process(searchQuery);
   try {
-    let blogs: Blog | any;
+    let blogs: Blog[];
     if (author)
       blogs = await blogModel
         .fuzzySearch(`${keywords} ${searchQuery}`, {
@@ -136,7 +136,7 @@ declare global {
   namespace Express {
     export interface User extends _User {}
     export interface Request {
-      blog: any;
+      blog: Blog;
     }
   }
 }

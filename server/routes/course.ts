@@ -13,7 +13,7 @@ const route = Router();
 
 route
   .get("/", async (req, res) => {
-    let courses: Course | any;
+    let courses: Course[];
     const searchQuery = req.query.search;
     if (searchQuery) {
       const keywords = Metaphone.process(searchQuery as string);

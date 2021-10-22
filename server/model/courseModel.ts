@@ -4,6 +4,7 @@ import mongoose_fuzzy_searching, {
 } from "mongoose-fuzzy-searching";
 
 interface Course extends Document {
+  _id: string;
   title: string;
   author: string;
   authorId: string;

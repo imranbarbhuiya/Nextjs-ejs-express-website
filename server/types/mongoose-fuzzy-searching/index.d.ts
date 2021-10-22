@@ -1,5 +1,5 @@
 declare module "mongoose-fuzzy-searching" {
-  import { Document, DocumentQuery, Model, Schema } from "mongoose";
+  import { Document, Model, Schema } from "mongoose";
 
   export interface MongooseFuzzyOptions<T> {
     fields: (T extends Object ? keyof T : string)[];
