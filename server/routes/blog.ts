@@ -5,7 +5,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { saveBlogAndRedirect, viewBlogs } from "../controller/blog";
 import { handleRejection } from "../controller/handleRejection";
 // middleware
-import { isAdmin, isAdminOrBlogOwner } from "../middleware/roles";
+import { isAdmin, isAdminOrBlogOwner } from "../middleware/roles.middleware";
 // mongoose models
 import blogModel, { Blog } from "../model/blogModel";
 import { User } from "../model/userModel";

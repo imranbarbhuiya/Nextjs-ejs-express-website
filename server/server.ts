@@ -16,8 +16,9 @@ import passportSocialAuth from "./controller/auth";
 import redisClient from "./db/redisDB";
 // Logger
 import Logger from "./lib/logger";
+import errorMiddleware from "./middleware/error.middleware";
 // middleware
-import morganMiddleware from "./middleware/morgan";
+import morganMiddleware from "./middleware/morgan.middleware";
 // Mongoose Models
 import UserModel, { User } from "./model/userModel";
 // routes
@@ -137,18 +138,7 @@ client.prepare().then(() => {
   });
 
   // error handlers
-  app.use(((err: Error, _req: Request, res: Response) => {
-    if (err.code === "EBADCSRFTOKEN") {
-      res.status(403);
-      res.send("Forbidden");
-      return;
-    }
-    res.status(err.status || 500);
-    res.render("error", {
-      message: err.message,
-      status: err.status,
-    });
-  }) as ErrorRequestHandler);
+  app.use(errorMiddleware as ErrorRequestHandler);
 
   // listening to port
   const listener = app.listen(port, () => {
@@ -157,11 +147,6 @@ client.prepare().then(() => {
 });
 
 // Interface setup
-interface Error {
-  code?: string;
-  status?: number;
-  message?: string;
-}
 
 // extend types
 type _User = User;
