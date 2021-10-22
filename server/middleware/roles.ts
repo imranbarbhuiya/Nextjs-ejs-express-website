@@ -1,4 +1,6 @@
-async function isAdmin(req, res, next) {
+import { NextFunction, Request, Response } from "express";
+import type { Course } from "../model/courseModel";
+async function isAdmin(req: Request, res: Response, next: NextFunction) {
   if (req.user && req.user.role === "admin") {
     next();
   } else {
@@ -6,7 +8,7 @@ async function isAdmin(req, res, next) {
   }
 }
 
-async function canAddCourse(req, res, next) {
+async function canAddCourse(req: Request, res: Response, next: NextFunction) {
   if (
     req.user &&
     (req.user.role === "instructor" || req.user.role === "admin")
@@ -17,7 +19,7 @@ async function canAddCourse(req, res, next) {
   }
 }
 
-async function canEditCourse(req, res, next) {
+async function canEditCourse(req: Request, res: Response, next: NextFunction) {
   if (
     req.user &&
     (req.user.role === "admin" || req.course.author === req.user.id)
@@ -28,7 +30,7 @@ async function canEditCourse(req, res, next) {
   }
 }
 function isAdminOrBlogOwner(path: string) {
-  return (req, res, next) => {
+  return (req: Request, res: Response, next: any) => {
     if (
       req.user &&
       (req.user.role === "admin" || req.blog.author === req.user.id)
@@ -41,3 +43,11 @@ function isAdminOrBlogOwner(path: string) {
   };
 }
 export { isAdmin, canAddCourse, canEditCourse, isAdminOrBlogOwner };
+
+declare global {
+  namespace Express {
+    export interface Request {
+      course: Course;
+    }
+  }
+}

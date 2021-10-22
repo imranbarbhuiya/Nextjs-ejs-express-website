@@ -1,5 +1,6 @@
 // importing dependencies
 import { randomBytes } from "crypto";
+import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import Logger from "../lib/logger";
 // mail module
@@ -7,7 +8,7 @@ import mail from "../lib/mail";
 // mongoose model
 import User from "../model/userModel";
 // verify controller
-async function verify(req, res) {
+async function verify(req: Request, res: Response) {
   const verificationToken = randomBytes(20).toString("hex");
   const encoded = jwt.sign(
     {
@@ -38,7 +39,7 @@ async function verify(req, res) {
     req.flash("error", "Mail send failed please try again");
     Logger.error(error);
   }
-  res.redirect(req.query.next || returnTo || "/");
+  res.redirect((req.query.next as string) || returnTo || "/");
 }
 
 export { verify };
