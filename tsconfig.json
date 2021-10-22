@@ -6,7 +6,6 @@
     "skipLibCheck": true,
     "typeRoots": ["./server/types", "./node_modules/@types"],
     "strict": false,
-    "noImplicitAny": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
