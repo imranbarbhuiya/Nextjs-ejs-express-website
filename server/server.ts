@@ -16,6 +16,7 @@ import passportSocialAuth from "./controller/auth";
 import redisClient from "./db/redisDB";
 // Logger
 import Logger from "./lib/logger";
+import adminMiddleware from "./middleware/admin.middleware";
 import errorMiddleware from "./middleware/error.middleware";
 // middleware
 import morganMiddleware from "./middleware/morgan.middleware";
@@ -113,21 +114,7 @@ client.prepare().then(() => {
     // adding login router
     .use("/", loginRoute)
     // defining admin middleware
-    .use(
-      (
-        req: express.Request,
-        _res: express.Response,
-        next: express.NextFunction
-      ) => {
-        if (req.user && req.user.role == "admin") {
-          req.admin = true;
-          next();
-        } else {
-          req.admin = false;
-          next();
-        }
-      }
-    )
+    .use(adminMiddleware)
     // adding course router
     .use("/course", courseRoute)
     // adding blog router
