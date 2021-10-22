@@ -23,7 +23,7 @@ const level = () => {
 const colors = {
   error: "red",
   warn: "yellow",
-  info: "blue",
+  info: "cyan",
   http: "magenta",
   debug: "white",
 };
@@ -54,7 +54,7 @@ const transports = [
     filename: "error-%DATE%",
     datePattern: "YYYY-MM-DD-HH",
     extension: ".log",
-    maxSize: "10m",
+    maxFiles: 3,
     level: "error",
   }),
   // Allow to print all the error message inside the all.log file
