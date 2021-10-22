@@ -2,12 +2,7 @@
 import flash from "connect-flash";
 import connect_redis from "connect-redis";
 import cookieParser from "cookie-parser";
-import express, {
-  ErrorRequestHandler,
-  NextFunction,
-  Request,
-  Response,
-} from "express";
+import express, { ErrorRequestHandler, Request, Response } from "express";
 import session from "express-session";
 import helmet from "helmet";
 import methodOverride from "method-override";
@@ -137,14 +132,8 @@ client.prepare().then(() => {
     // adding blog router
     .use("/blog", blogRoute);
   // next route
-  app.get("*", (req: Request, res: Response) => {
+  app.all("*", (req: Request, res: Response) => {
     return handle(req, res);
-  });
-  // catch 404 and forward to error handler
-  app.use((_req: Request, _res: Response, next: NextFunction) => {
-    const err: Error = new Error("Not Found");
-    err.status = 404;
-    next(err);
   });
 
   // error handlers
