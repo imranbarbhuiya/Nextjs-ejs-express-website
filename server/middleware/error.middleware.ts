@@ -1,11 +1,6 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 
-function errorMiddleware(
-  err: HttpException,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+function errorMiddleware(err: HttpException, _req: Request, res: Response) {
   if (err.code === "EBADCSRFTOKEN") {
     res.status(403);
     res.send("Forbidden");
@@ -23,8 +18,9 @@ export class HttpException extends Error {
   code?: string;
   status: number;
   message: string;
-  constructor(status: number, message: string) {
+  constructor(code: string, status: number, message: string) {
     super(message);
+    this.code = code;
     this.status = status;
     this.message = message;
   }

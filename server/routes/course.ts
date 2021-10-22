@@ -1,13 +1,10 @@
 // importing dependencies
 import { ensureLoggedIn } from "connect-ensure-login";
 import { Request, Response, Router } from "express";
-import natural from "natural";
-import Logger from "../lib/logger";
+import { Metaphone } from "natural";
 // mongoose models
 import courseDataModel from "../model/courseData";
 import courseModel, { Course } from "../model/courseModel";
-// object destruction
-const { Metaphone } = natural;
 // init express route
 const route = Router();
 

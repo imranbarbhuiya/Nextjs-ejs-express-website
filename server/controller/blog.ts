@@ -1,12 +1,9 @@
 // importing modules
 import { NextFunction, Request, Response } from "express";
-import natural from "natural";
+import { Metaphone } from "natural";
 import Logger from "../lib/logger";
 // mongoose model
 import blogModel, { Blog } from "../model/blogModel";
-import { User } from "../model/userModel";
-// object destruction
-const { Metaphone } = natural;
 
 // blog save controller
 function saveBlogAndRedirect(path: string) {
@@ -131,10 +128,8 @@ async function search(
 export { viewBlogs, saveBlogAndRedirect };
 
 // extend types
-type _User = User;
 declare global {
   namespace Express {
-    export interface User extends _User {}
     export interface Request {
       blog: Blog;
     }

@@ -2,7 +2,11 @@ import mongoose, { Document, model, Schema } from "mongoose";
 
 interface Course extends Document {
   userId: string;
-  courses: object;
+  courses: {
+    courseId: string;
+    price: number;
+    createdAt: Date;
+  }[];
 }
 
 const courseDataSchema = new Schema<Course>({
