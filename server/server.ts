@@ -2,6 +2,7 @@
 import flash from "connect-flash";
 import connect_redis from "connect-redis";
 import cookieParser from "cookie-parser";
+import csrf from "csurf";
 import express, { ErrorRequestHandler, Request, Response } from "express";
 import session from "express-session";
 import helmet from "helmet";
@@ -38,6 +39,8 @@ const client = next({ dev });
 const handle = client.getRequestHandler();
 // making redisStore for session store
 const RedisStore = connect_redis(session);
+// init csrf
+const csrfProtection = csrf({ cookie: true });
 // init next
 client.prepare().then(() => {
   // initiate app
@@ -84,7 +87,7 @@ client.prepare().then(() => {
         resave: false,
         saveUninitialized: false,
         store: new RedisStore({ client: redisClient }),
-        cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
+        cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, sameSite: true },
       })
     )
     // set flash
@@ -112,7 +115,7 @@ client.prepare().then(() => {
     // adding index router
     .use("/", indexRoute)
     // adding login router
-    .use("/", loginRoute)
+    .use("/", csrfProtection, loginRoute)
     // defining admin middleware
     .use(adminMiddleware)
     // adding course router

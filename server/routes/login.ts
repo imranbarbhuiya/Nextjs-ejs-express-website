@@ -1,7 +1,6 @@
 // importing dependencies
 import { ensureLoggedIn, ensureLoggedOut } from "connect-ensure-login";
 import { randomBytes } from "crypto";
-import csrf from "csurf";
 import { NextFunction, Request, Response, Router } from "express";
 import { body, validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
@@ -16,8 +15,6 @@ import UserModel, { User } from "../model/userModel";
 
 // init router
 const route = Router();
-// init csrf
-const csrfProtection = csrf({ cookie: true });
 route
   .get(
     "/auth/google",
@@ -67,7 +64,7 @@ route
 // for rate limiter rate-limiter-flexible is used
 
 route
-  .get("/login", csrfProtection, (req, res) => {
+  .get("/login", (req, res) => {
     res.render("login/login", {
       login: "",
       register: "none",
@@ -75,10 +72,10 @@ route
       message: req.flash(),
     });
   })
-  .post("/login", csrfProtection, loginRouteRateLimit, verify)
+  .post("/login", loginRouteRateLimit, verify)
 
   // local register system
-  .get("/register", csrfProtection, (req, res) => {
+  .get("/register", (req, res) => {
     res.render("login/login", {
       login: "none",
       register: "",
@@ -88,7 +85,7 @@ route
   })
   .post(
     "/register",
-    csrfProtection,
+
     body("username")
       .trim()
       .isLength({ min: 1 })
@@ -146,7 +143,7 @@ route
   // change password system
   .get(
     "/change",
-    csrfProtection,
+
     ensureLoggedIn({ redirectTo: "/login", setRedirectTo: false }),
     function (req, res) {
       res.render("login/change", {
@@ -157,7 +154,7 @@ route
   .post(
     "/change",
     ensureLoggedIn({ redirectTo: "/login", setRedirectTo: false }),
-    csrfProtection,
+
     (req: Request, res: Response) => {
       UserModel.findOne(
         { email: req.user.username },
@@ -213,14 +210,14 @@ route
   )
 
   // forgot password system
-  .get("/reset", csrfProtection, ensureLoggedOut(), function (req, res) {
+  .get("/reset", ensureLoggedOut(), function (req, res) {
     res.render("login/forgot", {
       password: false,
       message: req.flash(),
       csrfToken: req.csrfToken(),
     });
   })
-  .post("/reset", csrfProtection, async function (req, res) {
+  .post("/reset", async function (req, res) {
     const resetPasswordToken = randomBytes(20).toString("hex");
     const mailTo = req.body.email;
     const user = await UserModel.findOneAndUpdate(
@@ -257,7 +254,7 @@ route
   .get(
     "/reset/:token",
     ensureLoggedOut("/"),
-    csrfProtection,
+
     (req: Request, res: Response) => {
       jwt.verify(
         req.params.token,
@@ -279,7 +276,7 @@ route
   )
   .post(
     "/reset/:token",
-    csrfProtection,
+
     body("password")
       .isLength({ min: 8, max: 50 })
       .withMessage("Password length should be 8-50 character long.")
@@ -349,7 +346,7 @@ route
     });
   })
 
-  .get("/test", csrfProtection, (req, res, next) => {
+  .get("/test", (req, res, next) => {
     res.locals.csrf = req.csrfToken();
     next();
   });
