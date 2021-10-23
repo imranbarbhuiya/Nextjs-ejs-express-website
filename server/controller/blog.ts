@@ -1,7 +1,6 @@
 // importing modules
 import { NextFunction, Request, Response } from "express";
 import { Metaphone } from "natural";
-import Logger from "../lib/logger";
 // mongoose model
 import blogModel, { Blog } from "../model/blogModel";
 
@@ -93,36 +92,32 @@ async function search(
 ) {
   if (!skip) skip = 0;
   const keywords = Metaphone.process(searchQuery);
-  try {
-    let blogs: Blog[];
-    if (author)
-      blogs = await blogModel
-        .fuzzySearch(`${keywords} ${searchQuery}`, {
-          author,
-        })
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(5);
-    else if (unverified) {
-      blogs = await blogModel
-        .fuzzySearch(`${keywords} ${searchQuery}`, {
-          verified: false,
-        })
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(5);
-    } else
-      blogs = await blogModel
-        .fuzzySearch(`${keywords} ${searchQuery}`, {
-          verified: true,
-        })
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(5);
-    return blogs;
-  } catch (error: any) {
-    Logger.error(error);
-  }
+  let blogs: Blog[];
+  if (author)
+    blogs = await blogModel
+      .fuzzySearch(`${keywords} ${searchQuery}`, {
+        author,
+      })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(5);
+  else if (unverified) {
+    blogs = await blogModel
+      .fuzzySearch(`${keywords} ${searchQuery}`, {
+        verified: false,
+      })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(5);
+  } else
+    blogs = await blogModel
+      .fuzzySearch(`${keywords} ${searchQuery}`, {
+        verified: true,
+      })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(5);
+  return blogs;
 }
 
 export { viewBlogs, saveBlogAndRedirect };

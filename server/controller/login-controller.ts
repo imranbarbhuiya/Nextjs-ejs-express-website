@@ -129,12 +129,9 @@ export async function loginRouteRateLimit(
           return next(err);
         }
         delete req.session["referred"];
-        if (user.verified) {
-          const returnTo = req.session.returnTo;
-          delete req.session["returnTo"];
-          res.redirect((req.query.next as string) || returnTo || "/");
-        } else next();
-        return;
+        const returnTo = req.session.returnTo;
+        delete req.session["returnTo"];
+        res.redirect((req.query.next as string) || returnTo || "/");
       });
     }
   })(req, res, next);

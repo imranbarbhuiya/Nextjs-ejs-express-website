@@ -38,7 +38,7 @@ function isAdminOrBlogOwner(path: string) {
       req.flash();
       res.render(`blog/${path}`, { blog: req.blog, message: req.flash() });
     } else {
-      next({ status: 401, message: "Unauthorized" }, req, res);
+      next();
     }
   };
 }

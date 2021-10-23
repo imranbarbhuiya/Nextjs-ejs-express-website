@@ -72,7 +72,7 @@ route
       message: req.flash(),
     });
   })
-  .post("/login", loginRouteRateLimit, verify)
+  .post("/login", loginRouteRateLimit)
 
   // local register system
   .get("/register", (req, res) => {
