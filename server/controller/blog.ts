@@ -67,7 +67,7 @@ function viewBlogs(path: string) {
       }
     } else if (path === "unverified") {
       if (searchQuery) {
-        blogs = await search(searchQuery as string, 0, false, true);
+        blogs = await search(searchQuery as string, 0, undefined, true);
       } else {
         blogs = await blogModel
           .find({ verified: false })
@@ -88,7 +88,7 @@ function viewBlogs(path: string) {
 async function search(
   searchQuery: string,
   skip?: number,
-  author?: boolean | string,
+  author?: string,
   unverified?: boolean
 ) {
   if (!skip) skip = 0;
