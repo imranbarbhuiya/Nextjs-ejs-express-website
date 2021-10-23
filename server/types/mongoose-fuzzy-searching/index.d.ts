@@ -1,7 +1,8 @@
 declare module "mongoose-fuzzy-searching" {
   import {
-    CallbackError,
+    Callback,
     Document,
+    DocumentQuery,
     FilterQuery,
     Model,
     Schema,
@@ -23,7 +24,7 @@ declare module "mongoose-fuzzy-searching" {
             exact: boolean;
           },
       filter?: FilterQuery<T>,
-      callBack?: (err: CallbackError, data: Model<T, QueryHelpers>[]) => void
+      callBack?: Callback<T[]>
     ): DocumentQuery<T[], T, QueryHelpers>;
   }
 
