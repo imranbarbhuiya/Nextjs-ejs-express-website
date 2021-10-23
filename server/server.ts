@@ -17,17 +17,19 @@ import passportSocialAuth from "./controller/auth";
 import redisClient from "./db/redisDB";
 // Logger
 import Logger from "./lib/logger";
+// middleware
 import adminMiddleware from "./middleware/admin.middleware";
 import errorMiddleware from "./middleware/error.middleware";
-// middleware
 import morganMiddleware from "./middleware/morgan.middleware";
 // Mongoose Models
 import UserModel, { User } from "./model/userModel";
 // routes
+import adminRoute from "./routes/admin";
 import blogRoute from "./routes/blog";
 import courseRoute from "./routes/course";
 import indexRoute from "./routes/index";
 import loginRoute from "./routes/login";
+import userRoute from "./routes/user";
 // configuring env variables
 require("dotenv").config();
 // connecting to mongodb
@@ -121,7 +123,11 @@ client.prepare().then(() => {
     // adding course router
     .use("/course", courseRoute)
     // adding blog router
-    .use("/blog", blogRoute);
+    .use("/blog", blogRoute)
+    // adding admin router
+    .use("/admin", adminRoute)
+    // adding user router
+    .use("/user", userRoute);
   // next route
   app.all("*", (req: Request, res: Response) => {
     return handle(req, res);
