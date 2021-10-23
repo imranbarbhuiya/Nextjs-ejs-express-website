@@ -87,7 +87,7 @@ client.prepare().then(() => {
         resave: false,
         saveUninitialized: false,
         store: new RedisStore({ client: redisClient }),
-        cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, sameSite: true },
+        cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
       })
     )
     // set flash
