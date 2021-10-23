@@ -143,8 +143,7 @@ route
   // change password system
   .get(
     "/change",
-
-    ensureLoggedIn({ redirectTo: "/login", setRedirectTo: false }),
+    ensureLoggedIn({ redirectTo: "/login", setReturnTo: false }),
     function (req, res) {
       res.render("login/change", {
         csrfToken: req.csrfToken(),
@@ -153,7 +152,7 @@ route
   )
   .post(
     "/change",
-    ensureLoggedIn({ redirectTo: "/login", setRedirectTo: false }),
+    ensureLoggedIn({ redirectTo: "/login", setReturnTo: false }),
 
     (req: Request, res: Response) => {
       UserModel.findOne(
@@ -178,7 +177,7 @@ route
   .get("/verify", ensureLoggedIn("/login"), verify)
   .get(
     "/verify/:token",
-    ensureLoggedIn({ redirectTo: "/login", setRedirectTo: false }),
+    ensureLoggedIn({ redirectTo: "/login", setReturnTo: false }),
     (req: Request, res: Response) => {
       try {
         const decode: any = jwt.verify(
