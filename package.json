@@ -98,5 +98,6 @@
     "url": "https://github.com/imranbarbhuiya/Codversity/issues"
   },
   "homepage": "https://github.com/imranbarbhuiya/Codversity#readme",
-  "description": ""
+  "description": "",
+  "packageManager": "yarn@3.0.2"
 }
