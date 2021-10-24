@@ -83,6 +83,7 @@
     "@types/serve-favicon": "^2.5.3",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
+    "nodemon": "^2.0.14",
     "snyk": "^1.744.0",
     "ts-node": "^10.4.0",
     "tslint": "^6.1.3",
