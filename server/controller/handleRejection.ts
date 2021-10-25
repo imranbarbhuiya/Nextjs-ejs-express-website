@@ -5,13 +5,12 @@ function handleRejection(done: any) {
     try {
       // run controllers logic
       await done(req, res, next);
-    } catch (e) {
+    } catch (error) {
       // if an exception is raised, call next
-      if (e.kind === "ObjectId") {
-        e.message = "Not found";
-        e.status = 404;
+      if (error.kind === "ObjectId") {
+        next();
       }
-      next(e);
+      next(error);
     }
   };
 }
