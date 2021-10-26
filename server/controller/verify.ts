@@ -18,9 +18,9 @@ async function verify(req: Request, res: Response) {
     process.env.JWT_SECRET,
     { expiresIn: "24h" }
   );
-  const mailTo = req.user.email;
+  const email = req.user.email;
   await User.findOneAndUpdate(
-    { email: mailTo },
+    { email: email },
     {
       verificationToken,
     }
@@ -29,7 +29,7 @@ async function verify(req: Request, res: Response) {
   delete req.session["returnTo"];
   try {
     await mail(
-      mailTo,
+      email,
       "Verify account",
       `<p>Verify account</p>
         <a href="${req.protocol}://${req.headers.host}/verify/${encoded}">Click here</a>`

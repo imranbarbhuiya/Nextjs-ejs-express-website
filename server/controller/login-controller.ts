@@ -5,6 +5,7 @@ import passport from "passport";
 import { RateLimiterRedis } from "rate-limiter-flexible";
 // Redis Client
 import redisClient from "../db/redisDB";
+import { User } from "../model/userModel";
 
 // setting number of wrong limit
 const maxWrongAttemptsByIPperDay = 100;
@@ -80,59 +81,66 @@ export async function loginRouteRateLimit(
   } catch (err) {
     return next(err);
   }
-  passport.authenticate("local", async (err, user, info) => {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      // Consume 1 point from limiters on wrong attempt and block if limits reached
-      try {
-        const promises = [limiterSlowBruteByIP.consume(ipAddr)];
-        // check if user exists by checking if authentication failed because of an incorrect password
-        if (info.name === "IncorrectPasswordError") {
-          // Count failed attempts by Email + IP only for registered users
-          promises.push(
-            limiterConsecutiveFailsByEmailAndIP.consume(emailIPkey)
-          );
-        }
-        await Promise.all(promises);
-        req.flash("error", info.message);
-        res.redirect("/login");
-      } catch (rlRejected) {
-        if (rlRejected instanceof Error) {
-          throw rlRejected;
-        } else {
-          const timeOut =
-            String(Math.round(rlRejected.msBeforeNext / 1000)) || 1;
-          res.set("Retry-After", timeOut as string);
-          const remainingTime =
-            timeOut > 60
-              ? `${((timeOut as number) / 60).toFixed(2)} minute`
-              : `${timeOut} seconds`;
-          req.flash(
-            "error",
-            `Too many login attempts. Retry after ${remainingTime} seconds`
-          );
-          res.status(429).redirect("/login");
+  passport.authenticate(
+    "local",
+    async (
+      err: Error,
+      user: User,
+      info?: { name: string; message: string }
+    ) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        // Consume 1 point from limiters on wrong attempt and block if limits reached
+        try {
+          const promises = [limiterSlowBruteByIP.consume(ipAddr)];
+          // check if user exists by checking if authentication failed because of an incorrect password
+          if (info.name === "IncorrectPasswordError") {
+            // Count failed attempts by Email + IP only for registered users
+            promises.push(
+              limiterConsecutiveFailsByEmailAndIP.consume(emailIPkey)
+            );
+          }
+          await Promise.all(promises);
+          req.flash("error", info.message);
+          res.redirect("/login");
+        } catch (rlRejected) {
+          if (rlRejected instanceof Error) {
+            throw rlRejected;
+          } else {
+            const timeOut =
+              String(Math.round(rlRejected.msBeforeNext / 1000)) || 1;
+            res.set("Retry-After", timeOut as string);
+            const remainingTime =
+              timeOut > 60
+                ? `${((timeOut as number) / 60).toFixed(2)} minute`
+                : `${timeOut} seconds`;
+            req.flash(
+              "error",
+              `Too many login attempts. Retry after ${remainingTime} seconds`
+            );
+            res.status(429).redirect("/login");
+          }
         }
       }
-    }
-    // If passport authentication successful
-    if (user) {
-      if (resEmailAndIP !== null && resEmailAndIP.consumedPoints > 0) {
-        // Reset limiter based on IP + email on successful authorization
-        await limiterConsecutiveFailsByEmailAndIP.delete(emailIPkey);
-      }
-      // login (Passport.js method)
-      req.logIn(user, (err: Error) => {
-        if (err) {
-          return next(err);
+      // If passport authentication successful
+      if (user) {
+        if (resEmailAndIP !== null && resEmailAndIP.consumedPoints > 0) {
+          // Reset limiter based on IP + email on successful authorization
+          await limiterConsecutiveFailsByEmailAndIP.delete(emailIPkey);
         }
-        delete req.session["referred"];
-        const returnTo = req.session.returnTo;
-        delete req.session["returnTo"];
-        res.redirect((req.query.next as string) || returnTo || "/");
-      });
+        // login (Passport.js method)
+        req.logIn(user, (err: Error) => {
+          if (err) {
+            return next(err);
+          }
+          delete req.session["referred"];
+          const returnTo = req.session.returnTo;
+          delete req.session["returnTo"];
+          res.redirect((req.query.next as string) || returnTo || "/");
+        });
+      }
     }
-  })(req, res, next);
+  )(req, res, next);
 }

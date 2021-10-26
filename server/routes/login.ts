@@ -3,7 +3,7 @@ import { ensureLoggedIn, ensureLoggedOut } from "connect-ensure-login";
 import { randomBytes } from "crypto";
 import { NextFunction, Request, Response, Router } from "express";
 import { body, validationResult } from "express-validator";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import passport from "passport";
 // controllers
 import { loginRouteRateLimit } from "../controller/login-controller";
@@ -124,7 +124,7 @@ route
           referredBy: req.session.referred,
         }),
         req.body.password,
-        (err: Error, user: User) => {
+        (err: Error, _user: User) => {
           if (err) {
             req.flash("error", err.message);
             res.redirect("/register");
@@ -180,10 +180,10 @@ route
     ensureLoggedIn({ redirectTo: "/login", setReturnTo: false }),
     (req: Request, res: Response) => {
       try {
-        const decode: any = jwt.verify(
+        const decode: JwtPayload = jwt.verify(
           req.params.token,
           process.env.JWT_SECRET
-        );
+        ) as JwtPayload;
         UserModel.findOneAndUpdate(
           { email: req.user.email, verificationToken: decode.token },
           { verified: true, $unset: { verificationToken: 1 } },
@@ -255,22 +255,18 @@ route
     ensureLoggedOut("/"),
 
     (req: Request, res: Response) => {
-      jwt.verify(
-        req.params.token,
-        process.env.JWT_SECRET,
-        (err: Error, _token) => {
-          if (err) {
-            req.flash("error", "token expired");
-            res.redirect("/login");
-          } else {
-            res.render("login/forgot", {
-              password: true,
-              message: req.flash(),
-              csrfToken: req.csrfToken(),
-            });
-          }
-        }
-      );
+      try {
+        jwt.verify(req.params.token, process.env.JWT_SECRET);
+
+        res.render("login/forgot", {
+          password: true,
+          message: req.flash(),
+          csrfToken: req.csrfToken(),
+        });
+      } catch {
+        req.flash("error", "token expired");
+        res.redirect("/login");
+      }
     }
   )
   .post(
@@ -300,10 +296,10 @@ route
         return res.redirect("/register");
       }
       try {
-        const decode: any = jwt.verify(
+        const decode: JwtPayload = jwt.verify(
           req.params.token,
           process.env.JWT_SECRET
-        );
+        ) as JwtPayload;
         UserModel.findOne(
           { id: decode.id, resetPasswordToken: decode.token },
           function (err: Error, sanitizedUser: User) {
