@@ -1910,6 +1910,7 @@ __metadata:
     passport-github2: ^0.1.12
     passport-google-oauth20: ^2.0.0
     passport-local-mongoose: ^6.1.0
+    prettier: 2.4.1
     prop-types: ^15.7.2
     rate-limiter-flexible: ^2.3.2
     react: ^17.0.2
@@ -5981,6 +5982,15 @@ __metadata:
   version: 2.0.0
   resolution: "prepend-http@npm:2.0.0"
   checksum: 7694a9525405447662c1ffd352fcb41b6410c705b739b6f4e3a3e21cf5fdede8377890088e8934436b8b17ba55365a615f153960f30877bf0d0392f9e93503ea
+  languageName: node
+  linkType: hard
+
+"prettier@npm:2.4.1":
+  version: 2.4.1
+  resolution: "prettier@npm:2.4.1"
+  bin:
+    prettier: bin-prettier.js
+  checksum: cc6830588b401b0d742862fe9c46bc9118204fb307c3abe0e49e95b35ed23629573807ffdf9cdd65289c252a0bb51fc0171437f6626ee36378dea80f0ee80b91
   languageName: node
   linkType: hard
 
