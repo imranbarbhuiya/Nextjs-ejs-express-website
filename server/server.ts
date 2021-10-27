@@ -5,7 +5,6 @@ import cookieParser from "cookie-parser";
 import csrf from "csurf";
 import express, { ErrorRequestHandler, Request, Response } from "express";
 import session from "express-session";
-import helmet from "helmet";
 import methodOverride from "method-override";
 import next from "next";
 import passport from "passport";
@@ -49,22 +48,22 @@ client.prepare().then(() => {
   const app = express();
   app
     // using helmet for csp hide powered by and referer policy
-    .use(
-      helmet({
-        contentSecurityPolicy: {
-          useDefaults: true,
-          directives: {
-            scriptSrc: [
-              "'self'",
-              "https://cdn.jsdelivr.net",
-              "https://code.jquery.com",
-            ],
-            imgSrc: ["'self'", "https://*", "data:"],
-          },
-        },
-        hidePoweredBy: true,
-      })
-    )
+    // .use(
+    //   helmet({
+    //     contentSecurityPolicy: {
+    //       useDefaults: true,
+    //       directives: {
+    //         scriptSrc: [
+    //           "'self'",
+    //           "https://cdn.jsdelivr.net",
+    //           "https://code.jquery.com",
+    //         ],
+    //         imgSrc: ["'self'", "https://*", "data:"],
+    //       },
+    //     },
+    //     hidePoweredBy: true,
+    //   })
+    // )
     // serve favicon
     .use(serveFavicon(join(__dirname, "..", "public", "img", "favicon.ico")))
     // set static file directory
