@@ -4,6 +4,7 @@ node_modules
 yarn.lock
 package-lock.json
 public
+logs
 *.log
 .nyc_output
 coverage
