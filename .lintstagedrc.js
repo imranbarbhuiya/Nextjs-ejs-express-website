@@ -4,5 +4,3 @@ module.exports = {
       .map((file) => file.split(process.cwd())[1])
       .join(" --file ")}`,
 };
-
-console.log("ok");
