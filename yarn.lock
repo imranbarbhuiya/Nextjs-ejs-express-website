@@ -1888,6 +1888,7 @@ __metadata:
     ejs: ^3.1.6
     eslint: 7.32.0
     eslint-config-next: 12.0.0
+    eslint-config-prettier: ^8.3.0
     express: ^4.17.1
     express-session: ^1.17.2
     express-validator: ^6.13.0
@@ -2835,6 +2836,17 @@ __metadata:
     typescript:
       optional: true
   checksum: fd84d5237d877a246ba81ccefaffb7009e217700ddb205f697e5f9f19f2ec103c06bfcf92fb5e7c3ee44612ec28730b1cc17eca88fce55853db04a5c42a91ed9
+  languageName: node
+  linkType: hard
+
+"eslint-config-prettier@npm:^8.3.0":
+  version: 8.3.0
+  resolution: "eslint-config-prettier@npm:8.3.0"
+  peerDependencies:
+    eslint: ">=7.0.0"
+  bin:
+    eslint-config-prettier: bin/cli.js
+  checksum: df4cea3032671995bb5ab07e016169072f7fa59f44a53251664d9ca60951b66cdc872683b5c6a3729c91497c11490ca44a79654b395dd6756beb0c3903a37196
   languageName: node
   linkType: hard
 
