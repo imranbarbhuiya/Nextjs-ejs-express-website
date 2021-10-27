@@ -4,3 +4,11 @@ node_modules
 yarn.lock
 package-lock.json
 public
+*.log
+.nyc_output
+coverage
+flow-typed
+*.DS_Store
+dist
+.idea
+.vscode
