@@ -21,6 +21,11 @@
   "cacheDirectories": [
     ".next/cache"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "dependencies": {
     "axios": "^0.24.0",
     "connect-ensure-login": "^0.1.1",
