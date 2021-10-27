@@ -48,7 +48,7 @@ client.prepare().then(() => {
   // initiate app
   const app = express();
   if (app.get("env") !== "development") {
-    // using helmet for csp hide powered by and referer policy
+    // using helmet for csp and hide powered by only in production mode
     app.use(
       helmet({
         contentSecurityPolicy: {

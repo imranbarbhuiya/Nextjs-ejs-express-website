@@ -1,13 +1,11 @@
-import winston from "winston";
+import {
+  addColors,
+  createLogger,
+  format,
+  LoggerOptions,
+  transports,
+} from "winston";
 import "winston-daily-rotate-file";
-// Define severity levels.
-const levels = {
-  error: 0,
-  warn: 1,
-  info: 2,
-  http: 3,
-  debug: 4,
-};
 
 // This method set the current severity based on
 // the current NODE_ENV: show all the log levels
@@ -28,53 +26,64 @@ const colors = {
   debug: "white",
 };
 
+// defining logger options
+const loggerOptions: LoggerOptions = {
+  // Define severity levels.
+  levels: {
+    error: 0,
+    warn: 1,
+    info: 2,
+    http: 3,
+    debug: 4,
+  },
+
+  // define level
+  level: level(),
+  // Define log format.
+  format: format.combine(
+    // Show error stack
+    format.errors({ stack: true }),
+    // Add the message timestamp with the preferred format
+    format.timestamp({ format: "DD-MM-YYYY HH:mm:ss:ms" }),
+    // log must be colored
+    format.colorize({ all: true }),
+    // Defining the format of the message showing the level, the timestamp, and the message
+    format.printf(
+      (info) => `${info.level}  - ${info.timestamp} : ${info.message}`
+    )
+  ),
+
+  // Define which transports the logger must use to print out messages.
+  // We'll be using three different transports
+  transports: [
+    // Allow the use the console to print the messages
+    new transports.Console(),
+    // Allow to print all the error level messages inside the error.log file and delete them if file size becomes 10mb
+    new transports.DailyRotateFile({
+      dirname: "logs",
+      filename: "error-%DATE%",
+      datePattern: "YYYY-MM-DD-HH",
+      extension: ".log",
+      maxFiles: 3,
+      level: "error",
+    }),
+    // Allow to print all the error message inside the all.log file
+    // (also the error log that are also printed inside the error.log)
+    new transports.DailyRotateFile({
+      dirname: "logs",
+      filename: "all-%DATE%",
+      datePattern: "YYYY-MM-DD-HH",
+      extension: ".log",
+      maxSize: "10m",
+    }),
+  ],
+};
+
 // Tell winston to add color
-winston.addColors(colors);
-
-// Define log format.
-const format = winston.format.combine(
-  // Add the message timestamp with the preferred format
-  winston.format.timestamp({ format: "DD-MM-YYYY HH:mm:ss:ms" }),
-  // log must be colored
-  winston.format.colorize({ all: true }),
-  // Defining the format of the message showing the level, the timestamp, and the message
-  winston.format.printf(
-    (info) => `${info.level}  - ${info.timestamp} : ${info.message}`
-  )
-);
-
-// Define which transports the logger must use to print out messages.
-// We'll be using three different transports
-const transports = [
-  // Allow the use the console to print the messages
-  new winston.transports.Console(),
-  // Allow to print all the error level messages inside the error.log file and delete them if file size becomes 10mb
-  new winston.transports.DailyRotateFile({
-    dirname: "logs",
-    filename: "error-%DATE%",
-    datePattern: "YYYY-MM-DD-HH",
-    extension: ".log",
-    maxFiles: 3,
-    level: "error",
-  }),
-  // Allow to print all the error message inside the all.log file
-  // (also the error log that are also printed inside the error.log)
-  new winston.transports.DailyRotateFile({
-    dirname: "logs",
-    filename: "all-%DATE%",
-    datePattern: "YYYY-MM-DD-HH",
-    extension: ".log",
-    maxSize: "10m",
-  }),
-];
+addColors(colors);
 
 // Create the logger instance that has to be exported
 // and used to log messages.
-const Logger = winston.createLogger({
-  level: level(),
-  levels,
-  format,
-  transports,
-});
+const Logger = createLogger(loggerOptions);
 
 export default Logger;
