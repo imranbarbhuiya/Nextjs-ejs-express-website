@@ -4,6 +4,7 @@
   "main": "server/server.ts",
   "scripts": {
     "dev": "nodemon",
+    "dev:debug": "cross-env DEBUG=express:* nodemon",
     "build:server": "tsc --project tsconfig.server.json",
     "build:next": "next build",
     "build": "npm run build:next && npm run build:server",
