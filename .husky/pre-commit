@@ -1,16 +1,7 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-echo 'Checking before commit'
-
-# Check Prettier standards
-npm run check-format ||
-(
-    echo 'Prettier Check Failed. Run npm run format.';
-    false;
-)
-
-echo 'Running next lint'
+echo 'Checking lint before commit'
 
 # Check lint
 npm run lint ||
@@ -21,3 +12,6 @@ npm run lint ||
 
 # If everything passes... Now we can commit
 echo '✅ Everything looks perfect.'
+
+# yarn lint-staged
+# lint-stage isn't working with yarn will be fixing soon

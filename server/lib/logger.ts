@@ -49,7 +49,10 @@ const loggerOptions: LoggerOptions = {
     format.colorize({ all: true }),
     // Defining the format of the message showing the level, the timestamp, and the message
     format.printf(
-      (info) => `${info.level}  - ${info.timestamp} : ${info.message}`
+      (info) =>
+        `${info.level}  - ${info.timestamp} : ${info.message} \n ${
+          info.stack || ""
+        }`
     )
   ),
 
