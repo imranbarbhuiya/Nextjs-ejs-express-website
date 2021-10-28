@@ -1,7 +1,7 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-echo '🏗️👷 Styling before committing'
+echo 'Checking prettier format'
 
 # Check Prettier standards
 npm run check-format ||
@@ -9,6 +9,8 @@ npm run check-format ||
     echo 'Prettier Check Failed. Run npm run format.';
     false;
 )
+
+echo 'Running next lint'
 
 # Check lint
 npm run lint ||
