@@ -12,4 +12,3 @@ flow-typed
 *.DS_Store
 dist
 .idea
-.vscode
