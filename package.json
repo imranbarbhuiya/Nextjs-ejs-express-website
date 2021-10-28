@@ -88,9 +88,9 @@
     "eslint": "7.32.0",
     "eslint-config-next": "12.0.0",
     "eslint-config-prettier": "^8.3.0",
-    "husky": "^7.0.0",
+    "husky": "^7.0.4",
     "nodemon": "^2.0.14",
-    "snyk": "^1.746.0",
+    "snyk": "^1.747.0",
     "ts-node": "^10.4.0",
     "typescript": "^4.4.4"
   },

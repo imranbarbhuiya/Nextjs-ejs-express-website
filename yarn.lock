@@ -1886,7 +1886,7 @@ __metadata:
     express-session: ^1.17.2
     express-validator: ^6.13.0
     helmet: ^4.6.0
-    husky: ^7.0.0
+    husky: ^7.0.4
     jsdom: ^18.0.0
     jsonwebtoken: ^8.5.1
     marked: ^3.0.8
@@ -1912,7 +1912,7 @@ __metadata:
     redis: ^3.1.2
     serve-favicon: ^2.5.0
     slugify: ^1.6.1
-    snyk: ^1.746.0
+    snyk: ^1.747.0
     ts-node: ^10.4.0
     typescript: ^4.4.4
     winston: ^3.3.3
@@ -3799,7 +3799,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:^7.0.0":
+"husky@npm:^7.0.4":
   version: 7.0.4
   resolution: "husky@npm:7.0.4"
   bin:
@@ -6810,12 +6810,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"snyk@npm:^1.746.0":
-  version: 1.746.0
-  resolution: "snyk@npm:1.746.0"
+"snyk@npm:^1.747.0":
+  version: 1.747.0
+  resolution: "snyk@npm:1.747.0"
   bin:
     snyk: bin/snyk
-  checksum: c9979963dd994c5f9ad8406098d901b932f95625558fe5bb250d9949171fa1cf0eae8d0b8cbc298e7435d4c803c9ed208535f6bca86818221a9cfadaea1c61c1
+  checksum: 510bbfc436027fea7bb8008453d2b78daf0afa5c3d0f724cb7925e501e30a0fb58603a8c04d4dacb9ad8e57aee96526855f2ba76b0a997c53d19a471648afd5c
   languageName: node
   linkType: hard
 
