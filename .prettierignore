@@ -12,3 +12,5 @@ flow-typed
 *.DS_Store
 dist
 .idea
+.yarn
+*.yml
