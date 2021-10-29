@@ -77,7 +77,8 @@ const loggerOptions: LoggerOptions = {
       filename: "all-%DATE%",
       datePattern: "YYYY-MM-DD-HH",
       extension: ".log",
-      maxSize: "10m",
+      maxFiles: 3,
+      level: "error",
     }),
   ],
 };
