@@ -41,7 +41,7 @@
     "morgan": "^1.10.0",
     "natural": "^5.1.1",
     "next": "^12.0.0",
-    "nextjs-progressbar": "^0.0.11",
+    "nextjs-progressbar": "^0.0.12",
     "nodemailer": "^6.7.0",
     "passport": "^0.5.0",
     "passport-facebook": "^3.0.0",
