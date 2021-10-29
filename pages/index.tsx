@@ -4,7 +4,6 @@ import type { NextPage } from "next";
 // next components
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
@@ -135,9 +134,6 @@ const Home: NextPage = ({
           </Link>
         </div>
       </div>
-      <span>
-        <Image src="/img/logo.png" alt="logo" height="500" width="500" />
-      </span>
     </>
   );
 };
