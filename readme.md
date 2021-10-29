@@ -22,5 +22,5 @@ yarn install
 - run
 
 ```bash
-yarn dev
+npm run dev
 ```
