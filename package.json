@@ -10,8 +10,7 @@
     "build": "npm run build:next && npm run build:server",
     "start": "cross-env NODE_ENV=production node dist/server.js",
     "lint": "next lint",
-    "test": "snyk test",
-    "prepare": "husky install"
+    "test": "snyk test"
   },
   "author": "imran",
   "license": "ISC",
@@ -100,6 +99,5 @@
     "url": "https://github.com/imranbarbhuiya/Codversity/issues"
   },
   "homepage": "https://github.com/imranbarbhuiya/Codversity#readme",
-  "description": "",
-  "packageManager": "yarn@3.1.0"
+  "description": ""
 }
