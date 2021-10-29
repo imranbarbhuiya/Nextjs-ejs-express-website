@@ -5,5 +5,5 @@ ignore:
   SNYK-JS-SHELLQUOTE-1766506:
     - next > @next/react-dev-overlay > shell-quote:
         reason: None given
-        expires: '2021-11-28T08:18:55.428Z'
+        expires: "2021-11-28T08:18:55.428Z"
 patch: {}
