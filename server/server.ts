@@ -17,7 +17,7 @@ import passportSocialAuth from "./controller/auth";
 import redisClient from "./db/redisDB";
 // Logger
 import Logger from "./lib/logger";
-// middleware
+// middlewares
 import adminMiddleware from "./middleware/admin.middleware";
 import errorMiddleware from "./middleware/error.middleware";
 import morganMiddleware from "./middleware/morgan.middleware";

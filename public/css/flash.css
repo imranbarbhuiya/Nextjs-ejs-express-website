@@ -20,7 +20,6 @@
   align-items: center;
   animation: flash_appear none ease 500ms;
   overflow: hidden;
-  cursor: pointer;
 }
 .flash .flash-box.flash_hide {
   opacity: 0;
@@ -31,13 +30,29 @@
   0% {
     transform: translateX(100%);
   }
+  40% {
+    transform: translateX(-10%);
+  }
+  80% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-10px);
+  }
 }
 @keyframes flash_remove {
   0% {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(-10px);
+  }
+  40% {
+    transform: translateX(0%);
+  }
+  80% {
+    transform: translateX(-10%);
   }
   100% {
+    opacity: 1;
     transform: translateX(100%);
   }
 }
