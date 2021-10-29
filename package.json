@@ -99,5 +99,8 @@
     "url": "https://github.com/imranbarbhuiya/Codversity/issues"
   },
   "homepage": "https://github.com/imranbarbhuiya/Codversity#readme",
-  "description": ""
+  "description": "",
+  "engines": {
+    "node": "16.13.0"
+  }
 }
