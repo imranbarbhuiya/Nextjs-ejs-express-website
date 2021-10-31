@@ -1,9 +1,5 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
 version: v1.22.1
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
-ignore:
-  SNYK-JS-SHELLQUOTE-1766506:
-    - next > @next/react-dev-overlay > shell-quote:
-        reason: None given
-        expires: "2021-11-28T08:18:55.428Z"
+ignore: {}
 patch: {}
