@@ -18,13 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         closeOnClick
         pauseOnHover
       />
-      <NextNprogress
-        color="#29D"
-        startPosition={0.3}
-        stopDelayMs={200}
-        height={3}
-        showOnShallow={true}
-      />
+      <NextNprogress />
     </>
   );
 }
