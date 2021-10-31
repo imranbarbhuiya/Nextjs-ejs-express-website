@@ -10,7 +10,8 @@
     "build": "npm run build:next && npm run build:server",
     "start": "cross-env NODE_ENV=production node dist/server.js",
     "lint": "next lint",
-    "test": "snyk test"
+    "test": "snyk test",
+    "snyk:wizard": "snyk wizard"
   },
   "author": "imran",
   "license": "ISC",
