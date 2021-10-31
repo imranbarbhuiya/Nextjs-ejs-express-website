@@ -16,6 +16,7 @@
 
 ### To run this code
 
+- make sure you've [node](https://nodejs.org/en/) installed
 - clone the repo
 - install all dependencies with
 
