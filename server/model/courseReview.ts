@@ -1,7 +1,15 @@
-import mongoose from "mongoose";
+import mongoose, { Document, model, Schema } from "mongoose";
 
-const reviewSchema = new mongoose.Schema({
-  courseId: { type: mongoose.Types.ObjectId, require: true, unique: true },
+interface CourseReview extends Document {
+  courseId: string;
+  reviews: {
+    userId: string;
+    star: number;
+    comment: string;
+  }[];
+}
+const reviewSchema = new Schema<CourseReview>({
+  courseId: { type: String, require: true, unique: true },
   reviews: [
     {
       userId: { type: mongoose.Types.ObjectId, require: true, unique: true },
@@ -13,6 +21,7 @@ const reviewSchema = new mongoose.Schema({
   ],
 });
 
-const reviewModel = mongoose.model("review", reviewSchema);
+const reviewModel = model<CourseReview>("review", reviewSchema);
 
 export default reviewModel;
+export type { CourseReview };

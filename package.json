@@ -87,7 +87,7 @@
     "eslint": "7.32.0",
     "eslint-config-next": "^12.0.1",
     "nodemon": "^2.0.14",
-    "snyk": "^1.748.0",
+    "snyk": "^1.749.0",
     "ts-node": "^10.4.0",
     "typescript": "^4.4.4"
   },
@@ -99,8 +99,5 @@
     "url": "https://github.com/imranbarbhuiya/Codversity/issues"
   },
   "homepage": "https://github.com/imranbarbhuiya/Codversity#readme",
-  "description": "",
-  "engines": {
-    "node": "^16.13.0"
-  }
+  "description": ""
 }

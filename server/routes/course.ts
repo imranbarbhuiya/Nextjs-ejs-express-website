@@ -2,9 +2,9 @@
 import { ensureLoggedIn } from "connect-ensure-login";
 import { Request, Response, Router } from "express";
 import { Metaphone } from "natural";
-// mongoose models
-import courseDataModel from "../model/courseData";
 import courseModel, { Course } from "../model/courseModel";
+// mongoose models
+import courseDataModel from "../model/userCourseData";
 // init express route
 const route = Router();
 
@@ -42,20 +42,8 @@ route
     res.render("course/courseAdd", { done: true });
   })
   .get("/mycourses", ensureLoggedIn(), async (req, res) => {
-    // await courseDataModel.findOneAndUpdate(
-    //   {
-    //     userId: req.user.id,
-    //   },
-    //   {
-    //     $push: {
-    //       courses: {
-    //         courseId: req.user.id,
-    //       },
-    //     },
-    //   }
-    // );
     const data = await courseDataModel.findOne({
-      courses: { $elemMatch: { courseId: req.user.id } },
+      subscribedCourses: { $elemMatch: { courseId: req.user.id } },
     });
     res.send(data);
   })
