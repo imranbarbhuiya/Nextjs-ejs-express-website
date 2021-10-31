@@ -67,7 +67,7 @@ const loggerOptions: LoggerOptions = {
       filename: "error-%DATE%",
       datePattern: "YYYY-MM-DD-HH",
       extension: ".log",
-      maxFiles: 3,
+      maxSize: "10k",
       level: "error",
     }),
     // Allow to print all the error message inside the all.log file
@@ -77,7 +77,7 @@ const loggerOptions: LoggerOptions = {
       filename: "all-%DATE%",
       datePattern: "YYYY-MM-DD-HH",
       extension: ".log",
-      maxFiles: 3,
+      maxSize: "10k",
       level: "error",
     }),
   ],
