@@ -1,5 +1,10 @@
-# Codversity
-
+<p align="center">
+  <a href="https://codversity.com">
+    <img src="public/img/logo.png" height="128">
+    <h1 align="center">Codversity</h1>
+  </a>
+</p>
+<hr/>
 ## ToDo
 
 - Course routing
@@ -15,7 +20,7 @@
 - install all dependencies with
 
 ```bash
-yarn install
+npm install
 ```
 
 - add environment variables inside .env file
