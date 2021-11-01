@@ -14,6 +14,7 @@ interface User extends PassportLocalDocument {
   _id: string;
   email: string;
   username: string;
+  mobilenumber?: number;
   authId?: string;
   authProvider?: string;
   verified?: boolean;
@@ -28,6 +29,7 @@ const userSchema = new Schema({
   username: { type: String, required: true, default: "guest" },
   authId: String,
   authProvider: String,
+  mobilenumber: Number,
   verified: { type: Boolean, required: true, default: false },
   role: { type: String, required: true, default: "student" },
   referralCode: {
