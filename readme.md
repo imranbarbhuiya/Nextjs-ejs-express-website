@@ -24,9 +24,42 @@
 npm install
 ```
 
-- add environment variables inside .env file
+- add environment variables inside .env file (see .env.example) in the root of the project.
 - run
 
 ```bash
 npm run dev
 ```
+
+- to test the dependency vulnerabilities
+
+```bash
+npm audit
+```
+
+or with snyk
+
+```bash
+npm test
+```
+
+- for production release
+- build first with
+
+```bash
+npm run build
+```
+
+- then run
+
+```bash
+npm start
+```
+
+- to deploy to heroku
+
+  - add the env variables in the heroku environment settings.
+  - clone this repo
+  - set this repo in heroku deploy
+
+That's it.
