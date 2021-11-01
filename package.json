@@ -60,6 +60,7 @@
     "winston-daily-rotate-file": "^4.5.5"
   },
   "devDependencies": {
+    "@types/connect-ensure-login": "^0.1.7",
     "@types/connect-flash": "^0.0.37",
     "@types/connect-redis": "^0.0.17",
     "@types/cookie-parser": "^1.4.2",
