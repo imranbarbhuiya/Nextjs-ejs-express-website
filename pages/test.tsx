@@ -4,8 +4,6 @@ import Link from "next/link";
 const Test: NextPage = () => {
   return (
     <>
-      <h1>Why you&#39;ve came here? </h1>
-      <Link href="/">Go Back</Link>
       <p>
         Ok let&#39;s try something funny. Go to inspect find body tag add a
         background color (bright) then click
