@@ -11,7 +11,6 @@ import {
 import passportLocalMongoose from "passport-local-mongoose";
 //#region Test Models
 interface User extends PassportLocalDocument {
-  _id: string;
   email: string;
   username: string;
   mobilenumber?: number;
