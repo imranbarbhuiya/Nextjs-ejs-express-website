@@ -1,6 +1,6 @@
 // next types
 import type { AppProps } from "next/app";
-import NextNprogress from "nextjs-progressbar";
+import NextNProgress from "nextjs-progressbar";
 import React from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         closeOnClick
         pauseOnHover
       />
-      <NextNprogress />
+      <NextNProgress />
     </>
   );
 }
