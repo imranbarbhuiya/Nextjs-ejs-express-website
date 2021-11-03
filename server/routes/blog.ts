@@ -28,7 +28,11 @@ route
       );
       return res.redirect("/blog");
     }
-    res.render("blog/new", { blog: new blogModel(), message: req.flash() });
+    res.render("blog/new", {
+      blog: new blogModel(),
+      message: req.flash(),
+      csrfToken: req.csrfToken(),
+    });
   })
   .post(
     "/new",
@@ -56,7 +60,7 @@ route
       verified: true,
     });
     if (blog) res.render("blog/view", { blog });
-    else next({ status: 404, message: "Not found" }, req, res);
+    else next();
   })
   .delete(
     "/:id",

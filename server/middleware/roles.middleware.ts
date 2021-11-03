@@ -36,7 +36,11 @@ function isAdminOrBlogOwner(path: string) {
       (req.user.role === "admin" || req.blog.author === req.user.id)
     ) {
       req.flash();
-      res.render(`blog/${path}`, { blog: req.blog, message: req.flash() });
+      res.render(`blog/${path}`, {
+        blog: req.blog,
+        message: req.flash(),
+        csrfToken: req.csrfToken(),
+      });
     } else {
       next();
     }
