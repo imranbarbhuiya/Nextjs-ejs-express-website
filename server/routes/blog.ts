@@ -28,7 +28,11 @@ route
       );
       return res.redirect("/blog");
     }
-    res.render("blog/new", { blog: new blogModel(), message: req.flash() });
+    res.render("blog/new", {
+      blog: new blogModel(),
+      message: req.flash(),
+      csrfToken: req.csrfToken(),
+    });
   })
   .post(
     "/new",

@@ -80,6 +80,7 @@ function viewBlogs(path: string) {
       blogs,
       query: searchQuery,
       message: req.flash(),
+      csrfToken: req.csrfToken(),
     });
   };
 }
