@@ -336,13 +336,10 @@ route
 
   // logout
   .get("/logout", (req: Request, res: Response) => {
-    req.session.destroy(() => {
+    req.session.destroy((err) => {
+      if (err) req.flash("error", err.message);
       res.redirect("/");
     });
-  })
-
-  .get("/test", (req, res, next) => {
-    res.locals.csrf = req.csrfToken();
-    next();
   });
+
 export default route;
