@@ -2,7 +2,7 @@
 import createDOMPurify from "dompurify";
 import { NextFunction } from "express";
 import { JSDOM } from "jsdom";
-import marked from "marked";
+import { marked } from "marked";
 import { Document, Error, model, Schema } from "mongoose";
 import fuzzySearching, { MongooseFuzzyModel } from "mongoose-fuzzy-searching";
 import slugify from "slugify";
@@ -80,7 +80,7 @@ DOMpurify.addHook("afterSanitizeElements", (node) => {
 });
 
 function markAndSanitize(markdown: string) {
-  return DOMpurify.sanitize(marked(markdown), {
+  return DOMpurify.sanitize(marked.parse(markdown), {
     USE_PROFILES: { html: true },
   });
 }
