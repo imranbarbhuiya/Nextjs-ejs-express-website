@@ -92,11 +92,7 @@ const Home: NextPage = ({
                 <li className="field-text">Email: {user.email}</li>
               </ul>
               <Link href="/logout">
-                <a
-                  className="btn btn-warning me-2"
-                  href="/logout"
-                  role="button"
-                >
+                <a className="btn btn-warning me-2" role="button">
                   Log Out
                 </a>
               </Link>
