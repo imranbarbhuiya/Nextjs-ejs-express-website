@@ -6,8 +6,6 @@ import { GetServerSideProps } from "next";
 import React from "react";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  console.log("log");
-
   const { req } = ctx;
   const { session } = req as Request;
   session.destroy((err) => {

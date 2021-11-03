@@ -336,7 +336,6 @@ route
 
   // logout
   .get("/logout", (req: Request, res: Response) => {
-    console.log("logout");
     req.session.destroy((err) => {
       if (err) req.flash("error", err.message);
       res.redirect("/");
