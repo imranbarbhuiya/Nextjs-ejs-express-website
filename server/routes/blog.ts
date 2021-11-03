@@ -60,7 +60,7 @@ route
       verified: true,
     });
     if (blog) res.render("blog/view", { blog });
-    else next({ status: 404, message: "Not found" }, req, res);
+    else next();
   })
   .delete(
     "/:id",
