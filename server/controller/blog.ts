@@ -39,7 +39,7 @@ function viewBlogs(path: string) {
   // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a middleware
   return async (req: Request, res: Response) => {
     let blogs: Blog[];
-    // FIXME: fix query search xss issue
+    // SECURITY: fix query search xss issue
     // deepcode ignore HTTPSourceWithUncheckedType: not finding a way to fix this
     const searchQuery = String(req.query.search);
     const autocompleteQuery = String(req.query.term);
@@ -57,7 +57,7 @@ function viewBlogs(path: string) {
       } else if (autocompleteQuery) {
         blogs = await search(autocompleteQuery as string, 0);
         blogs = blogs.map((blog: any) => blog.title);
-        // FIXME: fix xss issue
+        // SECURITY: fix xss issue
         // deepcode ignore XSS: not finding a way to fix this
         return res.send(blogs);
       } else {

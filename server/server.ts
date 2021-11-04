@@ -30,6 +30,7 @@ import courseRoute from "./routes/course";
 import loginRoute from "./routes/login";
 import userRoute from "./routes/user";
 // configuring env variables
+// PRODUCTION: remove dotenv
 require("dotenv").config();
 // connecting to mongodb
 require("./db/mongoDB");
@@ -50,6 +51,7 @@ client
     const app = express();
     if (app.get("env") !== "development") {
       // using helmet for csp and hide powered by only in production mode
+      // PRODUCTION: remove development condition
       app.use(
         helmet({
           contentSecurityPolicy: {
@@ -92,7 +94,7 @@ client
           resave: false,
           saveUninitialized: false,
           store: new RedisStore({ client: redisClient }),
-          // TODO: add secure cookie
+          // PRODUCTION: add secure cookie
           // deepcode ignore WebCookieSecureDisabledByDefault: will be added in production
           cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
         })
