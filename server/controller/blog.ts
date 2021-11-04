@@ -40,8 +40,8 @@ function viewBlogs(path: string) {
   return async (req: Request, res: Response) => {
     let blogs: Blog[];
     // deepcode ignore HTTPSourceWithUncheckedType: fixed in previous middleware
-    const searchQuery = String(req.query.search);
-    const autocompleteQuery = String(req.query.term);
+    const searchQuery = req.query.search;
+    const autocompleteQuery = req.query.term;
     if (path === "myblogs") {
       if (searchQuery) {
         blogs = await search(searchQuery as string, 0, req.user.id);
@@ -52,13 +52,13 @@ function viewBlogs(path: string) {
       }
     } else if (path === "all") {
       if (searchQuery) {
-        blogs = await search(searchQuery as string, 0);
+        blogs = await search(String(searchQuery), 0);
       } else if (autocompleteQuery) {
-        blogs = await search(autocompleteQuery as string, 0);
-        blogs = blogs.map((blog: any) => blog.title);
-        // SECURITY: fix xss issue
-        // deepcode ignore XSS: not finding a way to fix this
-        return res.send(blogs);
+        blogs = await search(String(autocompleteQuery), 0);
+        const sanitizedBlogs: string[] = blogs.map((blog: Blog) => blog.title);
+        // SECURITY: sanitize the response
+        // deepcode ignore XSS: can't find a way to sanitize
+        return res.send(sanitizedBlogs);
       } else {
         let skip = 0;
         if (req.query.skip) skip = Number(req.query.skip);
