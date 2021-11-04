@@ -6,7 +6,8 @@ import blogModel, { Blog } from "../model/blogModel";
 
 // blog save controller
 function saveBlogAndRedirect(path: string) {
-  // deepcode ignore NoRateLimitingForExpensiveWebOperation: <please specify a reason of ignoring this>
+  // TODO: add rate limiting
+  // deepcode ignore NoRateLimitingForExpensiveWebOperation: will be used in the future
   return async (req: Request, res: Response) => {
     const keywords = Metaphone.process(
       `${req.body.title} ${req.user.username} ${req.body.description}`
@@ -36,10 +37,12 @@ function saveBlogAndRedirect(path: string) {
 }
 // view blog controller
 function viewBlogs(path: string) {
-  // deepcode ignore NoRateLimitingForExpensiveWebOperation: annoying
+  // TODO: add rate limiting
+  // deepcode ignore NoRateLimitingForExpensiveWebOperation: will be used in the future
   return async (req: Request, res: Response) => {
     let blogs: Blog[];
-    // deepcode ignore HTTPSourceWithUncheckedType: <please specify a reason of ignoring this>
+    // FIXME: fix query search xss issue
+    // deepcode ignore HTTPSourceWithUncheckedType: not finding a way to fix this
     const searchQuery = String(req.query.search);
     const autocompleteQuery = String(req.query.term);
     if (path === "myblogs") {
@@ -56,7 +59,8 @@ function viewBlogs(path: string) {
       } else if (autocompleteQuery) {
         blogs = await search(autocompleteQuery as string, 0);
         blogs = blogs.map((blog: any) => blog.title);
-        // deepcode ignore XSS: <please specify a reason of ignoring this>
+        // FIXME: fix xss issue
+        // deepcode ignore XSS: not finding a way to fix this
         return res.send(blogs);
       } else {
         let skip = 0;

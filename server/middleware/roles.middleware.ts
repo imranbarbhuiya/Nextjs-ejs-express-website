@@ -30,7 +30,8 @@ async function canEditCourse(req: Request, res: Response, next: NextFunction) {
   }
 }
 function isAdminOrBlogOwner(path: string) {
-  // file deepcode ignore NoRateLimitingForExpensiveWebOperation: <please specify a reason of ignoring this>
+  // TODO: add rate limiting
+  // file deepcode ignore NoRateLimitingForExpensiveWebOperation: will be added in future
   return (req: Request, res: Response, next: any) => {
     if (
       req.user &&

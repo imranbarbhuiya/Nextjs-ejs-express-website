@@ -144,7 +144,8 @@ route
   .get(
     "/change",
     ensureLoggedIn({ redirectTo: "/login", setReturnTo: false }),
-    // file deepcode ignore NoRateLimitingForExpensiveWebOperation: <please specify a reason of ignoring this>
+    // file deepcode ignore NoRateLimitingForExpensiveWebOperation: will be fixed in future
+    // TODO: rate limiting
     function (req, res) {
       res.render("login/change", {
         csrfToken: req.csrfToken(),
@@ -241,13 +242,13 @@ route
       req.flash("success", "Check email to proceed");
       res.redirect("/reset");
       // TODO: replace html with ejs template
-      // deepcode ignore XSS: <please specify a reason of ignoring this>
-      mail(
+      // deepcode ignore XSS: will be replaced with ejs template
+      mail({
         mailTo,
-        "Reset Password",
-        `<p>Reset Password</p>
-        <a href="${req.protocol}://${req.headers.host}/reset/${encoded}">Click here</a>`
-      ).catch((error: any) => {
+        subject: "Reset Password",
+        html: `<p>Reset Password</p>
+        <a href="${req.protocol}://${req.headers.host}/reset/${encoded}">Click here</a>`,
+      }).catch((error: any) => {
         req.flash("error", "auth fail");
         console.log(error);
       });

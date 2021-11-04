@@ -54,7 +54,8 @@ route
     }),
     isAdminOrBlogOwner("view")
   )
-  // file deepcode ignore NoRateLimitingForExpensiveWebOperation: <please specify a reason of ignoring this>
+  // TODO: add rate limit
+  // file deepcode ignore NoRateLimitingForExpensiveWebOperation: will be added in future
   .get("/:slug", async (req: Request, res: Response, next: any) => {
     const blog: Blog = await blogModel.findOne({
       slug: req.params.slug,
