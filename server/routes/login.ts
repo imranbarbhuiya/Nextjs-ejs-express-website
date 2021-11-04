@@ -2,6 +2,7 @@
 import { ensureLoggedIn, ensureLoggedOut } from "connect-ensure-login";
 import { randomBytes } from "crypto";
 import { NextFunction, Request, Response, Router } from "express";
+import rateLimit from "express-rate-limit";
 import { body, validationResult } from "express-validator";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import passport from "passport";
@@ -61,7 +62,13 @@ route
   );
 // Local passport authenticate
 // uses passport-local-mongoose
-// for rate limiter rate-limiter-flexible is used
+// for login rate limiter rate-limiter-flexible is used
+
+// rate limiter setup
+const apiLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour window
+  max: 5, // limit each IP to 5 requests per windowMs
+});
 
 route
   .get("/login", (req, res) => {
@@ -85,7 +92,7 @@ route
   })
   .post(
     "/register",
-
+    apiLimiter,
     body("username")
       .trim()
       .isLength({ min: 1 })
@@ -144,8 +151,6 @@ route
   .get(
     "/change",
     ensureLoggedIn({ redirectTo: "/login", setReturnTo: false }),
-    // file deepcode ignore NoRateLimitingForExpensiveWebOperation: will be fixed in future
-    // TODO: rate limiting
     function (req, res) {
       res.render("login/change", {
         csrfToken: req.csrfToken(),
@@ -154,6 +159,7 @@ route
   )
   .post(
     "/change",
+    apiLimiter,
     ensureLoggedIn({ redirectTo: "/login", setReturnTo: false }),
 
     (req: Request, res: Response) => {
@@ -179,6 +185,7 @@ route
   .get("/verify", ensureLoggedIn("/login"), verify)
   .get(
     "/verify/:token",
+    apiLimiter,
     ensureLoggedIn({ redirectTo: "/login", setReturnTo: false }),
     (req: Request, res: Response) => {
       try {
@@ -218,7 +225,7 @@ route
       csrfToken: req.csrfToken(),
     });
   })
-  .post("/reset", async function (req, res) {
+  .post("/reset", apiLimiter, async function (req, res) {
     const resetPasswordToken = randomBytes(20).toString("hex");
     const mailTo = req.body.email;
     const user = await UserModel.findOneAndUpdate(
@@ -275,7 +282,7 @@ route
   )
   .post(
     "/reset/:token",
-
+    apiLimiter,
     body("password")
       .isLength({ min: 8, max: 50 })
       .withMessage("Password length should be 8-50 character long.")
