@@ -60,8 +60,7 @@
     "serve-favicon": "^2.5.0",
     "slugify": "^1.6.1",
     "snyk": "^1.752.0",
-    "winston": "^3.3.3",
-    "winston-daily-rotate-file": "^4.5.5"
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@types/connect-ensure-login": "^0.1.7",

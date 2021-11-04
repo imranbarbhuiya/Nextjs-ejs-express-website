@@ -162,3 +162,8 @@ declare global {
     }
   }
 }
+
+// handle unhandled process exceptions
+process.on("uncaughtException", (err) => {
+  Logger.error(err);
+});
