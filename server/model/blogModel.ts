@@ -1,15 +1,11 @@
 // import dependencies
-import createDOMPurify from "dompurify";
 import { NextFunction } from "express";
-import { JSDOM } from "jsdom";
 import { marked } from "marked";
 import { Document, Error, model, Schema } from "mongoose";
 import fuzzySearching, { MongooseFuzzyModel } from "mongoose-fuzzy-searching";
 import slugify from "slugify";
-
-// dom setup
-const window: any = new JSDOM("").window;
-const DOMpurify = createDOMPurify(window);
+// import dom
+import DOMpurify from "../lib/dompurify";
 
 interface Blog extends Document {
   emptyHtml(): boolean;
