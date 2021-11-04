@@ -1,6 +1,7 @@
 // importing dependencies
 import { ensureLoggedIn } from "connect-ensure-login";
 import { Request, Response, Router } from "express";
+import { query } from "express-validator";
 import { Metaphone } from "natural";
 import { authLimiter } from "../controller/api-rate-limit";
 import courseModel, { Course } from "../model/courseModel";
@@ -10,10 +11,9 @@ import courseDataModel from "../model/userCourseData";
 const route = Router();
 
 route
-  .get("/", async (req, res) => {
+  .get("/", query("search").trim().escape(), async (req, res) => {
     let courses: Course[];
-    // SECURITY: fix this
-    // deepcode ignore HTTPSourceWithUncheckedType: not finding a way to fix this
+    // deepcode ignore HTTPSourceWithUncheckedType: already fixed
     const searchQuery = String(req.query.search);
     if (searchQuery) {
       const keywords = Metaphone.process(searchQuery as string);
@@ -25,8 +25,8 @@ route
     } else {
       courses = await courseModel.find({ verified: true }).sort({ price: 1 });
     }
-    // SECURITY: fix this
-    // deepcode ignore XSS: not finding a way to fix this
+    // TODO: change total course route response
+    // deepcode ignore XSS: will be replaced with render
     res.send(courses);
   })
   .get("/create", ensureLoggedIn("/login"), (_req: Request, res: Response) => {

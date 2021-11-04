@@ -1,6 +1,7 @@
 // importing dependencies
 import { ensureLoggedIn } from "connect-ensure-login";
 import { NextFunction, Request, Response, Router } from "express";
+import { query } from "express-validator";
 import { apiLimiter } from "../controller/api-rate-limit";
 // controllers
 import { saveBlogAndRedirect, viewBlogs } from "../controller/blog";
@@ -21,9 +22,14 @@ route.use(
   ensureLoggedIn({ redirectTo: "/login", setReturnTo: false })
 );
 route
-  .get("/", viewBlogs("all"))
-  .get("/myblogs", viewBlogs("myblogs"))
-  .get("/unverified", isAdmin, viewBlogs("unverified"))
+  .get("/", query("search").trim().escape(), viewBlogs("all"))
+  .get("/myblogs", query("search").escape(), viewBlogs("myblogs"))
+  .get(
+    "/unverified",
+    isAdmin,
+    query("search").trim().escape(),
+    viewBlogs("unverified")
+  )
   .get("/new", apiLimiter, (req: Request, res: Response) => {
     if (!req.user.verified) {
       req.flash(

@@ -2,7 +2,7 @@
 import { ensureLoggedIn, ensureLoggedOut } from "connect-ensure-login";
 import { randomBytes } from "crypto";
 import { NextFunction, Request, Response, Router } from "express";
-import { body, validationResult } from "express-validator";
+import { body, query, validationResult } from "express-validator";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import passport from "passport";
 import { apiLimiter, authLimiter } from "../controller/api-rate-limit";
@@ -179,7 +179,13 @@ route
   )
 
   // verification system
-  .get("/verify", ensureLoggedIn("/login"), authLimiter, verify)
+  .get(
+    "/verify",
+    ensureLoggedIn("/login"),
+    query("next").unescape(),
+    authLimiter,
+    verify
+  )
   .get(
     "/verify/:token",
     authLimiter,

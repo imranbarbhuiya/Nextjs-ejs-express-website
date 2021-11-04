@@ -39,8 +39,7 @@ function viewBlogs(path: string) {
   // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a middleware
   return async (req: Request, res: Response) => {
     let blogs: Blog[];
-    // SECURITY: fix query search xss issue
-    // deepcode ignore HTTPSourceWithUncheckedType: not finding a way to fix this
+    // deepcode ignore HTTPSourceWithUncheckedType: fixed in previous middleware
     const searchQuery = String(req.query.search);
     const autocompleteQuery = String(req.query.term);
     if (path === "myblogs") {
