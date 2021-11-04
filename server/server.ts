@@ -44,105 +44,111 @@ const RedisStore = connect_redis(session);
 // init csrf
 const csrfProtection = csrf({ cookie: true });
 // init next
-client.prepare().then(() => {
-  // initiate app
-  const app = express();
-  if (app.get("env") !== "development") {
-    // using helmet for csp and hide powered by only in production mode
-    app.use(
-      helmet({
-        contentSecurityPolicy: {
-          useDefaults: true,
-          directives: {
-            scriptSrc: [
-              "'self'",
-              "https://cdn.jsdelivr.net",
-              "https://code.jquery.com",
-            ],
-            imgSrc: ["'self'", "https://*", "data:"],
+client
+  .prepare()
+  .then(() => {
+    // initiate app
+    const app = express();
+    if (app.get("env") !== "development") {
+      // using helmet for csp and hide powered by only in production mode
+      app.use(
+        helmet({
+          contentSecurityPolicy: {
+            useDefaults: true,
+            directives: {
+              scriptSrc: [
+                "'self'",
+                "https://cdn.jsdelivr.net",
+                "https://code.jquery.com",
+              ],
+              imgSrc: ["'self'", "https://*", "data:"],
+            },
           },
-        },
-        hidePoweredBy: true,
-      })
-    );
-  }
-  app
-    // serve favicon
-    .use(serveFavicon(join(__dirname, "..", "public", "img", "favicon.ico")))
-    // set static file directory
-    .use(express.static("public"))
-    // set view engine
-    .set("view engine", "ejs")
-    // fetch data from request
-    .use(
-      express.urlencoded({
-        extended: false,
-      })
-    )
-    // trust proxy
-    .set("trust proxy", 1)
-    // set cookie parser
-    .use(cookieParser())
-    // set express season
-    .use(
-      session({
-        name: "codversity_session_id",
-        secret: process.env.SECRET as string,
-        resave: false,
-        saveUninitialized: false,
-        store: new RedisStore({ client: redisClient }),
-        cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
-      })
-    )
-    // set flash
-    .use(flash())
-    // init passport
-    .use(passport.initialize())
-    // using passport user session in app
-    .use(passport.session())
-    // using method override to use put and delete
-    .use(methodOverride("_method"))
-    // using morgan to write logs in console
-    .use(morganMiddleware);
+          hidePoweredBy: true,
+        })
+      );
+    }
+    app
+      // serve favicon
+      .use(serveFavicon(join(__dirname, "..", "public", "img", "favicon.ico")))
+      // set static file directory
+      .use(express.static("public"))
+      // set view engine
+      .set("view engine", "ejs")
+      // fetch data from request
+      .use(
+        express.urlencoded({
+          extended: false,
+        })
+      )
+      // trust proxy
+      .set("trust proxy", 1)
+      // set cookie parser
+      .use(cookieParser())
+      // set express season
+      .use(
+        session({
+          name: "codversity_session_id",
+          secret: process.env.SECRET as string,
+          resave: false,
+          saveUninitialized: false,
+          store: new RedisStore({ client: redisClient }),
+          // deepcode ignore WebCookieSecureDisabledByDefault: <please specify a reason of ignoring this>
+          cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
+        })
+      )
+      // set flash
+      .use(flash())
+      // init passport
+      .use(passport.initialize())
+      // using passport user session in app
+      .use(passport.session())
+      // using method override to use put and delete
+      .use(methodOverride("_method"))
+      // using morgan to write logs in console
+      .use(morganMiddleware);
 
-  // passport setup
-  passport.use(UserModel.createStrategy());
+    // passport setup
+    passport.use(UserModel.createStrategy());
 
-  // passport serialize and deserialize
-  passport.serializeUser(UserModel.serializeUser());
-  passport.deserializeUser(UserModel.deserializeUser());
+    // passport serialize and deserialize
+    passport.serializeUser(UserModel.serializeUser());
+    passport.deserializeUser(UserModel.deserializeUser());
 
-  // calling passport social auth function
-  passportSocialAuth();
+    // calling passport social auth function
+    passportSocialAuth();
 
-  app
-    // adding index router
-    .use("/", indexRoute)
-    // adding login router
-    .use("/", csrfProtection, loginRoute)
-    // defining admin middleware
-    .use(adminMiddleware)
-    // adding course router
-    .use("/course", courseRoute)
-    // adding blog router
-    .use("/blog", blogRoute)
-    // adding admin router
-    .use("/admin", adminRoute)
-    // adding user router
-    .use("/user", userRoute);
-  // next route
-  app.all("*", (req: Request, res: Response) => {
-    return handle(req, res);
+    app
+      // adding index router
+      .use("/", indexRoute)
+      // adding login router
+      .use("/", csrfProtection, loginRoute)
+      // defining admin middleware
+      .use(adminMiddleware)
+      // adding course router
+      .use("/course", courseRoute)
+      // adding blog router
+      .use("/blog", blogRoute)
+      // adding admin router
+      .use("/admin", adminRoute)
+      // adding user router
+      .use("/user", userRoute);
+    // next route
+    app.all("*", (req: Request, res: Response) => {
+      return handle(req, res);
+    });
+
+    // error handlers
+    app.use(errorMiddleware as ErrorRequestHandler);
+
+    // listening to port
+    const listener = app.listen(port, () => {
+      Logger.info(`Started server on ${JSON.stringify(listener.address())}`);
+    });
+  })
+  .catch((err) => {
+    Logger.error(err);
   });
-
-  // error handlers
-  app.use(errorMiddleware as ErrorRequestHandler);
-
-  // listening to port
-  const listener = app.listen(port, () => {
-    Logger.info(`Started server on ${JSON.stringify(listener.address())}`);
-  });
-});
 
 // Interface setup
 

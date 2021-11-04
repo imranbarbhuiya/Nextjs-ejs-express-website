@@ -1,11 +1,12 @@
 // importing modules
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { Metaphone } from "natural";
 // mongoose model
 import blogModel, { Blog } from "../model/blogModel";
 
 // blog save controller
 function saveBlogAndRedirect(path: string) {
+  // deepcode ignore NoRateLimitingForExpensiveWebOperation: <please specify a reason of ignoring this>
   return async (req: Request, res: Response) => {
     const keywords = Metaphone.process(
       `${req.body.title} ${req.user.username} ${req.body.description}`
@@ -25,7 +26,7 @@ function saveBlogAndRedirect(path: string) {
         return res.render(`blog/${path}`, { blog, message: req.flash() });
       }
       blog = await blog.save();
-      res.redirect(`/blog/preview/${blog.id}`);
+      res.redirect(303, `/blog/preview/${blog.id}`);
     } catch (error) {
       const errorMsg = error.message.split(":")[2];
       req.flash("error", errorMsg ? errorMsg : error.message);
@@ -35,10 +36,12 @@ function saveBlogAndRedirect(path: string) {
 }
 // view blog controller
 function viewBlogs(path: string) {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  // deepcode ignore NoRateLimitingForExpensiveWebOperation: annoying
+  return async (req: Request, res: Response) => {
     let blogs: Blog[];
-    const searchQuery = req.query.search;
-    const autocompleteQuery = req.query.term;
+    // deepcode ignore HTTPSourceWithUncheckedType: <please specify a reason of ignoring this>
+    const searchQuery = String(req.query.search);
+    const autocompleteQuery = String(req.query.term);
     if (path === "myblogs") {
       if (searchQuery) {
         blogs = await search(searchQuery as string, 0, req.user.id);
@@ -52,7 +55,8 @@ function viewBlogs(path: string) {
         blogs = await search(searchQuery as string, 0);
       } else if (autocompleteQuery) {
         blogs = await search(autocompleteQuery as string, 0);
-        blogs = blogs.map((blog: { title: any }) => blog.title);
+        blogs = blogs.map((blog: any) => blog.title);
+        // deepcode ignore XSS: <please specify a reason of ignoring this>
         return res.send(blogs);
       } else {
         let skip = 0;

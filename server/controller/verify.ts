@@ -39,7 +39,7 @@ async function verify(req: Request, res: Response) {
     req.flash("error", "Mail send failed please try again");
     Logger.error(error);
   }
-  res.redirect((req.query.next as string) || returnTo || "/");
+  res.redirect(301, String(req.query.next) || returnTo || "/");
 }
 
 export { verify };

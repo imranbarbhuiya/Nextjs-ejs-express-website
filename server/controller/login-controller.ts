@@ -138,7 +138,7 @@ export async function loginRouteRateLimit(
           delete req.session["referred"];
           const returnTo = req.session.returnTo;
           delete req.session["returnTo"];
-          res.redirect((req.query.next as string) || returnTo || "/");
+          res.redirect(301, String(req.query.next) || returnTo || "/");
         });
       }
     }
