@@ -2,10 +2,10 @@
 import { ensureLoggedIn, ensureLoggedOut } from "connect-ensure-login";
 import { randomBytes } from "crypto";
 import { NextFunction, Request, Response, Router } from "express";
-import rateLimit from "express-rate-limit";
 import { body, validationResult } from "express-validator";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import passport from "passport";
+import apiLimiter from "../controller/api-rate-limit";
 // controllers
 import { loginRouteRateLimit } from "../controller/login-controller";
 import { verify } from "../controller/verify";
@@ -65,12 +65,9 @@ route
 // for login rate limiter rate-limiter-flexible is used
 
 // rate limiter setup
-const apiLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour window
-  max: 5, // limit each IP to 5 requests per windowMs
-});
 
 route
+  // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a get request so no need of rate limiting
   .get("/login", (req, res) => {
     res.render("login/login", {
       login: "",
@@ -82,6 +79,7 @@ route
   .post("/login", loginRouteRateLimit)
 
   // local register system
+  // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a get request so no need of rate limiting
   .get("/register", (req, res) => {
     res.render("login/login", {
       login: "none",
@@ -151,7 +149,8 @@ route
   .get(
     "/change",
     ensureLoggedIn({ redirectTo: "/login", setReturnTo: false }),
-    function (req, res) {
+    // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a get request so no need of rate limiting
+    (req, res) => {
       res.render("login/change", {
         csrfToken: req.csrfToken(),
       });
@@ -182,7 +181,7 @@ route
   )
 
   // verification system
-  .get("/verify", ensureLoggedIn("/login"), verify)
+  .get("/verify", ensureLoggedIn("/login"), apiLimiter, verify)
   .get(
     "/verify/:token",
     apiLimiter,
@@ -218,14 +217,15 @@ route
   )
 
   // forgot password system
-  .get("/reset", ensureLoggedOut(), function (req, res) {
+  // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a get request so no need of rate limiting
+  .get("/reset", ensureLoggedOut(), (req, res) => {
     res.render("login/forgot", {
       password: false,
       message: req.flash(),
       csrfToken: req.csrfToken(),
     });
   })
-  .post("/reset", apiLimiter, async function (req, res) {
+  .post("/reset", apiLimiter, async (req, res) => {
     const resetPasswordToken = randomBytes(20).toString("hex");
     const mailTo = req.body.email;
     const user = await UserModel.findOneAndUpdate(
@@ -261,25 +261,21 @@ route
       });
     }
   })
-  .get(
-    "/reset/:token",
-    ensureLoggedOut("/"),
+  // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a get request so no need of rate limiting
+  .get("/reset/:token", ensureLoggedOut("/"), (req: Request, res: Response) => {
+    try {
+      jwt.verify(req.params.token, process.env.JWT_SECRET);
 
-    (req: Request, res: Response) => {
-      try {
-        jwt.verify(req.params.token, process.env.JWT_SECRET);
-
-        res.render("login/forgot", {
-          password: true,
-          message: req.flash(),
-          csrfToken: req.csrfToken(),
-        });
-      } catch {
-        req.flash("error", "token expired");
-        res.redirect("/login");
-      }
+      res.render("login/forgot", {
+        password: true,
+        message: req.flash(),
+        csrfToken: req.csrfToken(),
+      });
+    } catch {
+      req.flash("error", "token expired");
+      res.redirect("/login");
     }
-  )
+  })
   .post(
     "/reset/:token",
     apiLimiter,
