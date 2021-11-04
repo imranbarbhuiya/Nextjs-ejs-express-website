@@ -5,7 +5,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { body, validationResult } from "express-validator";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import passport from "passport";
-import apiLimiter from "../controller/api-rate-limit";
+import { apiLimiter, authLimiter } from "../controller/api-rate-limit";
 // controllers
 import { loginRouteRateLimit } from "../controller/login-controller";
 import { verify } from "../controller/verify";
@@ -64,11 +64,10 @@ route
 // uses passport-local-mongoose
 // for login rate limiter rate-limiter-flexible is used
 
-// rate limiter setup
+// file deepcode ignore NoRateLimitingForExpensiveWebOperation: already in place
 
 route
-  // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a get request so no need of rate limiting
-  .get("/login", (req, res) => {
+  .get("/login", apiLimiter, (req, res) => {
     res.render("login/login", {
       login: "",
       register: "none",
@@ -79,8 +78,7 @@ route
   .post("/login", loginRouteRateLimit)
 
   // local register system
-  // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a get request so no need of rate limiting
-  .get("/register", (req, res) => {
+  .get("/register", apiLimiter, (req, res) => {
     res.render("login/login", {
       login: "none",
       register: "",
@@ -90,7 +88,7 @@ route
   })
   .post(
     "/register",
-    apiLimiter,
+    authLimiter,
     body("username")
       .trim()
       .isLength({ min: 1 })
@@ -149,7 +147,7 @@ route
   .get(
     "/change",
     ensureLoggedIn({ redirectTo: "/login", setReturnTo: false }),
-    // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a get request so no need of rate limiting
+    apiLimiter,
     (req, res) => {
       res.render("login/change", {
         csrfToken: req.csrfToken(),
@@ -158,7 +156,7 @@ route
   )
   .post(
     "/change",
-    apiLimiter,
+    authLimiter,
     ensureLoggedIn({ redirectTo: "/login", setReturnTo: false }),
 
     (req: Request, res: Response) => {
@@ -181,10 +179,10 @@ route
   )
 
   // verification system
-  .get("/verify", ensureLoggedIn("/login"), apiLimiter, verify)
+  .get("/verify", ensureLoggedIn("/login"), authLimiter, verify)
   .get(
     "/verify/:token",
-    apiLimiter,
+    authLimiter,
     ensureLoggedIn({ redirectTo: "/login", setReturnTo: false }),
     (req: Request, res: Response) => {
       try {
@@ -217,15 +215,14 @@ route
   )
 
   // forgot password system
-  // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a get request so no need of rate limiting
-  .get("/reset", ensureLoggedOut(), (req, res) => {
+  .get("/reset", ensureLoggedOut(), apiLimiter, (req, res) => {
     res.render("login/forgot", {
       password: false,
       message: req.flash(),
       csrfToken: req.csrfToken(),
     });
   })
-  .post("/reset", apiLimiter, async (req, res) => {
+  .post("/reset", authLimiter, async (req, res) => {
     const resetPasswordToken = randomBytes(20).toString("hex");
     const mailTo = req.body.email;
     const user = await UserModel.findOneAndUpdate(
@@ -261,24 +258,28 @@ route
       });
     }
   })
-  // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a get request so no need of rate limiting
-  .get("/reset/:token", ensureLoggedOut("/"), (req: Request, res: Response) => {
-    try {
-      jwt.verify(req.params.token, process.env.JWT_SECRET);
+  .get(
+    "/reset/:token",
+    ensureLoggedOut("/"),
+    apiLimiter,
+    (req: Request, res: Response) => {
+      try {
+        jwt.verify(req.params.token, process.env.JWT_SECRET);
 
-      res.render("login/forgot", {
-        password: true,
-        message: req.flash(),
-        csrfToken: req.csrfToken(),
-      });
-    } catch {
-      req.flash("error", "token expired");
-      res.redirect("/login");
+        res.render("login/forgot", {
+          password: true,
+          message: req.flash(),
+          csrfToken: req.csrfToken(),
+        });
+      } catch {
+        req.flash("error", "token expired");
+        res.redirect("/login");
+      }
     }
-  })
+  )
   .post(
     "/reset/:token",
-    apiLimiter,
+    authLimiter,
     body("password")
       .isLength({ min: 8, max: 50 })
       .withMessage("Password length should be 8-50 character long.")

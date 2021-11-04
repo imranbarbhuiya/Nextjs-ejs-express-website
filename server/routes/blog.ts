@@ -1,6 +1,7 @@
 // importing dependencies
 import { ensureLoggedIn } from "connect-ensure-login";
 import { NextFunction, Request, Response, Router } from "express";
+import { apiLimiter } from "../controller/api-rate-limit";
 // controllers
 import { saveBlogAndRedirect, viewBlogs } from "../controller/blog";
 import { handleRejection } from "../controller/handleRejection";
@@ -12,6 +13,9 @@ import { User } from "../model/userModel";
 // init express route
 const route = Router();
 
+// file deepcode ignore NoRateLimitingForExpensiveWebOperation: already in place
+// TODO: add caching for view routes and remove apiLimiter
+
 route.use(
   /^\/.*(myblogs|unverified|new|preview|verify|edit).*/i,
   ensureLoggedIn({ redirectTo: "/login", setReturnTo: false })
@@ -20,7 +24,7 @@ route
   .get("/", viewBlogs("all"))
   .get("/myblogs", viewBlogs("myblogs"))
   .get("/unverified", isAdmin, viewBlogs("unverified"))
-  .get("/new", (req: Request, res: Response) => {
+  .get("/new", apiLimiter, (req: Request, res: Response) => {
     if (!req.user.verified) {
       req.flash(
         "error",
@@ -36,7 +40,8 @@ route
   })
   .post(
     "/new",
-    async (req: Request, res: Response, next: NextFunction) => {
+    apiLimiter,
+    async (req: Request, _res: Response, next: NextFunction) => {
       req.blog = new blogModel();
       next();
     },
@@ -54,9 +59,7 @@ route
     }),
     isAdminOrBlogOwner("view")
   )
-  // TODO: add rate limit
-  // file deepcode ignore NoRateLimitingForExpensiveWebOperation: will be added in future
-  .get("/:slug", async (req: Request, res: Response, next: any) => {
+  .get("/:slug", apiLimiter, async (req: Request, res: Response, next: any) => {
     const blog: Blog = await blogModel.findOne({
       slug: req.params.slug,
       verified: true,

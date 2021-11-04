@@ -6,8 +6,7 @@ import blogModel, { Blog } from "../model/blogModel";
 
 // blog save controller
 function saveBlogAndRedirect(path: string) {
-  // TODO: add rate limiting
-  // deepcode ignore NoRateLimitingForExpensiveWebOperation: will be used in the future
+  // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a middleware
   return async (req: Request, res: Response) => {
     const keywords = Metaphone.process(
       `${req.body.title} ${req.user.username} ${req.body.description}`
@@ -37,8 +36,7 @@ function saveBlogAndRedirect(path: string) {
 }
 // view blog controller
 function viewBlogs(path: string) {
-  // TODO: add rate limiting
-  // deepcode ignore NoRateLimitingForExpensiveWebOperation: will be used in the future
+  // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a middleware
   return async (req: Request, res: Response) => {
     let blogs: Blog[];
     // FIXME: fix query search xss issue
