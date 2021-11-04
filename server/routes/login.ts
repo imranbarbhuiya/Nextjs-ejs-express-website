@@ -240,6 +240,8 @@ route
       );
       req.flash("success", "Check email to proceed");
       res.redirect("/reset");
+      // TODO: replace html with ejs template
+      // deepcode ignore XSS: <please specify a reason of ignoring this>
       mail(
         mailTo,
         "Reset Password",

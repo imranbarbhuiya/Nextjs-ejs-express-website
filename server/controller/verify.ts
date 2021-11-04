@@ -28,6 +28,8 @@ async function verify(req: Request, res: Response) {
   const returnTo = req.session.returnTo;
   delete req.session["returnTo"];
   try {
+    // TODO: replace html with ejs template
+    // deepcode ignore XSS: <please specify a reason of ignoring this>
     await mail(
       email,
       "Verify account",
