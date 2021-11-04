@@ -1,15 +1,13 @@
 // importing dependencies
 import { createTransport } from "nodemailer";
-// importing dompurify
-import DOMpurify from "../lib/dompurify";
 // defining mail function
-async function mail(
-  mailTo: string,
-  subject: string,
-  html?: string,
-  text?: string
-) {
-  html = DOMpurify.sanitize(html);
+async function mail(options: {
+  mailTo: string;
+  subject: string;
+  html?: string;
+  text?: string;
+}) {
+  const { mailTo, subject, html, text } = options;
   let transporter = createTransport({
     service: "gmail",
     auth: {

@@ -27,7 +27,6 @@ import UserModel, { User } from "./model/userModel";
 import adminRoute from "./routes/admin";
 import blogRoute from "./routes/blog";
 import courseRoute from "./routes/course";
-import indexRoute from "./routes/index";
 import loginRoute from "./routes/login";
 import userRoute from "./routes/user";
 // configuring env variables
@@ -93,7 +92,8 @@ client
           resave: false,
           saveUninitialized: false,
           store: new RedisStore({ client: redisClient }),
-          // deepcode ignore WebCookieSecureDisabledByDefault: <please specify a reason of ignoring this>
+          // TODO: add secure cookie
+          // deepcode ignore WebCookieSecureDisabledByDefault: will be added in production
           cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
         })
       )
@@ -119,8 +119,6 @@ client
     passportSocialAuth();
 
     app
-      // adding index router
-      .use("/", indexRoute)
       // adding login router
       .use("/", csrfProtection, loginRoute)
       // defining admin middleware
@@ -162,5 +160,3 @@ declare global {
     }
   }
 }
-
-// TODO: add rate-limiter to required routes

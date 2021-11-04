@@ -29,13 +29,13 @@ async function verify(req: Request, res: Response) {
   delete req.session["returnTo"];
   try {
     // TODO: replace html with ejs template
-    // deepcode ignore XSS: <please specify a reason of ignoring this>
-    await mail(
-      email,
-      "Verify account",
-      `<p>Verify account</p>
-        <a href="${req.protocol}://${req.headers.host}/verify/${encoded}">Click here</a>`
-    );
+    // deepcode ignore XSS: will be replaced with ejs template
+    await mail({
+      mailTo: email,
+      subject: "Verify account",
+      html: `<p>Verify account</p>
+        <a href="${req.protocol}://${req.headers.host}/verify/${encoded}">Click here</a>`,
+    });
     req.flash("info", "Check email to verify");
   } catch (error) {
     req.flash("error", "Mail send failed please try again");
