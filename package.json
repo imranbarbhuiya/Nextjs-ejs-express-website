@@ -11,7 +11,8 @@
     "start": "cross-env NODE_ENV=production node dist/server.js",
     "lint": "next lint",
     "test": "snyk test",
-    "snyk:wizard": "snyk wizard"
+    "snyk:wizard": "snyk wizard",
+    "snyk:monitor": "snyk monitor"
   },
   "author": "imran",
   "license": "ISC",
