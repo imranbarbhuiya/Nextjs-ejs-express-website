@@ -54,6 +54,7 @@ route
     }),
     isAdminOrBlogOwner("view")
   )
+  // file deepcode ignore NoRateLimitingForExpensiveWebOperation: <please specify a reason of ignoring this>
   .get("/:slug", async (req: Request, res: Response, next: any) => {
     const blog: Blog = await blogModel.findOne({
       slug: req.params.slug,
@@ -100,7 +101,7 @@ route
       const blog: any = await blogModel.findById(req.params.id);
       blog.verified = true;
       blog.save();
-      res.redirect(`/blog/${blog.slug}`);
+      res.redirect(301, `/blog/${blog.slug}`);
     })
   );
 export default route;

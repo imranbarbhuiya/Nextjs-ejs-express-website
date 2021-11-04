@@ -11,7 +11,8 @@ const route = Router();
 route
   .get("/", async (req, res) => {
     let courses: Course[];
-    const searchQuery = req.query.search;
+    // deepcode ignore HTTPSourceWithUncheckedType: <please specify a reason of ignoring this>
+    const searchQuery = String(req.query.search);
     if (searchQuery) {
       const keywords = Metaphone.process(searchQuery as string);
       courses = await courseModel
@@ -22,11 +23,13 @@ route
     } else {
       courses = await courseModel.find({ verified: true }).sort({ price: 1 });
     }
+    // deepcode ignore XSS: <please specify a reason of ignoring this>
     res.send(courses);
   })
   .get("/create", ensureLoggedIn("/login"), (_req: Request, res: Response) => {
     res.render("course/courseAdd", { done: false });
   })
+  // file deepcode ignore NoRateLimitingForExpensiveWebOperation: <please specify a reason of ignoring this>
   .post("/create", ensureLoggedIn("/login"), (req: Request, res: Response) => {
     const { title, author, price } = req.body;
     const keywords = `${Metaphone.process(`${title} ${author}`)} ${title}`;

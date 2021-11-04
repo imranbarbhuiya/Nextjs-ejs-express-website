@@ -144,6 +144,7 @@ route
   .get(
     "/change",
     ensureLoggedIn({ redirectTo: "/login", setReturnTo: false }),
+    // file deepcode ignore NoRateLimitingForExpensiveWebOperation: <please specify a reason of ignoring this>
     function (req, res) {
       res.render("login/change", {
         csrfToken: req.csrfToken(),
