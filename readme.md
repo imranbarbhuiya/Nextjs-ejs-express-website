@@ -1,3 +1,5 @@
+[![wakatime](https://wakatime.com/badge/github/Codversity/Codversity.svg)](https://wakatime.com/badge/github/Codversity/Codversity)
+
 <p align="center">
   <a href="https://codversity.com">
     <img src="public/img/logo.png" height="128">
