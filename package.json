@@ -60,10 +60,11 @@
     "redis": "^3.1.2",
     "serve-favicon": "^2.5.0",
     "slugify": "^1.6.1",
-    "snyk": "^1.752.0",
+    "snyk": "^1.753.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@types/compression": "^1.7.2",
     "@types/connect-ensure-login": "^0.1.7",
     "@types/connect-flash": "^0.0.37",
     "@types/connect-redis": "^0.0.17",

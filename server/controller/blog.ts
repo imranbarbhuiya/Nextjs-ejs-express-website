@@ -9,11 +9,11 @@ function saveBlogAndRedirect(path: string) {
   // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a middleware
   return async (req: Request, res: Response) => {
     const keywords = Metaphone.process(
-      `${req.body.title} ${req.user.username} ${req.body.description}`
+      `${req.body.title} ${req.user?.username} ${req.body.description}`
     );
     let blog = req.blog;
-    blog.authorName = req.user.username;
-    blog.author = req.user.id;
+    blog.authorName = req.user?.username;
+    blog.author = req.user?.id;
     blog.title = req.body.title;
     blog.description = req.body.description;
     blog.markdown = req.body.markdown;
