@@ -2,8 +2,14 @@
 import flash from "connect-flash";
 import connect_redis from "connect-redis";
 import cookieParser from "cookie-parser";
+import crypto from "crypto";
 import csrf from "csurf";
-import express, { ErrorRequestHandler, Request, Response } from "express";
+import express, {
+  ErrorRequestHandler,
+  NextFunction,
+  Request,
+  Response,
+} from "express";
 import session from "express-session";
 import helmet from "helmet";
 import methodOverride from "method-override";
@@ -49,6 +55,12 @@ client
   .then(() => {
     // initiate app
     const app = express();
+    app.use((_req: Request, res: Response, next: NextFunction) => {
+      // nonce should be base64 encoded
+      res.locals.nonce = crypto.randomBytes(16).toString("base64");
+      global.__webpack_nonce__ = res.locals.nonce;
+      next();
+    });
     if (app.get("env") !== "development") {
       // using helmet for csp and hide powered by only in production mode
       // PRODUCTION: remove development condition
@@ -61,6 +73,8 @@ client
                 "'self'",
                 "https://cdn.jsdelivr.net",
                 "https://code.jquery.com",
+                // (_req: Request, res: Response) => `'nonce-${res.locals.nonce}'`,
+                ,
               ],
               imgSrc: ["'self'", "https://*", "data:"],
             },
@@ -150,8 +164,7 @@ client
     Logger.error(err);
   });
 
-// Interface setup
-
+// type setup
 // extend types
 type _User = User;
 declare global {
