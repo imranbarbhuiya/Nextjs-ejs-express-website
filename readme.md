@@ -1,4 +1,4 @@
-[![wakatime](https://wakatime.com/badge/github/Codversity/Codversity.svg)](https://wakatime.com/badge/github/Codversity/Codversity)
+[![wakatime](https://wakatime.com/badge/user/7da43ba9-2bc5-4a32-baea-19e38fc777e2/project/c824749e-8598-418b-a1e7-e66bc731c552.svg)](https://wakatime.com/badge/user/7da43ba9-2bc5-4a32-baea-19e38fc777e2/project/c824749e-8598-418b-a1e7-e66bc731c552)
 
 <p align="center">
   <a href="https://codversity.com">
