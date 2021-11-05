@@ -59,13 +59,14 @@ client
           contentSecurityPolicy: {
             useDefaults: true,
             directives: {
-              //   // TODO: add nonce to script src if required
-              // scriptSrc: [
-              //   "'self'",
-              //   // (req: Request) => `'nonce-${req.csrfToken()}'`,
-              // ],
-              styleSrc: ["'self'"],
-              imgSrc: ["'self'", "https", "data:"],
+              // PRODUCTION: remove unsafe-eval from style-src and add nonce in both style and script src
+              scriptSrc: [
+                "'self'",
+                "https://cdn.jsdelivr.net",
+                "https://code.jquery.com",
+                // (req: Request) => `'nonce-${req.csrfToken()}'`,
+              ],
+              imgSrc: ["'self'", "https://*", "data:"],
             },
           },
           hidePoweredBy: true,
@@ -139,13 +140,8 @@ client
     // next route
     app.all(
       "*",
-      // PRODUCTION: uncomment it
-      // helmet.contentSecurityPolicy({
-      //   useDefaults: true,
-      //   directives: {
-      //     imgSrc: ["'self'", "https", "data:"],
-      //   },
-      // }),
+      // PRODUCTION: change csp for this route
+      // add csp to all nextjs css and js files
       (req: Request, res: Response) => {
         return handle(req, res);
       }
