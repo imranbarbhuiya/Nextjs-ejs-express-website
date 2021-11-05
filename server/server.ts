@@ -3,14 +3,8 @@ import compression from "compression";
 import flash from "connect-flash";
 import connect_redis from "connect-redis";
 import cookieParser from "cookie-parser";
-import crypto from "crypto";
 import csrf from "csurf";
-import express, {
-  ErrorRequestHandler,
-  NextFunction,
-  Request,
-  Response,
-} from "express";
+import express, { ErrorRequestHandler, Request, Response } from "express";
 import session from "express-session";
 import helmet from "helmet";
 import methodOverride from "method-override";
@@ -57,28 +51,21 @@ client
     // initiate app
     const app = express();
     app.use(compression());
-    app.use((_req: Request, res: Response, next: NextFunction) => {
-      // nonce should be base64 encoded
-      res.locals.nonce = crypto.randomBytes(16).toString("base64");
-      global.__webpack_nonce__ = res.locals.nonce;
-      next();
-    });
+    // using helmet for csp and hide powered by only in production mode
+    // PRODUCTION: remove development condition
     if (app.get("env") !== "development") {
-      // using helmet for csp and hide powered by only in production mode
-      // PRODUCTION: remove development condition
       app.use(
         helmet({
           contentSecurityPolicy: {
             useDefaults: true,
             directives: {
-              scriptSrc: [
-                "'self'",
-                "https://cdn.jsdelivr.net",
-                "https://code.jquery.com",
-                // (_req: Request, res: Response) => `'nonce-${res.locals.nonce}'`,
-                ,
-              ],
-              imgSrc: ["'self'", "https://*", "data:"],
+              //   // TODO: add nonce to script src if required
+              // scriptSrc: [
+              //   "'self'",
+              //   // (req: Request) => `'nonce-${req.csrfToken()}'`,
+              // ],
+              styleSrc: ["'self'"],
+              imgSrc: ["'self'", "https", "data:"],
             },
           },
           hidePoweredBy: true,
@@ -112,7 +99,7 @@ client
           store: new RedisStore({ client: redisClient }),
           // PRODUCTION: add secure cookie
           // deepcode ignore WebCookieSecureDisabledByDefault: will be added in production
-          cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
+          cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true },
         })
       )
       // set flash
@@ -150,9 +137,19 @@ client
       // adding user router
       .use("/user", userRoute);
     // next route
-    app.all("*", (req: Request, res: Response) => {
-      return handle(req, res);
-    });
+    app.all(
+      "*",
+      // PRODUCTION: uncomment it
+      // helmet.contentSecurityPolicy({
+      //   useDefaults: true,
+      //   directives: {
+      //     imgSrc: ["'self'", "https", "data:"],
+      //   },
+      // }),
+      (req: Request, res: Response) => {
+        return handle(req, res);
+      }
+    );
 
     // error handlers
     app.use(errorMiddleware as ErrorRequestHandler);
@@ -160,6 +157,13 @@ client
     // listening to port
     const listener = app.listen(port, () => {
       Logger.info(`Started server on ${JSON.stringify(listener.address())}`);
+    });
+    process.on("SIGTERM", () => {
+      Logger.info("SIGTERM signal received");
+      listener.close(() => {
+        Logger.info("Closed out remaining connections");
+        process.exit(0);
+      });
     });
   })
   .catch((err) => {
@@ -177,8 +181,3 @@ declare global {
     }
   }
 }
-
-// handle unhandled process exceptions
-process.on("uncaughtException", (err) => {
-  Logger.error(err);
-});
