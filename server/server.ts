@@ -112,7 +112,7 @@ client
           store: new RedisStore({ client: redisClient }),
           // PRODUCTION: add secure cookie
           // deepcode ignore WebCookieSecureDisabledByDefault: will be added in production
-          cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
+          cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true },
         })
       )
       // set flash
@@ -161,6 +161,13 @@ client
     const listener = app.listen(port, () => {
       Logger.info(`Started server on ${JSON.stringify(listener.address())}`);
     });
+    process.on("SIGTERM", () => {
+      Logger.info("SIGTERM signal received");
+      listener.close(() => {
+        Logger.info("Closed out remaining connections");
+        process.exit(0);
+      });
+    });
   })
   .catch((err) => {
     Logger.error(err);
@@ -177,8 +184,3 @@ declare global {
     }
   }
 }
-
-// handle unhandled process exceptions
-process.on("uncaughtException", (err) => {
-  Logger.error(err);
-});
