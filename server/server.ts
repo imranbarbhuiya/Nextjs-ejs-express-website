@@ -1,4 +1,5 @@
 // importing dependencies
+import compression from "compression";
 import flash from "connect-flash";
 import connect_redis from "connect-redis";
 import cookieParser from "cookie-parser";
@@ -55,6 +56,7 @@ client
   .then(() => {
     // initiate app
     const app = express();
+    app.use(compression());
     app.use((_req: Request, res: Response, next: NextFunction) => {
       // nonce should be base64 encoded
       res.locals.nonce = crypto.randomBytes(16).toString("base64");
