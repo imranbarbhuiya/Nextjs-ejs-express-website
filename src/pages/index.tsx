@@ -8,7 +8,7 @@ import Link from "next/link";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 // user type
-import type { User } from "../server/model/userModel";
+import type { User } from "../../server/model/userModel";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { req } = ctx;
