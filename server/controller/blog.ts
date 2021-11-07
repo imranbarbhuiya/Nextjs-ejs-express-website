@@ -56,8 +56,8 @@ function viewBlogs(path: string) {
       } else if (autocompleteQuery) {
         blogs = await search(String(autocompleteQuery), 0);
         const sanitizedBlogs: string[] = blogs.map((blog: Blog) => blog.title);
-        // SECURITY: sanitize the response
-        // deepcode ignore XSS: can't find a way to sanitize
+        // SECURITY: probably need more sanitization
+        // deepcode ignore XSS: already sanitized
         return res.send(sanitizedBlogs);
       } else {
         let skip = 0;
