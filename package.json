@@ -108,6 +108,6 @@
   "homepage": "https://github.com/imranbarbhuiya/Codversity#readme",
   "description": "",
   "engines": {
-    "node": "^16.13.0"
+    "node": ">=16.13.0"
   }
 }
