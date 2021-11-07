@@ -52,6 +52,7 @@
     "passport-github2": "^0.1.12",
     "passport-google-oauth20": "^2.0.0",
     "passport-local-mongoose": "^6.1.0",
+    "passport-totp": "^0.0.2",
     "rate-limit-redis": "^2.1.0",
     "rate-limiter-flexible": "^2.3.3",
     "react": "^17.0.2",
@@ -60,7 +61,6 @@
     "redis": "^3.1.2",
     "serve-favicon": "^2.5.0",
     "slugify": "^1.6.1",
-    "snyk": "^1.753.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
@@ -95,6 +95,7 @@
     "eslint": "7.32.0",
     "eslint-config-next": "^12.0.3",
     "nodemon": "^2.0.14",
+    "snyk": "^1.753.0",
     "ts-node": "^10.4.0",
     "typescript": "^4.4.4"
   },
