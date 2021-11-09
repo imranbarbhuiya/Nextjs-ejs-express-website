@@ -1,4 +1,5 @@
 [![wakatime](https://wakatime.com/badge/user/7da43ba9-2bc5-4a32-baea-19e38fc777e2/project/c824749e-8598-418b-a1e7-e66bc731c552.svg)](https://wakatime.com/badge/user/7da43ba9-2bc5-4a32-baea-19e38fc777e2/project/c824749e-8598-418b-a1e7-e66bc731c552)
+[![CodeFactor](https://www.codefactor.io/repository/github/codversity/codversity/badge/main?s=87dbb7de0bc46c9ae8cf936c32b7644aa0800ce0)](https://www.codefactor.io/repository/github/codversity/codversity/overview/main)
 
 <p align="center">
   <a href="https://codversity.com">
