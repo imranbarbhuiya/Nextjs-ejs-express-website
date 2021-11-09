@@ -96,13 +96,17 @@ img {
   position: absolute;
   bottom: 1rem;
   width: 100%;
+  animation-duration: 0.4s;
+  animation-name: animate-login;
+}
+.login__register,
+.login__create,
+.forgot {
   background-color: var(--first-color-lighten);
   padding: 2rem 1rem;
   border-radius: 1rem;
   text-align: center;
   box-shadow: 0 8px 20px rgba(35, 0, 77, 0.2);
-  animation-duration: 0.4s;
-  animation-name: animate-login;
 }
 
 @keyframes animate-login {
@@ -253,11 +257,6 @@ img {
 .forgot {
   bottom: 1rem;
   width: 350px;
-  background-color: var(--first-color-lighten);
-  padding: 2rem 1rem;
-  border-radius: 1rem;
-  text-align: center;
-  box-shadow: 0 8px 20px rgba(35, 0, 77, 0.2);
   animation-duration: 0.4s;
   animation-name: animate-login;
   pointer-events: all;
