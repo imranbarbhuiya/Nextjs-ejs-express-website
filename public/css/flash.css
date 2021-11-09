@@ -1,7 +1,7 @@
 .flash {
   margin: 0 10px;
   position: fixed;
-  right: 0px;
+  right: 0;
   top: 10px;
   box-sizing: border-box;
   z-index: 999999;
@@ -92,12 +92,12 @@
 
 .flash .flash-range {
   position: absolute;
-  bottom: 0px;
+  bottom: 0;
   left: 0;
   height: 5px;
   width: 0;
   background-color: var(--color);
-  border-radius: 0 0 0px 5px;
+  border-radius: 0 0 0 5px;
   animation: range linear 1 forwards 5s;
 }
 
@@ -107,7 +107,7 @@
     border-radius: 0 0 5px 5px;
   }
   5% {
-    border-radius: 0 0 0px 5px;
+    border-radius: 0 0 0 5px;
     width: 100%;
   }
 }
