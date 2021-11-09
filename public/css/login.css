@@ -397,18 +397,6 @@ img {
   background-color: #de463b;
   color: #ffffff;
 }
-@-webkit-keyframes bubble-size {
-  0%,
-  75% {
-    width: var(--size, 4rem);
-    height: var(--size, 4rem);
-  }
-  100% {
-    width: 0rem;
-    height: 0rem;
-  }
-}
-
 @keyframes bubble-size {
   0%,
   75% {
@@ -416,18 +404,11 @@ img {
     height: var(--size, 4rem);
   }
   100% {
-    width: 0rem;
-    height: 0rem;
+    width: 0;
+    height: 0;
   }
 }
-@-webkit-keyframes bubble-move {
-  0% {
-    bottom: -4rem;
-  }
-  100% {
-    bottom: var(--distance, 10rem);
-  }
-}
+
 @keyframes bubble-move {
   0% {
     bottom: -4rem;
@@ -455,9 +436,6 @@ img {
   list-style: none;
   padding: 20px;
   background: white;
-  box-shadow: 0 8px 20px rgba(35, 0, 77, 0.2);
-  animation-duration: 0.4s;
-  animation-name: animate-login;
   z-index: 1049;
   color: red;
   display: none;
