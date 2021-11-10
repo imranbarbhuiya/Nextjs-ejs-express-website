@@ -93,7 +93,7 @@
     "@types/serve-favicon": "^2.5.3",
     "eslint": "7.32.0",
     "eslint-config-next": "^12.0.3",
-    "nodemon": "^2.0.14",
+    "nodemon": "^2.0.15",
     "snyk": "^1.757.0",
     "ts-node": "^10.4.0",
     "typescript": "^4.4.4"
