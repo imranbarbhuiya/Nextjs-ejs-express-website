@@ -20,7 +20,6 @@
     ".next/cache"
   ],
   "dependencies": {
-    "@types/marked": "^4.0.0",
     "axios": "^0.24.0",
     "compression": "^1.7.4",
     "connect-ensure-login": "^0.1.1",
@@ -77,6 +76,7 @@
     "@types/express-session": "^1.17.4",
     "@types/jsdom": "^16.2.13",
     "@types/jsonwebtoken": "^8.5.5",
+    "@types/marked": "^4.0.0",
     "@types/method-override": "^0.0.32",
     "@types/morgan": "^1.9.3",
     "@types/natural": "^5.1.0",
