@@ -22,8 +22,9 @@ import Logger from "./lib/logger";
 import adminMiddleware from "./middleware/admin.middleware";
 import errorMiddleware from "./middleware/error.middleware";
 import morganMiddleware from "./middleware/morgan.middleware";
+import type { User as _User } from "./model/userModel";
 // Mongoose Models
-import UserModel, { User } from "./model/userModel";
+import UserModel from "./model/userModel";
 // routes
 import adminRoute from "./routes/admin";
 import blogRoute from "./routes/blog";
@@ -167,8 +168,6 @@ client
   });
 
 // type setup
-// extend types
-type _User = User;
 declare global {
   namespace Express {
     export interface User extends _User {}
