@@ -30,6 +30,7 @@ async function verify(req: Request, res: Response) {
   try {
     // TODO: replace html with ejs template
     // deepcode ignore XSS: will be replaced with ejs template
+    // ejs.render(filename, {variable: value}, callback)
     await mail({
       mailTo: email,
       subject: "Verify account",
