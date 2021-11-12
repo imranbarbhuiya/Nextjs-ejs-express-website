@@ -1,0 +1,7 @@
+{
+  "labels": {
+    "type: next": ["src/**"],
+    "type: ejs": ["views/**"],
+    "type: server": ["server/**"],
+  }
+}
