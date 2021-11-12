@@ -1,0 +1,15 @@
+enhancement:
+- '*'
+
+dependencies:
+- package.*.json
+- package.json
+
+server:
+- server/**/*
+
+next:
+- src/**/*
+
+ejs:
+- views/**/*
