@@ -93,7 +93,7 @@
     "@types/redis": "^2.8.32",
     "@types/serve-favicon": "^2.5.3",
     "eslint": "7.32.0",
-    "eslint-config-next": "^12.0.3",
+    "eslint-config-next": "^12.0.4",
     "nodemon": "^2.0.15",
     "snyk": "^1.763.0",
     "ts-node": "^10.4.0",
