@@ -1,4 +1,5 @@
-import mongoose, { Document, model, Schema } from "mongoose";
+import type { Document } from "mongoose";
+import { model, Schema } from "mongoose";
 
 interface CourseReview extends Document {
   courseId: string;
@@ -12,7 +13,7 @@ const reviewSchema = new Schema<CourseReview>({
   courseId: { type: String, require: true, unique: true },
   reviews: [
     {
-      userId: { type: mongoose.Types.ObjectId, require: true, unique: true },
+      userId: { type: String, require: true, unique: true },
       star: { type: Number, require: true },
       comment: {
         type: String,

@@ -1,15 +1,13 @@
-import {
+import type {
   Document,
-  model,
   PassportLocalDocument,
   PassportLocalErrorMessages,
   PassportLocalModel,
   PassportLocalOptions,
   PassportLocalSchema,
-  Schema,
 } from "mongoose";
+import { model, Schema } from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose";
-//#region Test Models
 interface User extends PassportLocalDocument {
   email: string;
   username: string;

@@ -1,11 +1,11 @@
 // types
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 // importing dependencies
 import passport from "passport";
 import { RateLimiterRedis } from "rate-limiter-flexible";
 // Redis Client
 import redisClient from "../db/redisDB";
-import { User } from "../model/userModel";
+import type { User } from "../model/userModel";
 
 // setting number of wrong limit
 const maxWrongAttemptsByIPperDay = 100;

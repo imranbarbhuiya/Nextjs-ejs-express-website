@@ -1,8 +1,10 @@
 // import dependencies
-import { NextFunction } from "express";
+import type { NextFunction } from "express";
 import { marked } from "marked";
-import { Document, Error, model, Schema } from "mongoose";
-import fuzzySearching, { MongooseFuzzyModel } from "mongoose-fuzzy-searching";
+import type { Document, Error as MongoError } from "mongoose";
+import { model, Schema } from "mongoose";
+import type { MongooseFuzzyModel } from "mongoose-fuzzy-searching";
+import fuzzySearching from "mongoose-fuzzy-searching";
 import slugify from "slugify";
 // import dom
 import DOMpurify from "../lib/dompurify";
@@ -112,7 +114,7 @@ const blogModel = model<Blog>("blog", blogSchema) as MongooseFuzzyModel<Blog>;
 export default blogModel;
 export type { Blog };
 
-class _Error extends Error {
+interface _Error extends MongoError {
   code?: number;
   keyValue?: string;
 }

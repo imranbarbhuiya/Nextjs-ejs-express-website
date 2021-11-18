@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 function adminMiddleware(req: Request, _res: Response, next: NextFunction) {
   if (req.user && req.user.role == "admin") {
     req.admin = true;

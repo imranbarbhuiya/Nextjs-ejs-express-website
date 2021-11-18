@@ -1,8 +1,9 @@
 // importing modules
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { Metaphone } from "natural";
 // mongoose model
-import blogModel, { Blog } from "../model/blogModel";
+import type { Blog } from "../model/blogModel";
+import blogModel from "../model/blogModel";
 
 // blog save controller
 function saveBlogAndRedirect(path: string) {
