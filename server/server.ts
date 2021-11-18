@@ -156,13 +156,6 @@ client
     const listener = app.listen(port, () => {
       Logger.info(`Started server on ${JSON.stringify(listener.address())}`);
     });
-    process.on("SIGTERM", () => {
-      Logger.info("SIGTERM signal received");
-      listener.close(() => {
-        Logger.info("Closed out remaining connections");
-        process.exit(0);
-      });
-    });
   })
   .catch((err) => {
     Logger.error(err);
