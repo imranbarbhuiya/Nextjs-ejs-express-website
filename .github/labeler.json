@@ -1,5 +1,5 @@
 {
   "labels": {
-    "enhancement": ["server/**"],
+    "duplicate": ["server/**"],
   }
 }
