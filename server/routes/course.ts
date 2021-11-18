@@ -1,11 +1,13 @@
 // importing dependencies
 import { ensureLoggedIn } from "connect-ensure-login";
-import { Request, Response, Router } from "express";
+import type { Request, Response } from "express";
+import { Router } from "express";
 import { query } from "express-validator";
 import { Metaphone } from "natural";
 import { authLimiter } from "../controller/api-rate-limit";
-import courseModel, { Course } from "../model/courseModel";
 // mongoose models
+import type { Course } from "../model/courseModel";
+import courseModel from "../model/courseModel";
 import courseDataModel from "../model/userCourseData";
 // init express route
 const route = Router();

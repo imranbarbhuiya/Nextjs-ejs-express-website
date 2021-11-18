@@ -1,7 +1,8 @@
 // importing dependencies
 import { ensureLoggedIn, ensureLoggedOut } from "connect-ensure-login";
 import { randomBytes } from "crypto";
-import { NextFunction, Request, Response, Router } from "express";
+import type { NextFunction, Request, Response } from "express";
+import { Router } from "express";
 import { body, query, validationResult } from "express-validator";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import passport from "passport";
@@ -12,7 +13,8 @@ import { verify } from "../controller/verify";
 // mail module
 import mail from "../lib/mail";
 // mongoose models
-import UserModel, { User } from "../model/userModel";
+import type { User } from "../model/userModel";
+import UserModel from "../model/userModel";
 
 // init router
 const route = Router();

@@ -1,12 +1,12 @@
 // importing dependencies
 import { randomBytes } from "crypto";
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import Logger from "../lib/logger";
 // mail module
 import mail from "../lib/mail";
 // mongoose model
-import User from "../model/userModel";
+import userModel from "../model/userModel";
 // verify controller
 async function verify(req: Request, res: Response) {
   const verificationToken = randomBytes(20).toString("hex");
@@ -19,7 +19,7 @@ async function verify(req: Request, res: Response) {
     { expiresIn: "24h" }
   );
   const email = req.user.email;
-  await User.findOneAndUpdate(
+  await userModel.findOneAndUpdate(
     { email: email },
     {
       verificationToken,

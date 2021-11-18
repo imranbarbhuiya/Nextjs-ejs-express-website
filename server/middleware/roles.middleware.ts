@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import type { Course } from "../model/courseModel";
 async function isAdmin(req: Request, res: Response, next: NextFunction) {
   if (req.user && req.user.role === "admin") {

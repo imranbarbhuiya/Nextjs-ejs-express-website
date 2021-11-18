@@ -1,6 +1,7 @@
 // importing dependencies
 import { ensureLoggedIn } from "connect-ensure-login";
-import { NextFunction, Request, Response, Router } from "express";
+import type { NextFunction, Request, Response } from "express";
+import { Router } from "express";
 import { query } from "express-validator";
 import { apiLimiter } from "../controller/api-rate-limit";
 // controllers
@@ -8,8 +9,9 @@ import { saveBlogAndRedirect, viewBlogs } from "../controller/blog";
 import { handleRejection } from "../controller/handleRejection";
 // middleware
 import { isAdmin, isAdminOrBlogOwner } from "../middleware/roles.middleware";
+import type { Blog } from "../model/blogModel";
 // mongoose models
-import blogModel, { Blog } from "../model/blogModel";
+import blogModel from "../model/blogModel";
 // init express route
 const route = Router();
 

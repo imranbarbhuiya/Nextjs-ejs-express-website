@@ -1,4 +1,5 @@
-import mongoose, { Document, model, Schema } from "mongoose";
+import type { Document } from "mongoose";
+import { model, Schema } from "mongoose";
 
 interface UserCourseData extends Document {
   userId: string;
@@ -21,7 +22,7 @@ const userCourseDataSchema = new Schema<UserCourseData>({
   },
   subscribedCourses: [
     {
-      courseId: { type: mongoose.Types.ObjectId, require: true, unique: true },
+      courseId: { type: String, require: true, unique: true },
       price: { type: Number },
       createdAt: {
         type: Date,
@@ -32,7 +33,7 @@ const userCourseDataSchema = new Schema<UserCourseData>({
   ],
   yourCourses: [
     {
-      courseId: { type: mongoose.Types.ObjectId, require: true, unique: true },
+      courseId: { type: String, require: true, unique: true },
       price: { type: Number },
       createdAt: {
         type: Date,

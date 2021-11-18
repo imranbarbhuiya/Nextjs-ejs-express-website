@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 
 function errorMiddleware(err: HttpException, _req: Request, res: Response) {
   if (err.code === "EBADCSRFTOKEN") {

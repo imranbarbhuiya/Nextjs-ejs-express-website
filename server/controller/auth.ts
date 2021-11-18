@@ -2,22 +2,18 @@
 import axios from "axios";
 import { CallbackError } from "mongoose";
 import passport from "passport";
-import {
-  Profile as FacebookProfile,
-  Strategy as FacebookStrategy,
-} from "passport-facebook";
-import {
-  Profile as GithubProfile,
-  Strategy as GitHubStrategy,
-} from "passport-github2";
-import {
+import type { Profile as FacebookProfile } from "passport-facebook";
+import { Strategy as FacebookStrategy } from "passport-facebook";
+import type { Profile as GithubProfile } from "passport-github2";
+import { Strategy as GitHubStrategy } from "passport-github2";
+import type {
   Profile as GoogleProfile,
-  Strategy as GoogleStrategy,
   VerifyCallback,
 } from "passport-google-oauth20";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 // mongoose model
-import UserModel, { User } from "../model/userModel";
-//
+import type { User } from "../model/userModel";
+import UserModel from "../model/userModel";
 
 // setup the google facebook and github strategy
 const passportSocialAuth = () => {

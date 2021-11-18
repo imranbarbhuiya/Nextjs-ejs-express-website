@@ -1,3 +1,4 @@
+import type { Document } from "mongoose";
 import { model, Schema } from "mongoose";
 
 interface CourseVideoData extends Document {
