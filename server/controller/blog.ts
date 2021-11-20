@@ -1,6 +1,6 @@
 // importing modules
 import type { Request, Response } from "express";
-import { Metaphone } from "natural";
+import { metaphone } from "../lib/metaphone";
 // mongoose model
 import type { Blog } from "../model/blogModel";
 import blogModel from "../model/blogModel";
@@ -9,7 +9,7 @@ import blogModel from "../model/blogModel";
 function saveBlogAndRedirect(path: string) {
   // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a middleware
   return async (req: Request, res: Response) => {
-    const keywords = Metaphone.process(
+    const keywords = metaphone(
       `${req.body.title} ${req.user?.username} ${req.body.description}`
     );
     let blog = req.blog;
@@ -98,7 +98,7 @@ async function search(
   unverified?: boolean
 ) {
   if (!skip) skip = 0;
-  const keywords = Metaphone.process(searchQuery);
+  const keywords = metaphone(searchQuery);
   let blogs: Blog[];
   if (author)
     blogs = await blogModel
