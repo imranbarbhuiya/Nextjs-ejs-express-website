@@ -3,8 +3,8 @@ import { ensureLoggedIn } from "connect-ensure-login";
 import type { Request, Response } from "express";
 import { Router } from "express";
 import { query } from "express-validator";
-import { Metaphone } from "natural";
 import { authLimiter } from "../controller/api-rate-limit";
+import { metaphone } from "../lib/metaphone";
 // mongoose models
 import type { Course } from "../model/courseModel";
 import courseModel from "../model/courseModel";
@@ -18,7 +18,7 @@ route
     // deepcode ignore HTTPSourceWithUncheckedType: already fixed
     const searchQuery = String(req.query.search);
     if (searchQuery) {
-      const keywords = Metaphone.process(searchQuery as string);
+      const keywords = metaphone(searchQuery as string);
       courses = await courseModel
         .fuzzySearch(`${keywords} ${searchQuery}`, {
           verified: true,
@@ -41,7 +41,7 @@ route
     // deepcode ignore NoRateLimitingForExpensiveWebOperation: already added a rate limiter
     (req: Request, res: Response) => {
       const { title, author, price } = req.body;
-      const keywords = `${Metaphone.process(`${title} ${author}`)} ${title}`;
+      const keywords = `${metaphone(`${title} ${author}`)} ${title}`;
       const course = new courseModel({
         author,
         authorId: req.user.id,
