@@ -38,7 +38,7 @@
     "helmet": "^4.6.0",
     "jsdom": "^18.1.1",
     "jsonwebtoken": "^8.5.1",
-    "marked": "^4.0.4",
+    "marked": "^4.0.5",
     "method-override": "^3.0.0",
     "mongoose": "^6.0.13",
     "mongoose-fuzzy-searching": "^2.0.2",
