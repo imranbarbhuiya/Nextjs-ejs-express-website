@@ -45,7 +45,7 @@
     "morgan": "^1.10.0",
     "next": "^12.0.4",
     "nextjs-progressbar": "^0.0.13",
-    "nodemailer": "^6.7.1",
+    "nodemailer": "^6.7.2",
     "passport": "^0.5.0",
     "passport-facebook": "^3.0.0",
     "passport-github2": "^0.1.12",
@@ -93,7 +93,7 @@
     "eslint": "7.32.0",
     "eslint-config-next": "^12.0.4",
     "nodemon": "^2.0.15",
-    "snyk": "^1.773.0",
+    "snyk": "^1.775.0",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.2"
   },
