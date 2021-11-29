@@ -158,7 +158,7 @@ const metaphone = function (token: string, maxLength?: number) {
   token = dropVowels(token);
 
   if (maxLength) {
-    token.toUpperCase();
+    token = token.toUpperCase();
     if (token.length >= maxLength) {
       token = token.substring(0, maxLength);
     }
