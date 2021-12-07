@@ -1,15 +1,17 @@
 enhancement:
-- '*'
+  - "*"
+  - "!package.*.json"
+  - "!package.json"
 
 dependencies:
-- package.*.json
-- package.json
+  - package.*.json
+  - package.json
 
 server:
-- server/**/*
+  - server/**/*
 
 next:
-- src/**/*
+  - src/**/*
 
 ejs:
-- views/**/*
+  - views/**/*
