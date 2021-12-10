@@ -65,7 +65,7 @@
     "@types/compression": "^1.7.2",
     "@types/connect-ensure-login": "^0.1.7",
     "@types/connect-flash": "^0.0.37",
-    "@types/connect-redis": "^0.0.17",
+    "@types/connect-redis": "^0.0.18",
     "@types/cookie-parser": "^1.4.2",
     "@types/csurf": "^1.11.2",
     "@types/dompurify": "^2.3.1",
