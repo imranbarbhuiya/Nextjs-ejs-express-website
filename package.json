@@ -1,10 +1,9 @@
 {
   "name": "codversity",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha",
   "main": "server/server.ts",
   "scripts": {
     "dev": "nodemon",
-    "debug:server": "cross-env DEBUG=express:* nodemon",
     "build:server": "tsc --project tsconfig.server.json",
     "build:next": "next build",
     "build": "npm run build:next && npm run build:server",
@@ -14,14 +13,13 @@
     "snyk:wizard": "snyk wizard",
     "snyk:monitor": "snyk monitor"
   },
-  "author": "imran",
+  "author": "imranbarbhuiya",
   "license": "ISC",
   "cacheDirectories": [
     ".next/cache"
   ],
   "dependencies": {
     "axios": "^0.24.0",
-    "compression": "^1.7.4",
     "connect-ensure-login": "^0.1.1",
     "connect-flash": "^0.1.1",
     "connect-redis": "^6.0.0",
@@ -62,7 +60,6 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
-    "@types/compression": "^1.7.2",
     "@types/connect-ensure-login": "^0.1.7",
     "@types/connect-flash": "^0.0.37",
     "@types/connect-redis": "^0.0.18",
@@ -104,8 +101,11 @@
     "url": "https://github.com/imranbarbhuiya/Codversity/issues"
   },
   "homepage": "https://github.com/imranbarbhuiya/Codversity#readme",
-  "description": "",
+  "description": "[![wakatime](https://wakatime.com/badge/user/7da43ba9-2bc5-4a32-baea-19e38fc777e2/project/c824749e-8598-418b-a1e7-e66bc731c552.svg)](https://wakatime.com/badge/user/7da43ba9-2bc5-4a32-baea-19e38fc777e2/project/c824749e-8598-418b-a1e7-e66bc731c552)\r [![Build](https://github.com/Codversity/Codversity/actions/workflows/build.yml/badge.svg)](https://github.com/Codversity/Codversity/actions/workflows/build.yml/badge.svg)\r [![CodeFactor](https://www.codefactor.io/repository/github/codversity/codversity/badge/main?s=87dbb7de0bc46c9ae8cf936c32b7644aa0800ce0)](https://www.codefactor.io/repository/github/codversity/codversity/overview/main)",
   "engines": {
     "node": ">=16.13.0"
-  }
+  },
+  "keywords": [
+    "codversity"
+  ]
 }

@@ -1,5 +1,4 @@
 // importing dependencies
-import compression from "compression";
 import flash from "connect-flash";
 import connect_redis from "connect-redis";
 import cookieParser from "cookie-parser";
@@ -52,7 +51,6 @@ client
   .then(() => {
     // initiate app
     const app = express();
-    app.use(compression());
     // using helmet for csp and hide powered by only in production mode
     // PRODUCTION: remove development condition
     if (app.get("env") !== "development") {
@@ -162,7 +160,9 @@ client
 // type setup
 declare global {
   namespace Express {
-    export interface User extends _User {}
+    export interface User extends _User {
+      //
+    }
     export interface Request {
       admin?: boolean;
     }
