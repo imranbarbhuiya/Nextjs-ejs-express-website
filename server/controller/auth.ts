@@ -1,6 +1,6 @@
 // requiring dependencies
 import axios from "axios";
-import { CallbackError } from "mongoose";
+import type { CallbackError } from "mongoose";
 import passport from "passport";
 import type { Profile as FacebookProfile } from "passport-facebook";
 import { Strategy as FacebookStrategy } from "passport-facebook";
