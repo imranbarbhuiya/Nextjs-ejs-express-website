@@ -107,8 +107,6 @@ client
       )
       // set flash
       .use(flash())
-      // init passport
-      .use(passport.initialize())
       // using passport user session in app
       .use(passport.session())
       // using method override to use put and delete
