@@ -160,9 +160,8 @@ client
 // type setup
 declare global {
   namespace Express {
-    export interface User extends _User {
-      //
-    }
+    // tslint:disable-next-line:no-empty-interface
+    export interface User extends _User {}
     export interface Request {
       admin?: boolean;
     }
