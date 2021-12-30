@@ -38,7 +38,7 @@
     "jsonwebtoken": "^8.5.1",
     "marked": "^4.0.8",
     "method-override": "^3.0.0",
-    "mongoose": "^6.1.3",
+    "mongoose": "^6.1.4",
     "morgan": "^1.10.0",
     "next": "^12.0.7",
     "nextjs-progressbar": "^0.0.13",
@@ -87,7 +87,7 @@
     "eslint": "^8.5.0",
     "eslint-config-next": "^12.0.7",
     "nodemon": "^2.0.15",
-    "snyk": "^1.809.0",
+    "snyk": "^1.812.0",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4"
   },
