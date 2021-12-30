@@ -1,10 +1,10 @@
 // import dependencies
+import type { MongooseFuzzyModel } from "@imranbarbhuiya/mongoose-fuzzy-searching";
+import fuzzySearching from "@imranbarbhuiya/mongoose-fuzzy-searching";
 import type { NextFunction } from "express";
 import { marked } from "marked";
 import type { Document, Error as MongoError } from "mongoose";
 import { model, Schema } from "mongoose";
-import type { MongooseFuzzyModel } from "mongoose-fuzzy-searching";
-import fuzzySearching from "mongoose-fuzzy-searching";
 import slugify from "slugify";
 // import dom
 import DOMpurify from "../lib/dompurify";
