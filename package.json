@@ -19,7 +19,7 @@
     ".next/cache"
   ],
   "dependencies": {
-    "@imranbarbhuiya/mongoose-fuzzy-searching": "^3.0.3",
+    "@imranbarbhuiya/mongoose-fuzzy-searching": "^3.0.4",
     "axios": "^0.24.0",
     "connect-ensure-login": "^0.1.1",
     "connect-flash": "^0.1.1",
