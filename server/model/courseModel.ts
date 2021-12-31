@@ -1,5 +1,6 @@
-import type { MongooseFuzzyModel } from "@imranbarbhuiya/mongoose-fuzzy-searching";
-import mongoose_fuzzy_searching from "@imranbarbhuiya/mongoose-fuzzy-searching";
+import fuzzySearching, {
+  MongoosePluginModel,
+} from "@imranbarbhuiya/mongoose-fuzzy-searching";
 import type { Document } from "mongoose";
 import { model, Schema } from "mongoose";
 
@@ -25,13 +26,13 @@ const courseSchema = new Schema<Course>({
   verified: { type: Boolean, required: true, default: false },
 });
 
-courseSchema.plugin(mongoose_fuzzy_searching, {
+courseSchema.plugin(fuzzySearching, {
   fields: ["keywords", "author", "description", "title"],
 });
 
 const courseModel = model<Course>(
   "Course",
   courseSchema
-) as MongooseFuzzyModel<Course>;
+) as MongoosePluginModel<Course>;
 export default courseModel;
 export type { Course };
