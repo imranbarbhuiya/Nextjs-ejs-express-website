@@ -1,6 +1,7 @@
 // import dependencies
-import type { MongooseFuzzyModel } from "@imranbarbhuiya/mongoose-fuzzy-searching";
-import fuzzySearching from "@imranbarbhuiya/mongoose-fuzzy-searching";
+import fuzzySearching, {
+  MongoosePluginModel,
+} from "@imranbarbhuiya/mongoose-fuzzy-searching";
 import type { NextFunction } from "express";
 import { marked } from "marked";
 import type { Document, Error as MongoError } from "mongoose";
@@ -110,7 +111,7 @@ blogSchema.post("save", (error: _Error, _doc: Blog, next: NextFunction) => {
 blogSchema.plugin(fuzzySearching, {
   fields: ["keywords", "author", "description", "title"],
 });
-const blogModel = model<Blog>("blog", blogSchema) as MongooseFuzzyModel<Blog>;
+const blogModel = model<Blog>("blog", blogSchema) as MongoosePluginModel<Blog>;
 export default blogModel;
 export type { Blog };
 
