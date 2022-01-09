@@ -57,9 +57,7 @@ client
       app.use(
         helmet({
           contentSecurityPolicy: {
-            useDefaults: true,
             directives: {
-              // PRODUCTION: remove unsafe-eval from style-src and add nonce in both style and script src
               scriptSrc: [
                 "'self'",
                 "https://cdn.jsdelivr.net",
