@@ -8,7 +8,7 @@ import Link from "next/link";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 // user type
-import { User } from "../server/model/userModel";
+import type { User } from "../../server/model/userModel";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { req } = ctx;
@@ -92,11 +92,7 @@ const Home: NextPage = ({
                 <li className="field-text">Email: {user.email}</li>
               </ul>
               <Link href="/logout">
-                <a
-                  className="btn btn-warning me-2"
-                  href="/logout"
-                  role="button"
-                >
+                <a className="btn btn-warning me-2" role="button">
                   Log Out
                 </a>
               </Link>

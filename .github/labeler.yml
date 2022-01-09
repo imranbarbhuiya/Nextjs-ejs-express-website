@@ -1,0 +1,17 @@
+enhancement:
+  - "*"
+  - "!package.*.json"
+  - "!package.json"
+
+dependencies:
+  - package.*.json
+  - package.json
+
+server:
+  - server/**/*
+
+next:
+  - src/**/*
+
+ejs:
+  - views/**/*

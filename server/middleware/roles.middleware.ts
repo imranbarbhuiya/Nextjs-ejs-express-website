@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import type { Course } from "../model/courseModel";
 async function isAdmin(req: Request, res: Response, next: NextFunction) {
   if (req.user && req.user.role === "admin") {
@@ -30,13 +30,18 @@ async function canEditCourse(req: Request, res: Response, next: NextFunction) {
   }
 }
 function isAdminOrBlogOwner(path: string) {
+  // file deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a middleware so no need
   return (req: Request, res: Response, next: any) => {
     if (
       req.user &&
       (req.user.role === "admin" || req.blog.author === req.user.id)
     ) {
       req.flash();
-      res.render(`blog/${path}`, { blog: req.blog, message: req.flash() });
+      res.render(`blog/${path}`, {
+        blog: req.blog,
+        message: req.flash(),
+        csrfToken: req.csrfToken(),
+      });
     } else {
       next();
     }

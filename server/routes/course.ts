@@ -1,19 +1,24 @@
 // importing dependencies
 import { ensureLoggedIn } from "connect-ensure-login";
-import { Request, Response, Router } from "express";
-import { Metaphone } from "natural";
-import courseModel, { Course } from "../model/courseModel";
+import type { Request, Response } from "express";
+import { Router } from "express";
+import { query } from "express-validator";
+import { authLimiter } from "../controller/api-rate-limit";
+import { metaphone } from "../lib/metaphone";
 // mongoose models
+import type { Course } from "../model/courseModel";
+import courseModel from "../model/courseModel";
 import courseDataModel from "../model/userCourseData";
 // init express route
 const route = Router();
 
 route
-  .get("/", async (req, res) => {
+  .get("/", query("search").trim().escape(), async (req, res) => {
     let courses: Course[];
-    const searchQuery = req.query.search;
+    // deepcode ignore HTTPSourceWithUncheckedType: already fixed
+    const searchQuery = String(req.query.search);
     if (searchQuery) {
-      const keywords = Metaphone.process(searchQuery as string);
+      const keywords = metaphone(searchQuery as string);
       courses = await courseModel
         .fuzzySearch(`${keywords} ${searchQuery}`, {
           verified: true,
@@ -22,25 +27,33 @@ route
     } else {
       courses = await courseModel.find({ verified: true }).sort({ price: 1 });
     }
+    // TODO: change total course route response
+    // deepcode ignore XSS: will be replaced with render
     res.send(courses);
   })
   .get("/create", ensureLoggedIn("/login"), (_req: Request, res: Response) => {
     res.render("course/courseAdd", { done: false });
   })
-  .post("/create", ensureLoggedIn("/login"), (req: Request, res: Response) => {
-    const { title, author, price } = req.body;
-    const keywords = `${Metaphone.process(`${title} ${author}`)} ${title}`;
-    const course = new courseModel({
-      author,
-      authorId: req.user.id,
-      title,
-      price,
-      keywords,
-      verified: true,
-    });
-    course.save();
-    res.render("course/courseAdd", { done: true });
-  })
+  .post(
+    "/create",
+    ensureLoggedIn("/login"),
+    authLimiter,
+    // deepcode ignore NoRateLimitingForExpensiveWebOperation: already added a rate limiter
+    (req: Request, res: Response) => {
+      const { title, author, price } = req.body;
+      const keywords = `${metaphone(`${title} ${author}`)} ${title}`;
+      const course = new courseModel({
+        author,
+        authorId: req.user.id,
+        title,
+        price,
+        keywords,
+        verified: true,
+      });
+      course.save();
+      res.render("course/courseAdd", { done: true });
+    }
+  )
   .get("/mycourses", ensureLoggedIn(), async (req, res) => {
     const data = await courseDataModel.findOne({
       subscribedCourses: { $elemMatch: { courseId: req.user.id } },

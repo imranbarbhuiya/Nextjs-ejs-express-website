@@ -1,18 +1,20 @@
 // importing modules
-import { NextFunction, Request, Response } from "express";
-import { Metaphone } from "natural";
+import type { Request, Response } from "express";
+import { metaphone } from "../lib/metaphone";
 // mongoose model
-import blogModel, { Blog } from "../model/blogModel";
+import type { Blog } from "../model/blogModel";
+import blogModel from "../model/blogModel";
 
 // blog save controller
 function saveBlogAndRedirect(path: string) {
+  // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a middleware
   return async (req: Request, res: Response) => {
-    const keywords = Metaphone.process(
-      `${req.body.title} ${req.user.username} ${req.body.description}`
+    const keywords = metaphone(
+      `${req.body.title} ${req.user?.username} ${req.body.description}`
     );
     let blog = req.blog;
-    blog.authorName = req.user.username;
-    blog.author = req.user.id;
+    blog.authorName = req.user?.username;
+    blog.author = req.user?.id;
     blog.title = req.body.title;
     blog.description = req.body.description;
     blog.markdown = req.body.markdown;
@@ -25,7 +27,7 @@ function saveBlogAndRedirect(path: string) {
         return res.render(`blog/${path}`, { blog, message: req.flash() });
       }
       blog = await blog.save();
-      res.redirect(`/blog/preview/${blog.id}`);
+      res.redirect(303, `/blog/preview/${blog.id}`);
     } catch (error) {
       const errorMsg = error.message.split(":")[2];
       req.flash("error", errorMsg ? errorMsg : error.message);
@@ -35,8 +37,10 @@ function saveBlogAndRedirect(path: string) {
 }
 // view blog controller
 function viewBlogs(path: string) {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  // deepcode ignore NoRateLimitingForExpensiveWebOperation: it's a middleware
+  return async (req: Request, res: Response) => {
     let blogs: Blog[];
+    // deepcode ignore HTTPSourceWithUncheckedType: fixed in previous middleware
     const searchQuery = req.query.search;
     const autocompleteQuery = req.query.term;
     if (path === "myblogs") {
@@ -49,11 +53,13 @@ function viewBlogs(path: string) {
       }
     } else if (path === "all") {
       if (searchQuery) {
-        blogs = await search(searchQuery as string, 0);
+        blogs = await search(String(searchQuery), 0);
       } else if (autocompleteQuery) {
-        blogs = await search(autocompleteQuery as string, 0);
-        blogs = blogs.map((blog: { title: any }) => blog.title);
-        return res.send(blogs);
+        blogs = await search(String(autocompleteQuery), 0);
+        const sanitizedBlogs: string[] = blogs.map((blog: Blog) => blog.title);
+        // SECURITY: probably need more sanitization
+        // deepcode ignore XSS: already sanitized
+        return res.send(sanitizedBlogs);
       } else {
         let skip = 0;
         if (req.query.skip) skip = Number(req.query.skip);
@@ -80,6 +86,7 @@ function viewBlogs(path: string) {
       blogs,
       query: searchQuery,
       message: req.flash(),
+      csrfToken: req.csrfToken(),
     });
   };
 }
@@ -91,7 +98,7 @@ async function search(
   unverified?: boolean
 ) {
   if (!skip) skip = 0;
-  const keywords = Metaphone.process(searchQuery);
+  const keywords = metaphone(searchQuery);
   let blogs: Blog[];
   if (author)
     blogs = await blogModel

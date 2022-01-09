@@ -1,26 +1,37 @@
 // importing dependencies
 import { ensureLoggedIn } from "connect-ensure-login";
-import { NextFunction, Request, Response, Router } from "express";
+import type { NextFunction, Request, Response } from "express";
+import { Router } from "express";
+import { query } from "express-validator";
+import { apiLimiter } from "../controller/api-rate-limit";
 // controllers
 import { saveBlogAndRedirect, viewBlogs } from "../controller/blog";
 import { handleRejection } from "../controller/handleRejection";
 // middleware
 import { isAdmin, isAdminOrBlogOwner } from "../middleware/roles.middleware";
+import type { Blog } from "../model/blogModel";
 // mongoose models
-import blogModel, { Blog } from "../model/blogModel";
-import { User } from "../model/userModel";
+import blogModel from "../model/blogModel";
 // init express route
 const route = Router();
+
+// file deepcode ignore NoRateLimitingForExpensiveWebOperation: already in place
+// TODO: add caching for view routes and remove apiLimiter
 
 route.use(
   /^\/.*(myblogs|unverified|new|preview|verify|edit).*/i,
   ensureLoggedIn({ redirectTo: "/login", setReturnTo: false })
 );
 route
-  .get("/", viewBlogs("all"))
-  .get("/myblogs", viewBlogs("myblogs"))
-  .get("/unverified", isAdmin, viewBlogs("unverified"))
-  .get("/new", (req: Request, res: Response) => {
+  .get("/", query("search").trim().escape(), viewBlogs("all"))
+  .get("/myblogs", query("search").escape(), viewBlogs("myblogs"))
+  .get(
+    "/unverified",
+    isAdmin,
+    query("search").trim().escape(),
+    viewBlogs("unverified")
+  )
+  .get("/new", apiLimiter, (req: Request, res: Response) => {
     if (!req.user.verified) {
       req.flash(
         "error",
@@ -28,11 +39,16 @@ route
       );
       return res.redirect("/blog");
     }
-    res.render("blog/new", { blog: new blogModel(), message: req.flash() });
+    res.render("blog/new", {
+      blog: new blogModel(),
+      message: req.flash(),
+      csrfToken: req.csrfToken(),
+    });
   })
   .post(
     "/new",
-    async (req: Request, res: Response, next: NextFunction) => {
+    apiLimiter,
+    async (req: Request, _res: Response, next: NextFunction) => {
       req.blog = new blogModel();
       next();
     },
@@ -50,13 +66,13 @@ route
     }),
     isAdminOrBlogOwner("view")
   )
-  .get("/:slug", async (req: Request, res: Response, next: any) => {
+  .get("/:slug", apiLimiter, async (req: Request, res: Response, next: any) => {
     const blog: Blog = await blogModel.findOne({
       slug: req.params.slug,
       verified: true,
     });
     if (blog) res.render("blog/view", { blog });
-    else next({ status: 404, message: "Not found" }, req, res);
+    else next();
   })
   .delete(
     "/:id",
@@ -96,15 +112,7 @@ route
       const blog: any = await blogModel.findById(req.params.id);
       blog.verified = true;
       blog.save();
-      res.redirect(`/blog/${blog.slug}`);
+      res.redirect(301, `/blog/${blog.slug}`);
     })
   );
 export default route;
-
-// extend types
-type _User = User;
-declare global {
-  namespace Express {
-    export interface User extends _User {}
-  }
-}

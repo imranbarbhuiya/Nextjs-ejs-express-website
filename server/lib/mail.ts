@@ -1,12 +1,13 @@
 // importing dependencies
 import { createTransport } from "nodemailer";
 // defining mail function
-async function mail(
-  mailTo: string,
-  subject: string,
-  html?: string,
-  text?: string
-) {
+async function mail(options: {
+  mailTo: string;
+  subject: string;
+  html?: string;
+  text?: string;
+}) {
+  const { mailTo, subject, html, text } = options;
   let transporter = createTransport({
     service: "gmail",
     auth: {
@@ -18,9 +19,9 @@ async function mail(
   await transporter.sendMail({
     from: '"Codversity" <reset@codversity.com>',
     to: mailTo,
-    subject: subject,
-    text: text,
-    html: html,
+    subject,
+    text,
+    html,
   });
 }
 export default mail;

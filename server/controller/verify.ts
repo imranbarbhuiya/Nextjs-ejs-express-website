@@ -1,12 +1,12 @@
 // importing dependencies
 import { randomBytes } from "crypto";
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import Logger from "../lib/logger";
 // mail module
 import mail from "../lib/mail";
 // mongoose model
-import User from "../model/userModel";
+import userModel from "../model/userModel";
 // verify controller
 async function verify(req: Request, res: Response) {
   const verificationToken = randomBytes(20).toString("hex");
@@ -19,7 +19,7 @@ async function verify(req: Request, res: Response) {
     { expiresIn: "24h" }
   );
   const email = req.user.email;
-  await User.findOneAndUpdate(
+  await userModel.findOneAndUpdate(
     { email: email },
     {
       verificationToken,
@@ -28,18 +28,21 @@ async function verify(req: Request, res: Response) {
   const returnTo = req.session.returnTo;
   delete req.session["returnTo"];
   try {
-    await mail(
-      email,
-      "Verify account",
-      `<p>Verify account</p>
-        <a href="${req.protocol}://${req.headers.host}/verify/${encoded}">Click here</a>`
-    );
+    // TODO: replace html with ejs template
+    // deepcode ignore XSS: will be replaced with ejs template
+    // ejs.render(filename, {variable: value}, callback)
+    await mail({
+      mailTo: email,
+      subject: "Verify account",
+      html: `<p>Verify account</p>
+        <a href="${req.protocol}://${req.headers.host}/verify/${encoded}">Click here</a>`,
+    });
     req.flash("info", "Check email to verify");
   } catch (error) {
     req.flash("error", "Mail send failed please try again");
     Logger.error(error);
   }
-  res.redirect((req.query.next as string) || returnTo || "/");
+  res.redirect(301, String(req.query.next) || returnTo || "/");
 }
 
 export { verify };

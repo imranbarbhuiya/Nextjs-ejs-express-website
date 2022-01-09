@@ -5,7 +5,6 @@ import {
   LoggerOptions,
   transports,
 } from "winston";
-import "winston-daily-rotate-file";
 
 // This method set the current severity based on
 // the current NODE_ENV: show all the log levels
@@ -62,22 +61,11 @@ const loggerOptions: LoggerOptions = {
     // Allow the use the console to print the messages
     new transports.Console(),
     // Allow to print all the error level messages inside the error.log file and delete them if file size becomes 10mb
-    new transports.DailyRotateFile({
-      dirname: "logs",
-      filename: "error-%DATE%",
-      datePattern: "YYYY-MM-DD-HH",
-      extension: ".log",
-      maxSize: "10k",
-      level: "error",
-    }),
+    new transports.File({ filename: "logs/all.log" }),
     // Allow to print all the error message inside the all.log file
     // (also the error log that are also printed inside the error.log)
-    new transports.DailyRotateFile({
-      dirname: "logs",
-      filename: "all-%DATE%",
-      datePattern: "YYYY-MM-DD-HH",
-      extension: ".log",
-      maxSize: "10k",
+    new transports.File({
+      filename: "logs/error.log",
       level: "error",
     }),
   ],

@@ -3,7 +3,8 @@ import flash from "connect-flash";
 import connect_redis from "connect-redis";
 import cookieParser from "cookie-parser";
 import csrf from "csurf";
-import express, { ErrorRequestHandler, Request, Response } from "express";
+import type { ErrorRequestHandler, Request, Response } from "express";
+import express from "express";
 import session from "express-session";
 import helmet from "helmet";
 import methodOverride from "method-override";
@@ -21,16 +22,17 @@ import Logger from "./lib/logger";
 import adminMiddleware from "./middleware/admin.middleware";
 import errorMiddleware from "./middleware/error.middleware";
 import morganMiddleware from "./middleware/morgan.middleware";
+import type { User as _User } from "./model/userModel";
 // Mongoose Models
-import UserModel, { User } from "./model/userModel";
+import UserModel from "./model/userModel";
 // routes
 import adminRoute from "./routes/admin";
 import blogRoute from "./routes/blog";
 import courseRoute from "./routes/course";
-import indexRoute from "./routes/index";
 import loginRoute from "./routes/login";
 import userRoute from "./routes/user";
 // configuring env variables
+// PRODUCTION: remove dotenv
 require("dotenv").config();
 // connecting to mongodb
 require("./db/mongoDB");
@@ -44,112 +46,119 @@ const RedisStore = connect_redis(session);
 // init csrf
 const csrfProtection = csrf({ cookie: true });
 // init next
-client.prepare().then(() => {
-  // initiate app
-  const app = express();
-  if (app.get("env") !== "development") {
+client
+  .prepare()
+  .then(() => {
+    // initiate app
+    const app = express();
     // using helmet for csp and hide powered by only in production mode
-    app.use(
-      helmet({
-        contentSecurityPolicy: {
-          useDefaults: true,
-          directives: {
-            scriptSrc: [
-              "'self'",
-              "https://cdn.jsdelivr.net",
-              "https://code.jquery.com",
-            ],
-            imgSrc: ["'self'", "https://*", "data:"],
+    // PRODUCTION: remove development condition
+    if (app.get("env") !== "development") {
+      app.use(
+        helmet({
+          contentSecurityPolicy: {
+            directives: {
+              scriptSrc: [
+                "'self'",
+                "https://cdn.jsdelivr.net",
+                "https://code.jquery.com",
+                // (req: Request) => `'nonce-${req.csrfToken()}'`,
+              ],
+              imgSrc: ["'self'", "https://*", "data:"],
+            },
           },
-        },
-        hidePoweredBy: true,
-      })
+          hidePoweredBy: true,
+        })
+      );
+    }
+    app
+      // serve favicon
+      .use(serveFavicon(join(__dirname, "..", "public", "img", "favicon.ico")))
+      // set static file directory
+      .use(express.static("public"))
+      // set view engine
+      .set("view engine", "ejs")
+      // fetch data from request
+      .use(
+        express.urlencoded({
+          extended: false,
+        })
+      )
+      // trust proxy
+      .set("trust proxy", 1)
+      // set cookie parser
+      .use(cookieParser())
+      // set express season
+      .use(
+        session({
+          name: "codversity_session_id",
+          secret: process.env.SECRET as string,
+          resave: false,
+          saveUninitialized: false,
+          store: new RedisStore({ client: redisClient }),
+          // PRODUCTION: add secure cookie
+          // deepcode ignore WebCookieSecureDisabledByDefault: will be added in production
+          cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true },
+        })
+      )
+      // set flash
+      .use(flash())
+      // using passport user session in app
+      .use(passport.session())
+      // using method override to use put and delete
+      .use(methodOverride("_method"))
+      // using morgan to write logs in console
+      .use(morganMiddleware);
+
+    // passport setup
+    passport.use(UserModel.createStrategy());
+
+    // passport serialize and deserialize
+    passport.serializeUser(UserModel.serializeUser());
+    passport.deserializeUser(UserModel.deserializeUser());
+
+    // calling passport social auth function
+    passportSocialAuth();
+
+    app
+      // adding login router
+      .use("/", csrfProtection, loginRoute)
+      // defining admin middleware
+      .use(adminMiddleware)
+      // adding course router
+      .use("/course", courseRoute)
+      // adding blog router
+      .use("/blog", blogRoute)
+      // adding admin router
+      .use("/admin", adminRoute)
+      // adding user router
+      .use("/user", userRoute);
+    // next route
+    app.all(
+      "*",
+      // PRODUCTION: change csp for this route
+      // add csp to all nextjs css and js files
+      (req: Request, res: Response) => {
+        return handle(req, res);
+      }
     );
-  }
-  app
-    // serve favicon
-    .use(serveFavicon(join(__dirname, "..", "public", "img", "favicon.ico")))
-    // set static file directory
-    .use(express.static("public"))
-    // set view engine
-    .set("view engine", "ejs")
-    // fetch data from request
-    .use(
-      express.urlencoded({
-        extended: false,
-      })
-    )
-    // trust proxy
-    .set("trust proxy", 1)
-    // set cookie parser
-    .use(cookieParser())
-    // set express season
-    .use(
-      session({
-        name: "codversity_session_id",
-        secret: process.env.SECRET as string,
-        resave: false,
-        saveUninitialized: false,
-        store: new RedisStore({ client: redisClient }),
-        cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
-      })
-    )
-    // set flash
-    .use(flash())
-    // init passport
-    .use(passport.initialize())
-    // using passport user session in app
-    .use(passport.session())
-    // using method override to use put and delete
-    .use(methodOverride("_method"))
-    // using morgan to write logs in console
-    .use(morganMiddleware);
 
-  // passport setup
-  passport.use(UserModel.createStrategy());
+    // error handlers
+    app.use(errorMiddleware as ErrorRequestHandler);
 
-  // passport serialize and deserialize
-  passport.serializeUser(UserModel.serializeUser());
-  passport.deserializeUser(UserModel.deserializeUser());
-
-  // calling passport social auth function
-  passportSocialAuth();
-
-  app
-    // adding index router
-    .use("/", indexRoute)
-    // adding login router
-    .use("/", csrfProtection, loginRoute)
-    // defining admin middleware
-    .use(adminMiddleware)
-    // adding course router
-    .use("/course", courseRoute)
-    // adding blog router
-    .use("/blog", blogRoute)
-    // adding admin router
-    .use("/admin", adminRoute)
-    // adding user router
-    .use("/user", userRoute);
-  // next route
-  app.all("*", (req: Request, res: Response) => {
-    return handle(req, res);
+    // listening to port
+    const listener = app.listen(port, () => {
+      Logger.info(`Started server on ${JSON.stringify(listener.address())}`);
+    });
+  })
+  .catch((err) => {
+    Logger.error(err);
   });
 
-  // error handlers
-  app.use(errorMiddleware as ErrorRequestHandler);
-
-  // listening to port
-  const listener = app.listen(port, () => {
-    Logger.info(`Started server on ${JSON.stringify(listener.address())}`);
-  });
-});
-
-// Interface setup
-
-// extend types
-type _User = User;
+// type setup
 declare global {
   namespace Express {
+    // tslint:disable-next-line:no-empty-interface
     export interface User extends _User {}
     export interface Request {
       admin?: boolean;

@@ -1,15 +1,14 @@
 // import dependencies
-import createDOMPurify from "dompurify";
-import { NextFunction } from "express";
-import { JSDOM } from "jsdom";
-import marked from "marked";
-import { Document, Error, model, Schema } from "mongoose";
-import fuzzySearching, { MongooseFuzzyModel } from "mongoose-fuzzy-searching";
+import fuzzySearching, {
+  MongoosePluginModel,
+} from "@imranbarbhuiya/mongoose-fuzzy-searching";
+import type { NextFunction } from "express";
+import { marked } from "marked";
+import type { Document, Error as MongoError } from "mongoose";
+import { model, Schema } from "mongoose";
 import slugify from "slugify";
-
-// dom setup
-const window: any = new JSDOM("").window;
-const DOMpurify = createDOMPurify(window);
+// import dom
+import DOMpurify from "../lib/dompurify";
 
 interface Blog extends Document {
   emptyHtml(): boolean;
@@ -80,7 +79,7 @@ DOMpurify.addHook("afterSanitizeElements", (node) => {
 });
 
 function markAndSanitize(markdown: string) {
-  return DOMpurify.sanitize(marked(markdown), {
+  return DOMpurify.sanitize(marked.parse(markdown), {
     USE_PROFILES: { html: true },
   });
 }
@@ -89,7 +88,7 @@ blogSchema.methods.emptyHtml = function () {
   return !markAndSanitize(this.markdown);
 };
 
-blogSchema.pre("validate", function (next) {
+blogSchema.pre<Blog>("validate", function (next) {
   if (this.title && !this.slug) {
     this.slug = slugify(this.title, { lower: true, strict: true });
   } else if (this.slug) {
@@ -112,11 +111,11 @@ blogSchema.post("save", (error: _Error, _doc: Blog, next: NextFunction) => {
 blogSchema.plugin(fuzzySearching, {
   fields: ["keywords", "author", "description", "title"],
 });
-const blogModel = model<Blog>("blog", blogSchema) as MongooseFuzzyModel<Blog>;
+const blogModel = model<Blog>("blog", blogSchema) as MongoosePluginModel<Blog>;
 export default blogModel;
 export type { Blog };
 
-class _Error extends Error {
+interface _Error extends MongoError {
   code?: number;
   keyValue?: string;
 }

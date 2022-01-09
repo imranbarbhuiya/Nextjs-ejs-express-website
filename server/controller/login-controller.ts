@@ -1,11 +1,11 @@
 // types
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 // importing dependencies
 import passport from "passport";
 import { RateLimiterRedis } from "rate-limiter-flexible";
 // Redis Client
-import redisClient from "../db/redisDB";
-import { User } from "../model/userModel";
+import client from "../db/redisDB";
+import type { User } from "../model/userModel";
 
 // setting number of wrong limit
 const maxWrongAttemptsByIPperDay = 100;
@@ -13,7 +13,7 @@ const maxConsecutiveFailsByEmailAndIP = 10;
 
 // the rate limiter instance counts and limits the number of failed logins by key
 const limiterSlowBruteByIP = new RateLimiterRedis({
-  storeClient: redisClient,
+  storeClient: client,
   keyPrefix: "codversity_login_fail_ip_per_day",
   // maximum number of failed logins allowed. 1 fail = 1 point
   // each failed login consumes a point
@@ -25,7 +25,7 @@ const limiterSlowBruteByIP = new RateLimiterRedis({
 });
 
 const limiterConsecutiveFailsByEmailAndIP = new RateLimiterRedis({
-  storeClient: redisClient,
+  storeClient: client,
   keyPrefix: "codversity_login_fail_consecutive_email_and_ip",
   points: maxConsecutiveFailsByEmailAndIP,
   duration: 60 * 60 * 24 * 14, // Store number for 14 days since first fail
@@ -138,7 +138,7 @@ export async function loginRouteRateLimit(
           delete req.session["referred"];
           const returnTo = req.session.returnTo;
           delete req.session["returnTo"];
-          res.redirect((req.query.next as string) || returnTo || "/");
+          res.redirect(301, String(req.query.next) || returnTo || "/");
         });
       }
     }

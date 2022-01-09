@@ -4,15 +4,15 @@ import Logger from "../lib/logger";
 
 require("dotenv").config();
 
-const redisClient = createClient({
+const client = createClient({
   host: process.env.REDIS_HOSTNAME,
-  port: parseInt(process.env.REDIS_PORT, 10),
+  port: parseInt(process.env.REDIS_PORT as string, 10),
   password: process.env.REDIS_PASSWORD,
 
   enable_offline_queue: false,
 });
 
-redisClient
+client
   .on("connect", () => {
     Logger.info("Connected to the Redis database successfully.");
   })
@@ -21,4 +21,4 @@ redisClient
     Logger.error(err);
     return new Error();
   });
-export default redisClient;
+export default client;

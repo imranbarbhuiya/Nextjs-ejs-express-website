@@ -1,17 +1,20 @@
 // importing dependencies
 import { ensureLoggedIn, ensureLoggedOut } from "connect-ensure-login";
 import { randomBytes } from "crypto";
-import { NextFunction, Request, Response, Router } from "express";
-import { body, validationResult } from "express-validator";
+import type { NextFunction, Request, Response } from "express";
+import { Router } from "express";
+import { body, query, validationResult } from "express-validator";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import passport from "passport";
+import { apiLimiter, authLimiter } from "../controller/api-rate-limit";
 // controllers
 import { loginRouteRateLimit } from "../controller/login-controller";
 import { verify } from "../controller/verify";
 // mail module
 import mail from "../lib/mail";
 // mongoose models
-import UserModel, { User } from "../model/userModel";
+import type { User } from "../model/userModel";
+import UserModel from "../model/userModel";
 
 // init router
 const route = Router();
@@ -61,10 +64,12 @@ route
   );
 // Local passport authenticate
 // uses passport-local-mongoose
-// for rate limiter rate-limiter-flexible is used
+// for login rate limiter rate-limiter-flexible is used
+
+// file deepcode ignore NoRateLimitingForExpensiveWebOperation: already in place
 
 route
-  .get("/login", (req, res) => {
+  .get("/login", apiLimiter, (req, res) => {
     res.render("login/login", {
       login: "",
       register: "none",
@@ -75,7 +80,7 @@ route
   .post("/login", loginRouteRateLimit)
 
   // local register system
-  .get("/register", (req, res) => {
+  .get("/register", apiLimiter, (req, res) => {
     res.render("login/login", {
       login: "none",
       register: "",
@@ -85,7 +90,7 @@ route
   })
   .post(
     "/register",
-
+    authLimiter,
     body("username")
       .trim()
       .isLength({ min: 1 })
@@ -144,7 +149,8 @@ route
   .get(
     "/change",
     ensureLoggedIn({ redirectTo: "/login", setReturnTo: false }),
-    function (req, res) {
+    apiLimiter,
+    (req, res) => {
       res.render("login/change", {
         csrfToken: req.csrfToken(),
       });
@@ -152,6 +158,7 @@ route
   )
   .post(
     "/change",
+    authLimiter,
     ensureLoggedIn({ redirectTo: "/login", setReturnTo: false }),
 
     (req: Request, res: Response) => {
@@ -174,9 +181,16 @@ route
   )
 
   // verification system
-  .get("/verify", ensureLoggedIn("/login"), verify)
+  .get(
+    "/verify",
+    ensureLoggedIn("/login"),
+    query("next").unescape(),
+    authLimiter,
+    verify
+  )
   .get(
     "/verify/:token",
+    authLimiter,
     ensureLoggedIn({ redirectTo: "/login", setReturnTo: false }),
     (req: Request, res: Response) => {
       try {
@@ -209,14 +223,14 @@ route
   )
 
   // forgot password system
-  .get("/reset", ensureLoggedOut(), function (req, res) {
+  .get("/reset", ensureLoggedOut(), apiLimiter, (req, res) => {
     res.render("login/forgot", {
       password: false,
       message: req.flash(),
       csrfToken: req.csrfToken(),
     });
   })
-  .post("/reset", async function (req, res) {
+  .post("/reset", authLimiter, async (req, res) => {
     const resetPasswordToken = randomBytes(20).toString("hex");
     const mailTo = req.body.email;
     const user = await UserModel.findOneAndUpdate(
@@ -239,12 +253,14 @@ route
       );
       req.flash("success", "Check email to proceed");
       res.redirect("/reset");
-      mail(
+      // TODO: replace html with ejs template
+      // deepcode ignore XSS: will be replaced with ejs template
+      mail({
         mailTo,
-        "Reset Password",
-        `<p>Reset Password</p>
-        <a href="${req.protocol}://${req.headers.host}/reset/${encoded}">Click here</a>`
-      ).catch((error: any) => {
+        subject: "Reset Password",
+        html: `<p>Reset Password</p>
+        <a href="${req.protocol}://${req.headers.host}/reset/${encoded}">Click here</a>`,
+      }).catch((error: any) => {
         req.flash("error", "auth fail");
         console.log(error);
       });
@@ -253,7 +269,7 @@ route
   .get(
     "/reset/:token",
     ensureLoggedOut("/"),
-
+    apiLimiter,
     (req: Request, res: Response) => {
       try {
         jwt.verify(req.params.token, process.env.JWT_SECRET);
@@ -271,7 +287,7 @@ route
   )
   .post(
     "/reset/:token",
-
+    authLimiter,
     body("password")
       .isLength({ min: 8, max: 50 })
       .withMessage("Password length should be 8-50 character long.")
@@ -336,13 +352,10 @@ route
 
   // logout
   .get("/logout", (req: Request, res: Response) => {
-    req.session.destroy(() => {
+    req.session.destroy((err) => {
+      if (err) req.flash("error", err.message);
       res.redirect("/");
     });
-  })
-
-  .get("/test", (req, res, next) => {
-    res.locals.csrf = req.csrfToken();
-    next();
   });
+
 export default route;
