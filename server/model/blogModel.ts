@@ -88,7 +88,7 @@ blogSchema.methods.emptyHtml = function () {
   return !markAndSanitize(this.markdown);
 };
 
-blogSchema.pre("validate", function (next) {
+blogSchema.pre<Blog>("validate", function (next) {
   if (this.title && !this.slug) {
     this.slug = slugify(this.title, { lower: true, strict: true });
   } else if (this.slug) {
