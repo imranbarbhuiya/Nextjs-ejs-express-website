@@ -40,7 +40,7 @@
     "method-override": "^3.0.0",
     "mongoose": "^6.1.6",
     "morgan": "^1.10.0",
-    "next": "^12.0.7",
+    "next": "^12.0.8",
     "nextjs-progressbar": "^0.0.13",
     "nodemailer": "^6.7.2",
     "passport": "^0.5.2",
