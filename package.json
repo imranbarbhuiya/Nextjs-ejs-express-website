@@ -70,7 +70,7 @@
     "@types/express-session": "^1.17.4",
     "@types/jsdom": "^16.2.14",
     "@types/jsonwebtoken": "^8.5.8",
-    "@types/marked": "^4.0.1",
+    "@types/marked": "^4.0.2",
     "@types/method-override": "^0.0.32",
     "@types/morgan": "^1.9.3",
     "@types/node": "17.0.13",
