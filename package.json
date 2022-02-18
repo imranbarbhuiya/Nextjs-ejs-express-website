@@ -6,12 +6,9 @@
     "dev": "nodemon",
     "build:server": "tsc --project tsconfig.server.json",
     "build:next": "next build",
-    "build": "npm run build:next && npm run build:server",
+    "build": "yarn build:next && yarn build:server",
     "start": "node dist/server.js",
-    "lint": "next lint",
-    "test": "snyk test",
-    "snyk:wizard": "snyk wizard",
-    "snyk:monitor": "snyk monitor"
+    "lint": "next lint"
   },
   "author": "imranbarbhuiya",
   "license": "ISC",
@@ -87,7 +84,6 @@
     "eslint": "^8.9.0",
     "eslint-config-next": "^12.0.10",
     "nodemon": "^2.0.15",
-    "snyk": "^1.853.0",
     "ts-node": "^10.5.0",
     "typescript": "^4.5.5"
   },
