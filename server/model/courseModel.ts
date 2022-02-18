@@ -26,6 +26,7 @@ const courseSchema = new Schema<Course>({
   verified: { type: Boolean, required: true, default: false },
 });
 
+// @ts-expect-error
 courseSchema.plugin(fuzzySearching, {
   fields: ["keywords", "author", "description", "title"],
 });

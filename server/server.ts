@@ -1,17 +1,17 @@
 // importing dependencies
 import flash from "connect-flash";
-import connect_redis from "connect-redis";
+import connectRedis from "connect-redis";
 import cookieParser from "cookie-parser";
 import csrf from "csurf";
-import type { ErrorRequestHandler, Request, Response } from "express";
+import type { ErrorRequestHandler } from "express";
 import express from "express";
 import session from "express-session";
 import helmet from "helmet";
 import methodOverride from "method-override";
 import next from "next";
 import passport from "passport";
-import { join } from "path";
-import serveFavicon from "serve-favicon";
+// import { join } from "path";
+// import serveFavicon from "serve-favicon";
 // controllers
 import passportSocialAuth from "./controller/auth";
 // connecting to redis
@@ -42,7 +42,7 @@ const dev = process.env.NODE_ENV !== "production";
 const client = next({ dev });
 const handle = client.getRequestHandler();
 // making redisStore for session store
-const RedisStore = connect_redis(session);
+const RedisStore = connectRedis(session);
 // init csrf
 const csrfProtection = csrf({ cookie: true });
 // init next
@@ -73,7 +73,7 @@ client
     }
     app
       // serve favicon
-      .use(serveFavicon(join(__dirname, "..", "public", "img", "favicon.ico")))
+      // .use(serveFavicon(join(__dirname, "..", "public", "img", "favicon.ico")))
       // set static file directory
       .use(express.static("public"))
       // set view engine
