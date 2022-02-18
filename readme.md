@@ -1,11 +1,10 @@
 [![wakatime](https://wakatime.com/badge/user/7da43ba9-2bc5-4a32-baea-19e38fc777e2/project/c824749e-8598-418b-a1e7-e66bc731c552.svg)](https://wakatime.com/badge/user/7da43ba9-2bc5-4a32-baea-19e38fc777e2/project/c824749e-8598-418b-a1e7-e66bc731c552)
-[![Build](https://github.com/Codversity/Codversity/actions/workflows/build.yml/badge.svg)](https://github.com/Codversity/Codversity/actions/workflows/build.yml/badge.svg)
-[![CodeFactor](https://www.codefactor.io/repository/github/codversity/codversity/badge/main?s=87dbb7de0bc46c9ae8cf936c32b7644aa0800ce0)](https://www.codefactor.io/repository/github/codversity/codversity/overview/main)
+[![Build](https://github.com/imranbarbhuiya/Nextjs-ejs-express-website/actions/workflows/build.yml/badge.svg)](https://github.com/imranbarbhuiya/Nextjs-ejs-express-website/actions/workflows/build.yml/badge.svg)
 
 <p align="center">
-  <a href="https://codversity.com">
+  <a href="https://nextjs.com">
     <img src="public/img/logo.png" height="128">
-    <h1 align="center">Codversity</h1>
+    <h1 align="center">Nextjs express website</h1>
   </a>
 </p>
 <hr/>

@@ -40,7 +40,7 @@
     "method-override": "^3.0.0",
     "mongoose": "^6.2.1",
     "morgan": "^1.10.0",
-    "next": "^12.0.10",
+    "next": "^12.1.0",
     "nextjs-progressbar": "^0.0.13",
     "nodemailer": "^6.7.2",
     "passport": "^0.5.2",
@@ -99,11 +99,7 @@
     "url": "https://github.com/imranbarbhuiya/Codversity/issues"
   },
   "homepage": "https://github.com/imranbarbhuiya/Codversity#readme",
-  "description": "[![wakatime](https://wakatime.com/badge/user/7da43ba9-2bc5-4a32-baea-19e38fc777e2/project/c824749e-8598-418b-a1e7-e66bc731c552.svg)](https://wakatime.com/badge/user/7da43ba9-2bc5-4a32-baea-19e38fc777e2/project/c824749e-8598-418b-a1e7-e66bc731c552)\r [![Build](https://github.com/Codversity/Codversity/actions/workflows/build.yml/badge.svg)](https://github.com/Codversity/Codversity/actions/workflows/build.yml/badge.svg)\r [![CodeFactor](https://www.codefactor.io/repository/github/codversity/codversity/badge/main?s=87dbb7de0bc46c9ae8cf936c32b7644aa0800ce0)](https://www.codefactor.io/repository/github/codversity/codversity/overview/main)",
   "engines": {
     "node": ">=16.13.0"
-  },
-  "keywords": [
-    "codversity"
-  ]
+  }
 }

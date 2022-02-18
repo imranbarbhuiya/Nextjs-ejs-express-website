@@ -138,7 +138,7 @@ client
       "*",
       // PRODUCTION: change csp for this route
       // add csp to all nextjs css and js files
-      (req: Request, res: Response) => {
+      (req, res) => {
         return handle(req, res);
       }
     );
