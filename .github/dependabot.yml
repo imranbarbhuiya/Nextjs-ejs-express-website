@@ -12,4 +12,3 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
-    target-branch: "parbez"
