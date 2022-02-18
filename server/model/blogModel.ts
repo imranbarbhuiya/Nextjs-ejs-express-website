@@ -108,6 +108,7 @@ blogSchema.post("save", (error: _Error, _doc: Blog, next: NextFunction) => {
   }
 });
 
+// @ts-expect-error
 blogSchema.plugin(fuzzySearching, {
   fields: ["keywords", "author", "description", "title"],
 });

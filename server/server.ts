@@ -10,8 +10,8 @@ import helmet from "helmet";
 import methodOverride from "method-override";
 import next from "next";
 import passport from "passport";
-import { join } from "path";
-import serveFavicon from "serve-favicon";
+// import { join } from "path";
+// import serveFavicon from "serve-favicon";
 // controllers
 import passportSocialAuth from "./controller/auth";
 // connecting to redis
@@ -73,7 +73,7 @@ client
     }
     app
       // serve favicon
-      .use(serveFavicon(join(__dirname, "..", "public", "img", "favicon.ico")))
+      // .use(serveFavicon(join(__dirname, "..", "public", "img", "favicon.ico")))
       // set static file directory
       .use(express.static("public"))
       // set view engine
