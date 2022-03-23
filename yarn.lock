@@ -3165,10 +3165,10 @@ passport-google-oauth20@^2.0.0:
   dependencies:
     passport-oauth2 "1.x.x"
 
-passport-local-mongoose@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/passport-local-mongoose/-/passport-local-mongoose-6.1.0.tgz#341db91359ac855057476e0f2d795f6a6c5f686b"
-  integrity sha512-kxRDejpBXoPmWau1RCrmEeNYEXGG9ec4aDYjd0pFAHIEAzZ0RXKn581ISfjpHZ1zZLoCCM2pWUo4SfGHNJNwnw==
+passport-local-mongoose@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/passport-local-mongoose/-/passport-local-mongoose-7.0.0.tgz#d8a4d4bb1bd419823f7dc9fa6d841d65a5cc4519"
+  integrity sha512-JwpMJJa7D73ri9vojXNOgsPT4pzw5UowH4QhdXQUW18noLngwJ+mtImo/5cMVlOuZEB6Q2tryy4YGqJRMZzC+g==
   dependencies:
     generaterr "^1.5.0"
     passport-local "^1.0.0"
