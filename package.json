@@ -79,7 +79,7 @@
     "@types/passport-local-mongoose": "^6.1.0",
     "@types/rate-limit-redis": "^1.7.4",
     "@types/react": "^18.0.5",
-    "@types/react-dom": "^18.0.1",
+    "@types/react-dom": "^18.0.2",
     "@types/serve-favicon": "^2.5.3",
     "eslint": "^8.13.0",
     "eslint-config-next": "^12.1.5",
