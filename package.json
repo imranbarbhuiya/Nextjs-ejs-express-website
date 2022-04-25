@@ -81,7 +81,7 @@
     "@types/react": "^18.0.6",
     "@types/react-dom": "^18.0.2",
     "@types/serve-favicon": "^2.5.3",
-    "eslint": "^8.13.0",
+    "eslint": "^8.14.0",
     "eslint-config-next": "^12.1.5",
     "nodemon": "^2.0.15",
     "ts-node": "^10.7.0",
