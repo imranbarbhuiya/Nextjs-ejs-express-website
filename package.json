@@ -35,7 +35,7 @@
     "jsonwebtoken": "^8.5.1",
     "marked": "^4.0.16",
     "method-override": "^3.0.0",
-    "mongoose": "^6.3.1",
+    "mongoose": "^6.3.4",
     "morgan": "^1.10.0",
     "next": "^12.1.6",
     "nextjs-progressbar": "^0.0.14",
